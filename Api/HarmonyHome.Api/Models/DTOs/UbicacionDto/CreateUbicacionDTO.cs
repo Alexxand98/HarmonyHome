@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using HarmonyHome.Api.Models.Enums;
 
-namespace HarmonyHome.Api.Models.DTOs
+namespace HarmonyHome.Api.Models.DTO
 {
     public class CreateUbicacionDTO
     {

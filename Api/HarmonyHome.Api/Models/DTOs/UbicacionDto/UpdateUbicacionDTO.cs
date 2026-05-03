@@ -1,4 +1,6 @@
-﻿namespace HarmonyHome.Api.Models.DTOs
+﻿using HarmonyHome.Api.Models.DTO;
+
+namespace HarmonyHome.Api.Models.DTOs
 {
     public class UpdateUbicacionDTO : CreateUbicacionDTO
     {

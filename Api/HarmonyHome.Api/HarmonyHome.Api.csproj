@@ -25,7 +25,7 @@
     <Folder Include="Helpers\" />
     <Folder Include="Models\DTOs\" />
     <Folder Include="Repository\IRepository\" />
-    <Folder Include="Services\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
 </Project>

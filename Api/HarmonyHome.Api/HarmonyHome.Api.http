@@ -1,0 +1,6 @@
+@HarmonyHome.Api_HostAddress = http://localhost:5232
+
+GET {{HarmonyHome.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

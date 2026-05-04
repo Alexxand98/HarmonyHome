@@ -111,6 +111,7 @@ namespace HarmonyHome.Api.Helpers
             };
         }
 
+
         public static Cliente ToCliente(CreateClienteDTO dto)
         {
             return new Cliente
@@ -125,6 +126,7 @@ namespace HarmonyHome.Api.Helpers
             };
         }
 
+
         public static void UpdateCliente(Cliente cliente, UpdateClienteDTO dto)
         {
             cliente.Nombre = dto.Nombre;
@@ -133,6 +135,157 @@ namespace HarmonyHome.Api.Helpers
             cliente.Email = dto.Email;
             cliente.Direccion = dto.Direccion;
             cliente.Activo = dto.Activo;
+        }
+       public static StockUbicacionDTO ToStockUbicacionDTO(StockUbicacion stock)
+        {
+            return new StockUbicacionDTO
+            {
+                Id = stock.Id,
+                ProductoId = stock.ProductoId,
+                ProductoReferencia = stock.Producto?.Referencia ?? string.Empty,
+                ProductoNombre = stock.Producto?.Nombre ?? string.Empty,
+                UbicacionId = stock.UbicacionId,
+                UbicacionCodigo = stock.Ubicacion?.Codigo ?? string.Empty,
+                UbicacionNombre = stock.Ubicacion?.Nombre ?? string.Empty,
+                TipoUbicacion = stock.Ubicacion?.TipoUbicacion ?? 0,
+                TipoUbicacionNombre = stock.Ubicacion?.TipoUbicacion.ToString() ?? string.Empty,
+                Cantidad = stock.Cantidad
+            };
+        }
+
+
+        public static LineaVentaDTO ToLineaVentaDTO(LineaPedidoVenta linea)
+        {
+            return new LineaVentaDTO
+            {
+                Id = linea.Id,
+                ProductoId = linea.ProductoId,
+                ProductoReferencia = linea.Producto?.Referencia ?? string.Empty,
+                ProductoNombre = linea.Producto?.Nombre ?? string.Empty,
+                Cantidad = linea.Cantidad,
+                PrecioUnitario = linea.PrecioUnitario,
+                Subtotal = linea.Subtotal
+            };
+        }
+        public static VentaDTO ToVentaDTO(PedidoVenta pedido)
+        {
+            return new VentaDTO
+            {
+                Id = pedido.Id,
+                ClienteId = pedido.ClienteId,
+                ClienteNombreCompleto = pedido.Cliente == null ? string.Empty : $"{pedido.Cliente.Nombre} {pedido.Cliente.Apellidos}".Trim(),
+                UsuarioId = pedido.UsuarioId,
+                FechaCreacion = pedido.FechaCreacion,
+                Estado = pedido.Estado,
+                EstadoNombre = pedido.Estado.ToString(),
+                TipoPedidoVenta = pedido.TipoPedidoVenta,
+                TipoPedidoVentaNombre = pedido.TipoPedidoVenta.ToString(),
+                Total = pedido.Total,
+                Observaciones = pedido.Observaciones,
+                Lineas = pedido.Lineas.Select(ToLineaVentaDTO).ToList()
+            };
+        }
+
+
+
+        public static LineaPedidoClienteDTO ToLineaPedidoClienteDTO(LineaPedidoVenta linea)
+        {
+            return new LineaPedidoClienteDTO
+            {
+                Id = linea.Id,
+                ProductoId = linea.ProductoId,
+                ProductoReferencia = linea.Producto?.Referencia ?? string.Empty,
+                ProductoNombre = linea.Producto?.Nombre ?? string.Empty,
+                Cantidad = linea.Cantidad,
+                PrecioUnitario = linea.PrecioUnitario,
+                Subtotal = linea.Subtotal
+            };
+        }
+
+
+        public static PedidoClienteDTO ToPedidoClienteDTO(PedidoVenta pedido, OrdenRecogida? ordenRecogida = null)
+        {
+            return new PedidoClienteDTO
+            {
+                Id = pedido.Id,
+                ClienteId = pedido.ClienteId,
+                ClienteNombreCompleto = pedido.Cliente == null ? string.Empty : $"{pedido.Cliente.Nombre} {pedido.Cliente.Apellidos}".Trim(),
+                UsuarioId = pedido.UsuarioId,
+                FechaCreacion = pedido.FechaCreacion,
+                Estado = pedido.Estado,
+                EstadoNombre = pedido.Estado.ToString(),
+                TipoPedidoVenta = pedido.TipoPedidoVenta,
+                TipoPedidoVentaNombre = pedido.TipoPedidoVenta.ToString(),
+                Total = pedido.Total,
+                Observaciones = pedido.Observaciones,
+                OrdenRecogidaId = ordenRecogida?.Id,
+                EstadoOrdenRecogidaNombre = ordenRecogida?.Estado.ToString(),
+                Lineas = pedido.Lineas.Select(ToLineaPedidoClienteDTO).ToList()
+            };
+        }
+
+
+
+        public static OrdenRecogidaDTO ToOrdenRecogidaDTO(OrdenRecogida orden)
+        {
+
+            var pedido = orden.PedidoVenta;
+
+            return new OrdenRecogidaDTO
+            {
+               
+                Id = orden.Id,
+               
+                PedidoVentaId = orden.PedidoVentaId,
+                
+                FechaCreacion = orden.FechaCreacion,
+               
+                Estado = orden.Estado,
+               
+                EstadoNombre = orden.Estado.ToString(),
+                UsuarioAsignadoId = orden.UsuarioAsignadoId,
+               
+                Observaciones = orden.Observaciones,
+
+                ClienteId = pedido?.ClienteId ?? 0,
+                ClienteNombreCompleto = pedido?.Cliente == null ? string.Empty : $"{pedido.Cliente.Nombre} {pedido.Cliente.Apellidos}".Trim(),
+
+                TotalPedido = pedido?.Total ?? 0,
+
+                LineasPedido = pedido?.Lineas.Select(ToLineaPedidoClienteDTO).ToList() ?? new List<LineaPedidoClienteDTO>()
+            };
+        }
+
+
+
+        public static LineaOrdenReposicionDTO ToLineaOrdenReposicionDTO(LineaOrdenReposicion linea)
+        {
+            return new LineaOrdenReposicionDTO
+            {
+                Id = linea.Id,
+                ProductoId = linea.ProductoId,
+                ProductoReferencia = linea.Producto?.Referencia ?? string.Empty,
+                ProductoNombre = linea.Producto?.Nombre ?? string.Empty,
+                CantidadSolicitada = linea.CantidadSolicitada,
+                CantidadPreparada = linea.CantidadPreparada
+            };
+        }
+
+
+
+        public static OrdenReposicionDTO ToOrdenReposicionDTO(OrdenReposicion orden)
+        {
+            return new OrdenReposicionDTO
+            {
+                Id = orden.Id,
+                FechaSolicitud = orden.FechaSolicitud,
+                Estado = orden.Estado,
+                EstadoNombre = orden.Estado.ToString(),
+                UsuarioSolicitanteId = orden.UsuarioSolicitanteId,
+                UsuarioPreparadorId = orden.UsuarioPreparadorId,
+                Observaciones = orden.Observaciones,
+                Lineas = orden.Lineas.Select(ToLineaOrdenReposicionDTO).ToList()
+            };
         }
     }
 }

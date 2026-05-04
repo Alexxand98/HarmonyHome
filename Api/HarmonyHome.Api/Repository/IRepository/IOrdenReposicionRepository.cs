@@ -1,0 +1,19 @@
+﻿using HarmonyHome.Api.Models.DTOs;
+
+namespace HarmonyHome.Api.Repository.IRepository
+{
+    public interface IOrdenReposicionRepository
+    {
+        Task<List<OrdenReposicionDTO>> GetAll();
+
+        Task<List<OrdenReposicionDTO>> GetPendientes();
+
+        Task<OrdenReposicionDTO?> GetById(int id);
+
+        Task<OrdenReposicionDTO?> Create(CreateOrdenReposicionDTO dto, string usuarioSolicitanteId);
+
+        Task<OrdenReposicionDTO?> Asignar(int id, string usuarioPreparadorId);
+
+        Task<OrdenReposicionDTO?> Finalizar(int id, string usuarioPreparadorId, FinalizarOrdenReposicionDTO dto);
+    }
+}

@@ -73,7 +73,11 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IVentaRepository, VentaRepository>();
+builder.Services.AddScoped<IPedidoClienteRepository, PedidoClienteRepository>();
+builder.Services.AddScoped<IOrdenRecogidaRepository, OrdenRecogidaRepository>();
+builder.Services.AddScoped<IOrdenReposicionRepository, OrdenReposicionRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

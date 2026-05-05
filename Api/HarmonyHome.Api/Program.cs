@@ -78,6 +78,7 @@ builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 builder.Services.AddScoped<IPedidoClienteRepository, PedidoClienteRepository>();
 builder.Services.AddScoped<IOrdenRecogidaRepository, OrdenRecogidaRepository>();
 builder.Services.AddScoped<IOrdenReposicionRepository, OrdenReposicionRepository>();
+builder.Services.AddScoped<IDemarcaRepository, DemarcaRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

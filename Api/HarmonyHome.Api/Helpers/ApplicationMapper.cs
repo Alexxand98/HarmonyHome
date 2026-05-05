@@ -287,5 +287,33 @@ namespace HarmonyHome.Api.Helpers
                 Lineas = orden.Lineas.Select(ToLineaOrdenReposicionDTO).ToList()
             };
         }
+
+
+
+        public static DemarcaDTO ToDemarcaDTO(MovimientoStock movimiento)
+        {
+
+            return new DemarcaDTO
+            {
+                MovimientoStockId = movimiento.Id,
+                ProductoId = movimiento.ProductoId,
+                ProductoReferencia = movimiento.Producto?.Referencia ?? string.Empty,
+                ProductoNombre = movimiento.Producto?.Nombre ?? string.Empty,
+                UbicacionId = movimiento.UbicacionOrigenId ?? 0,
+                UbicacionCodigo = movimiento.UbicacionOrigen?.Codigo ?? string.Empty,
+                UbicacionNombre = movimiento.UbicacionOrigen?.Nombre ?? string.Empty,
+                Cantidad = movimiento.Cantidad,
+                TipoMovimiento = movimiento.TipoMovimiento,
+                TipoMovimientoNombre = movimiento.TipoMovimiento.ToString(),
+                UsuarioId = movimiento.UsuarioId,
+                Fecha = movimiento.Fecha,
+                Motivo = movimiento.Observaciones
+            };
+
+
+        }
+
     }
+
+
 }

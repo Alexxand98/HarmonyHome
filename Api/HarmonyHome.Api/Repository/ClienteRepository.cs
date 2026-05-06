@@ -84,6 +84,7 @@ namespace HarmonyHome.Api.Repository
             ApplicationMapper.UpdateCliente(cliente, updateClienteDTO);
 
             _context.Clientes.Update(cliente);
+
             await _context.SaveChangesAsync();
 
             return ApplicationMapper.ToClienteDTO(cliente);

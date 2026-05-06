@@ -12,6 +12,7 @@ namespace HarmonyHome.Api.Controllers
     public class PedidoClienteController : ControllerBase
     {
         private readonly IPedidoClienteRepository _pedidoClienteRepository;
+
         private readonly ResponseApi _responseApi;
 
         public PedidoClienteController(IPedidoClienteRepository pedidoClienteRepository)
@@ -37,6 +38,7 @@ namespace HarmonyHome.Api.Controllers
             {
                 _responseApi.StatusCode = HttpStatusCode.Unauthorized;
                 _responseApi.IsSuccess = false;
+
                 _responseApi.ErrorMessages.Add("No se pudo identificar al usuario.");
 
                 return Unauthorized(_responseApi);
@@ -48,6 +50,7 @@ namespace HarmonyHome.Api.Controllers
             {
                 _responseApi.StatusCode = HttpStatusCode.BadRequest;
                 _responseApi.IsSuccess = false;
+
                 _responseApi.ErrorMessages.Add("No se pudo crear el pedido. Verifica cliente, productos habilitados y stock suficiente en almacén.");
 
                 return BadRequest(_responseApi);

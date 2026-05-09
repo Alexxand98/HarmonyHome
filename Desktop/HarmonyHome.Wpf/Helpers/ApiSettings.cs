@@ -4,8 +4,7 @@ using System.Text;
 
 namespace HarmonyHome.Wpf.Helpers
 {
-    public static class ApiSettings
-    {
-        public static string BaseUrl { get; set; } = "http://localhost:5122";
+    public static class ApiSettings{
+        public static string BaseUrl { get; set; } = "http://localhost:5232";
     }
 }

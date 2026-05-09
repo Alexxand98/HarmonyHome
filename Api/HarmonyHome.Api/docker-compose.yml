@@ -1,0 +1,15 @@
+services:
+  harmonyhome-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: harmonyhome-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Manager00!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - harmonyhome_sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  harmonyhome_sqlserver_data:

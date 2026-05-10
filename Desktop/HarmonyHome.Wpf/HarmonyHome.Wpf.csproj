@@ -12,9 +12,7 @@
     <Folder Include="Resources\Images\" />
     <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Styles\" />
-    <Folder Include="Services\Interfaces\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>

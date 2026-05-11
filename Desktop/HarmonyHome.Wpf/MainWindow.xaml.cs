@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using HarmonyHome.Wpf.Helpers;
+using HarmonyHome.Wpf.Views;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +21,29 @@ namespace HarmonyHome.Wpf
         public MainWindow()
         {
             InitializeComponent();
+
+            CargarDatosUsuario();
+        }
+
+        private void CargarDatosUsuario()
+        {
+            TxtUsuario.Text = SessionManager.Email;
+
+            TxtRol.Text = SessionManager.Rol;
+        }
+
+
+        private void BtnCerrarSesion_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            SessionManager.ClearSession();
+
+            LoginView loginView = new LoginView();
+
+            loginView.Show();
+
+            Close();
         }
     }
 }

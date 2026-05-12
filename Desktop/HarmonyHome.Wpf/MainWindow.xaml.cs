@@ -45,5 +45,13 @@ namespace HarmonyHome.Wpf
 
             Close();
         }
+
+
+        private void BtnProductos_Click(object sender, RoutedEventArgs e)
+        {
+            ProductosView productosView = new ProductosView();
+
+            productosView.ShowDialog();
+        }
     }
 }

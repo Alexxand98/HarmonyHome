@@ -1,0 +1,50 @@
+﻿<Window x:Class="HarmonyHome.Wpf.Views.ProductosView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
+        mc:Ignorable="d"
+        Title="Productos" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Background="White" Margin="15">
+
+        <TextBlock Text="Productos"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"/>
+
+        <Button x:Name="BtnCargarProductos"
+                Content="Cargar productos"
+                Width="130"
+                Height="32"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="BtnCargarProductos_Click"/>
+
+        <DataGrid x:Name="TablaProductos"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="0,50,0,35">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Referencia" Binding="{Binding Referencia}" Width="110"/>
+                <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="160"/>
+                <DataGridTextColumn Header="Categoría" Binding="{Binding Categoria}" Width="120"/>
+                <DataGridTextColumn Header="Trazabilidad" Binding="{Binding TipoTrazabilidadNombre}" Width="120"/>
+                <DataGridTextColumn Header="Precio" Binding="{Binding PrecioVenta}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Habilitado" Binding="{Binding Habilitado}" Width="90"/>
+                <DataGridCheckBoxColumn Header="Activo" Binding="{Binding Activo}" Width="70"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <TextBlock x:Name="TxtMensajeProductos"
+                   Text=""
+                   Foreground="Gray"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>

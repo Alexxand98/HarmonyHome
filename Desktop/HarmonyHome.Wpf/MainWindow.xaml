@@ -50,7 +50,8 @@
             <Button x:Name="BtnProductos"
                     Content="Productos"
                     Height="38"
-                    Margin="15,20,15,10"/>
+                    Margin="15,20,15,10"
+                    Click="BtnProductos_Click"/>
 
             <Button x:Name="BtnUbicaciones"
                     Content="Ubicaciones"

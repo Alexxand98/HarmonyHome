@@ -5,6 +5,6 @@ using System.Text;
 namespace HarmonyHome.Wpf.Helpers
 {
     public static class ApiSettings{
-        public static string BaseUrl { get; set; } = "http://localhost:5232";
+        public static string BaseUrl { get; set; } = "https://localhost:7099";
     }
 }

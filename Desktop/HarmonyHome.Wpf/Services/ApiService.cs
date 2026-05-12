@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using HarmonyHome.Wpf.Helpers;
+﻿using HarmonyHome.Wpf.Helpers;
 using HarmonyHome.Wpf.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HarmonyHome.Wpf.Services
 {
@@ -26,6 +27,7 @@ namespace HarmonyHome.Wpf.Services
         public async Task<T?> GetAsync<T>(string endpoint)
         {
             try{
+                MessageBox.Show("Entrando a ApiService GET: " + endpoint);
                 AddToken();
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
@@ -41,6 +43,7 @@ namespace HarmonyHome.Wpf.Services
                 return JsonSerializer.Deserialize<T>(json, GetJsonOptions());
 
             }catch{
+                MessageBox.Show("Error al leer datos de la API");
 
                 return default;
             }

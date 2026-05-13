@@ -53,5 +53,12 @@ namespace HarmonyHome.Wpf
 
             productosView.ShowDialog();
         }
+
+
+        private void BtnUbicaciones_Click(object sender, RoutedEventArgs e)
+        {
+            UbicacionesView ubicacionesView = new UbicacionesView();
+            ubicacionesView.ShowDialog();
+        }
     }
 }

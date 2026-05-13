@@ -1,0 +1,50 @@
+﻿<Window x:Class="HarmonyHome.Wpf.Views.UbicacionesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
+        mc:Ignorable="d"
+        Title="Ubicaciones" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Background="White" Margin="15">
+
+        <TextBlock Text="Ubicaciones"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"/>
+
+        <Button x:Name="BtnCargarUbicaciones"
+                Content="Cargar ubicaciones"
+                Width="150"
+                Height="32"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top" Click="BtnCargarUbicaciones_Click"/>
+
+        <DataGrid x:Name="TablaUbicaciones"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="0,50,0,35">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Codigo" 
+                                    Binding="{Binding Codigo}" Width="130"/>
+                <DataGridTextColumn Header="Nombre" 
+                                    Binding="{Binding Nombre}" Width="220"/>
+                <DataGridTextColumn Header="Tipo" 
+                                    Binding="{Binding TipoUbicacionNombre}" Width="160"/>
+                <DataGridCheckBoxColumn Header="Activa" 
+                                        Binding="{Binding Activa}" Width="80"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <TextBlock x:Name="TxtMensajeUbicaciones" Text=""
+                   Foreground="Gray"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>

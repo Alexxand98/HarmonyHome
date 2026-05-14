@@ -62,7 +62,8 @@
             <Button x:Name="BtnServidor"
                     Content="Servidor"
                     Height="38"
-                    Margin="15,0,15,10"/>
+                    Margin="15,0,15,10"
+                    Click="BtnServerInfo_Click"/>
 
             <Button x:Name="BtnCerrarSesion"
                     Content="Cerrar sesion"

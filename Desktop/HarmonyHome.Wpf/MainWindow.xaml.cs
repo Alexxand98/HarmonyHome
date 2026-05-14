@@ -60,5 +60,19 @@ namespace HarmonyHome.Wpf
             UbicacionesView ubicacionesView = new UbicacionesView();
             ubicacionesView.ShowDialog();
         }
+
+
+
+        private void BtnServerInfo_Click(object sender, RoutedEventArgs e)
+        {
+            ServidorView servidorView = new ServidorView();
+
+
+            servidorView.ShowDialog();
+        }
+
     }
+
+
+
 }

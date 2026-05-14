@@ -25,6 +25,9 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _authService = new AuthService();
+
+            TxtEmail.Text = "admin@harmonyhome.com";
+            TxtPassword.Password = "Password123!";
         }
 
         private async void BtnLogin_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,7 @@
 ﻿using HarmonyHome.Api.Models.DTOs;
 
 using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.UsuarioDto;
 
 namespace HarmonyHome.Api.Repository.IRepository
 {
@@ -15,5 +16,16 @@ namespace HarmonyHome.Api.Repository.IRepository
         Task<UserDTO?> GetUser(string userId);
 
         Task<List<UserDTO>> GetUsers();
+
+
+        Task<List<UserDTO>> GetLogisticos();
+
+        Task<UserDTO?> CreateLogistico(CreateLogisticoDTO createLogisticoDTO);
+
+        Task<UserDTO?> UpdateUser(string id, UpdateUserDTO updateUserDTO);
+
+        Task<bool> ActivarUser(string id);
+
+        Task<bool> DesactivarUser(string id);
     }
 }

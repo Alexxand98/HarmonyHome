@@ -1,6 +1,8 @@
 ﻿using HarmonyHome.Api.Data;
 using HarmonyHome.Api.Helpers;
 using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.MovimientoStockDto;
+using HarmonyHome.Api.Models.DTOs.StockDto;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Models.Enums;
 using HarmonyHome.Api.Repository.IRepository;
@@ -123,16 +125,16 @@ namespace HarmonyHome.Api.Repository
             var productoExiste = await _context.Productos.AnyAsync(p => p.Id == createStockDTO.ProductoId && p.Activo);
             var ubicacionExiste = await _context.Ubicaciones.AnyAsync(u => u.Id == createStockDTO.UbicacionId && u.Activa);
 
-            if (!productoExiste || !ubicacionExiste)
-            {
+            if (!productoExiste || !ubicacionExiste)   {
+
                 return null;
             }
 
-            var stockExistente = await _context.StockUbicaciones
-                .FirstOrDefaultAsync(s =>s.ProductoId == createStockDTO.ProductoId && s.UbicacionId == createStockDTO.UbicacionId);
+            var stockExistente = await _context.StockUbicaciones.FirstOrDefaultAsync(s =>s.ProductoId == createStockDTO.ProductoId && s.UbicacionId == createStockDTO.UbicacionId);
 
-            if (stockExistente != null)
-            {
+            if (stockExistente != null) {
+
+
                 stockExistente.Cantidad += createStockDTO.Cantidad;
 
                 _context.StockUbicaciones.Update(stockExistente);
@@ -145,6 +147,7 @@ namespace HarmonyHome.Api.Repository
             var stock = new StockUbicacion
             {
                 ProductoId = createStockDTO.ProductoId,
+
                 UbicacionId = createStockDTO.UbicacionId,
 
                 Cantidad = createStockDTO.Cantidad
@@ -162,8 +165,8 @@ namespace HarmonyHome.Api.Repository
         {
             var stock = await _context.StockUbicaciones.FirstOrDefaultAsync(s => s.Id == id);
 
-            if (stock == null)
-            {
+            if (stock == null) {
+
                 return null;
             }
 
@@ -174,6 +177,98 @@ namespace HarmonyHome.Api.Repository
             await _context.SaveChangesAsync();
 
             return await GetById(stock.Id);
+        }
+
+
+
+        public async Task<MovimientoStockDTO?> MoverStock(MoveStockDTO moveStockDTO, string usuarioId)
+        {
+            if (moveStockDTO.UbicacionOrigenId == moveStockDTO.UbicacionDestinoId)  {
+
+                return null;
+            }
+
+            var producto = await _context.Productos.FirstOrDefaultAsync(p => p.Id == moveStockDTO.ProductoId && p.Activo);
+
+            if (producto == null)  {
+
+                return null;
+            }
+
+            var ubicacionOrigen = await _context.Ubicaciones.FirstOrDefaultAsync(u => u.Id == moveStockDTO.UbicacionOrigenId && u.Activa);
+
+            var ubicacionDestino = await _context.Ubicaciones.FirstOrDefaultAsync(u => u.Id == moveStockDTO.UbicacionDestinoId && u.Activa);
+
+            if (ubicacionOrigen == null || ubicacionDestino == null)  {
+                return null;
+            }
+
+            // Movimiento interno: no permitimos que participe TIENDA.
+            // La tienda se modifica mediante venta directa, reposición o demarca.
+
+            if (ubicacionOrigen.TipoUbicacion == TipoUbicacion.Tienda || ubicacionDestino.TipoUbicacion == TipoUbicacion.Tienda) {
+                
+                return null;
+            }
+
+            var stockOrigen = await _context.StockUbicaciones.FirstOrDefaultAsync(s => s.ProductoId == moveStockDTO.ProductoId && s.UbicacionId == moveStockDTO.UbicacionOrigenId);
+
+            if (stockOrigen == null || stockOrigen.Cantidad < moveStockDTO.Cantidad) {
+
+                return null;
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                stockOrigen.Cantidad -= moveStockDTO.Cantidad;
+
+                var stockDestino = await _context.StockUbicaciones.FirstOrDefaultAsync(s =>s.ProductoId == moveStockDTO.ProductoId && s.UbicacionId == moveStockDTO.UbicacionDestinoId);
+
+                if (stockDestino == null){
+
+                    stockDestino = new StockUbicacion
+                    {
+                        ProductoId = moveStockDTO.ProductoId,
+                        UbicacionId = moveStockDTO.UbicacionDestinoId,
+                        Cantidad = 0
+                    };
+
+                    await _context.StockUbicaciones.AddAsync(stockDestino);
+                }
+
+                stockDestino.Cantidad += moveStockDTO.Cantidad;
+
+                var movimiento = new MovimientoStock
+                {
+                    ProductoId = moveStockDTO.ProductoId,
+                    UbicacionOrigenId = moveStockDTO.UbicacionOrigenId,
+                    UbicacionDestinoId = moveStockDTO.UbicacionDestinoId,
+                    Cantidad = moveStockDTO.Cantidad,
+                    Fecha = DateTime.UtcNow,
+                    UsuarioId = usuarioId,
+                    TipoMovimiento = TipoMovimiento.MovimientoManual,
+                    Observaciones = moveStockDTO.Observaciones ?? "Movimiento interno manual de stock."
+                };
+
+                await _context.MovimientosStock.AddAsync(movimiento);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                var movimientoGuardado = await _context.MovimientosStock
+                    .Include(m => m.Producto)
+                    .Include(m => m.UbicacionOrigen)
+                    .Include(m => m.UbicacionDestino).FirstOrDefaultAsync(m => m.Id == movimiento.Id);
+
+                return movimientoGuardado == null
+                    ? null
+                    : ApplicationMapper.ToMovimientoStockDTO(movimientoGuardado);
+            }catch {
+                await transaction.RollbackAsync();
+                return null;
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System.Net;
-using HarmonyHome.Api.Models.DTOs;
+﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.StockDto;
 using HarmonyHome.Api.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace HarmonyHome.Api.Controllers
 {
@@ -185,6 +187,53 @@ namespace HarmonyHome.Api.Controllers
             _responseApi.Result = stock;
 
             return Ok(_responseApi);
+        }
+
+
+
+
+        [HttpPost("mover")]
+        [Authorize(Roles = "Logistico,SupervisorLogistico,Administrador")]
+        public async Task<IActionResult> MoverStock([FromBody] MoveStockDTO moveStockDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                _responseApi.StatusCode = HttpStatusCode.BadRequest;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                return BadRequest(_responseApi);
+            }
+
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(usuarioId))
+            {
+                _responseApi.StatusCode = HttpStatusCode.Unauthorized;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("No se pudo identificar al usuario.");
+
+                return Unauthorized(_responseApi);
+            }
+
+            var movimiento = await _stockRepository.MoverStock(moveStockDTO, usuarioId);
+
+            if (movimiento == null)
+            {
+                _responseApi.StatusCode = HttpStatusCode.BadRequest;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("No se pudo mover el stock. Verifica producto, ubicaciones internas, stock suficiente y que no participe la tienda.");
+
+                return BadRequest(_responseApi);
+            }
+
+            _responseApi.StatusCode = HttpStatusCode.Created;
+            _responseApi.Result = movimiento;
+
+            return StatusCode(StatusCodes.Status201Created, _responseApi);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.MovimientoStockDto;
+using HarmonyHome.Api.Models.DTOs.StockDto;
 
 namespace HarmonyHome.Api.Repository.IRepository
 {
@@ -21,5 +23,8 @@ namespace HarmonyHome.Api.Repository.IRepository
         Task<StockUbicacionDTO?> Create(CreateStockUbicacionDTO createStockDTO);
 
         Task<StockUbicacionDTO?> Update(int id, UpdateStockUbicacionDTO updateStockDTO);
+
+        Task<MovimientoStockDTO?> MoverStock(MoveStockDTO moveStockDTO, string usuarioId);
+
     }
 }

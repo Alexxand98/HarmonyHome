@@ -64,5 +64,6 @@ namespace HarmonyHome.Api.Repository
                 ? null
                 : ApplicationMapper.ToMovimientoStockDTO(movimiento);
         }
+
     }
 }

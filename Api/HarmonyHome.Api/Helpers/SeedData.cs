@@ -67,30 +67,6 @@ namespace HarmonyHome.Api.Helpers
                 "Password123!"
             );
 
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "logistico@harmonyhome.com",
-                "LogisticoDemo",
-                "Logistico",
-                "admin?"
-            );
-
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "encargado@harmonyhome.com",
-                "EncargadoDemo",
-                "EncargadoTienda",
-                "admin1?!"
-            );
-
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "vendedor@harmonyhome.com",
-                "AdminDemo",
-                "Administrador",
-                "admin2?!"
-            );
-
 
         }
 

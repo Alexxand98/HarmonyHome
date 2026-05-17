@@ -1,5 +1,6 @@
 ﻿using HarmonyHome.Api.Models.DTO;
 using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.MovimientoStockDto;
 using HarmonyHome.Api.Models.Entity;
 
 namespace HarmonyHome.Api.Helpers
@@ -311,6 +312,38 @@ namespace HarmonyHome.Api.Helpers
             };
 
 
+        }
+
+
+
+
+        public static MovimientoStockDTO ToMovimientoStockDTO(MovimientoStock movimiento)
+        {
+            return new MovimientoStockDTO
+            {
+
+                Id = movimiento.Id,
+                ProductoId = movimiento.ProductoId,
+                ProductoReferencia = movimiento.Producto?.Referencia ?? string.Empty,
+                ProductoNombre = movimiento.Producto?.Nombre ?? string.Empty,
+
+                UbicacionOrigenId = movimiento.UbicacionOrigenId,
+                UbicacionOrigenCodigo = movimiento.UbicacionOrigen?.Codigo,
+                UbicacionOrigenNombre = movimiento.UbicacionOrigen?.Nombre,
+
+                UbicacionDestinoId = movimiento.UbicacionDestinoId,
+                UbicacionDestinoCodigo = movimiento.UbicacionDestino?.Codigo,
+                UbicacionDestinoNombre = movimiento.UbicacionDestino?.Nombre,
+
+
+
+                Cantidad = movimiento.Cantidad,
+                Fecha = movimiento.Fecha,
+                UsuarioId = movimiento.UsuarioId,
+                TipoMovimiento = movimiento.TipoMovimiento,
+                TipoMovimientoNombre = movimiento.TipoMovimiento.ToString(),
+                Observaciones = movimiento.Observaciones
+            };
         }
 
     }

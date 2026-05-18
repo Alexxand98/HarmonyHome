@@ -52,6 +52,12 @@
                     Height="38"
                     Margin="15,20,15,10"
                     Click="BtnProductos_Click"/>
+            
+            <Button x:Name="BtnGestionProductos"
+                Content="Gestión productos"
+                Height="38"
+                Margin="15,0,15,10"
+                Click="BtnGestionProductos_Click"/>
 
             <Button x:Name="BtnUbicaciones"
                     Content="Ubicaciones"

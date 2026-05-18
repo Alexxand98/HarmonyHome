@@ -13,7 +13,9 @@ namespace HarmonyHome.Wpf.Services.Interfaces
         Task<T?> PutAsync<T>(string endpoint, object data);
 
         Task<T?> DeleteAsync<T>(string endpoint);
-    
 
+
+
+        Task<T?> PatchAsync<T>(string endpoint, object? data = null);
     }
 }

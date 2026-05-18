@@ -25,7 +25,7 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnCargarProductos_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Boton pulsado");
+            //MessageBox.Show("Boton pulsado");
 
             TxtMensajeProductos.Text = "Cargando productos...";
 
@@ -48,3 +48,4 @@ namespace HarmonyHome.Wpf.Views
         }
     }
 }
+ 

@@ -27,7 +27,7 @@ namespace HarmonyHome.Wpf.Services
         public async Task<T?> GetAsync<T>(string endpoint)
         {
             try{
-                MessageBox.Show("Entrando a ApiService GET: " + endpoint);
+               // MessageBox.Show("Entrando a ApiService GET: " + endpoint);
                 AddToken();
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
@@ -137,6 +137,35 @@ namespace HarmonyHome.Wpf.Services
             {
                 PropertyNameCaseInsensitive = true
             };
+        }
+
+
+        public async Task<T?> PatchAsync<T>(string endpoint, object? data = null)
+        {
+            try{
+                AddToken();
+
+                HttpContent? content = null;
+
+                if (data != null) {
+                    string jsonData = JsonSerializer.Serialize(data);
+
+                    content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                }
+
+                HttpResponseMessage response = await _httpClient.PatchAsync(endpoint, content);
+
+                string json = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode) {
+                    return default;
+                }
+
+                return JsonSerializer.Deserialize<T>(json, GetJsonOptions());
+
+            }catch {
+                return default;
+            }
         }
     }
 }

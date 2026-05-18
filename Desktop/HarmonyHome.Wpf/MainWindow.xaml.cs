@@ -30,6 +30,16 @@ namespace HarmonyHome.Wpf
             TxtUsuario.Text = SessionManager.Email;
 
             TxtRol.Text = SessionManager.Rol;
+
+
+            if (SessionManager.Rol == "Logistico")
+            {
+                BtnGestionProductos.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                BtnGestionProductos.Visibility = Visibility.Visible;
+            }
         }
 
 
@@ -70,6 +80,15 @@ namespace HarmonyHome.Wpf
 
             servidorView.ShowDialog();
         }
+
+
+        private void BtnGestionProductos_Click(object sender, RoutedEventArgs e)
+        {
+            GestionProductosView gestionProductosView = new GestionProductosView();
+
+            gestionProductosView.ShowDialog();
+        }
+
 
     }
 

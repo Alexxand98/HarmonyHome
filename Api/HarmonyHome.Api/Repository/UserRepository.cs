@@ -1,11 +1,12 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using HarmonyHome.Api.Models.DTOs;
+﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.UsuarioDto;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace HarmonyHome.Api.Repository
 {
@@ -163,6 +164,142 @@ namespace HarmonyHome.Api.Repository
                 .ToList();
 
             return Task.FromResult(users);
+        }
+
+
+
+        public async Task<List<UserDTO>> GetLogisticos()
+        {
+            var users = await _userManager.GetUsersInRoleAsync("Logistico");
+
+            return users.Select(u => new UserDTO
+            {
+                Id = u.Id,
+                UserName = u.UserName ?? string.Empty,
+                Email = u.Email ?? string.Empty,
+                NombreCompleto = u.NombreCompleto,
+                Role = "Logistico",
+                Activo = u.Activo,
+                FechaAlta = u.FechaAlta
+
+            }).ToList();
+        }
+
+        public async Task<UserDTO?> CreateLogistico(CreateLogisticoDTO createLogisticoDTO)
+        {
+            if (!IsUniqueUser(createLogisticoDTO.Email)){
+                return null;
+            }
+
+            if (!await _roleManager.RoleExistsAsync("Logistico")) {
+
+                await _roleManager.CreateAsync(new IdentityRole("Logistico"));
+            }
+
+            var user = new ApplicationUser
+            {
+                UserName = createLogisticoDTO.UserName,
+                Email = createLogisticoDTO.Email,
+                NombreCompleto = createLogisticoDTO.NombreCompleto ?? createLogisticoDTO.UserName,
+                Activo = true,
+                FechaAlta = DateTime.UtcNow,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, createLogisticoDTO.Password);
+
+            if (!result.Succeeded)
+            {
+                return null;
+            }
+
+            await _userManager.AddToRoleAsync(user, "Logistico");
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                NombreCompleto = user.NombreCompleto,
+                Role = "Logistico",
+                Activo = user.Activo,
+                FechaAlta = user.FechaAlta
+            };
+        }
+
+        public async Task<UserDTO?> UpdateUser(string id, UpdateUserDTO updateUserDTO)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)  {
+
+                return null;
+            }
+
+            var emailOwner = await _userManager.FindByEmailAsync(updateUserDTO.Email);
+
+            if (emailOwner != null && emailOwner.Id != id)   {
+
+                return null;
+            }
+
+            user.UserName = updateUserDTO.UserName;
+
+            user.Email = updateUserDTO.Email;
+
+            user.NombreCompleto = updateUserDTO.NombreCompleto;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded) {
+
+                return null;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                NombreCompleto = user.NombreCompleto,
+                Role = roles.FirstOrDefault() ?? string.Empty,
+                Activo = user.Activo,
+                FechaAlta = user.FechaAlta
+            };
+        }
+
+        public async Task<bool> ActivarUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null) {
+
+                return false;
+            }
+
+            user.Activo = true;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> DesactivarUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null) {
+
+                return false;
+            }
+
+            user.Activo = false;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
         }
     }
 }

@@ -124,14 +124,28 @@ namespace HarmonyHome.Api.Repository
             return ApplicationMapper.ToProductoDTO(producto);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<string?> Delete(int id)
         {
             var producto = await _context.Productos
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (producto == null)
             {
-                return false;
+                return null;
+            }
+
+            var tieneRelaciones =
+                await _context.StockUbicaciones.AnyAsync(s => s.ProductoId == id) ||
+                await _context.MovimientosStock.AnyAsync(m => m.ProductoId == id) ||
+                await _context.LineasPedidoVenta.AnyAsync(l => l.ProductoId == id) ||
+                await _context.LineasOrdenReposicion.AnyAsync(l => l.ProductoId == id);
+
+            if (!tieneRelaciones)
+            {
+                _context.Productos.Remove(producto);
+                await _context.SaveChangesAsync();
+
+                return "Producto eliminado correctamente.";
             }
 
             producto.Activo = false;
@@ -140,7 +154,7 @@ namespace HarmonyHome.Api.Repository
             _context.Productos.Update(producto);
             await _context.SaveChangesAsync();
 
-            return true;
+            return "El producto tiene datos asociados. Se ha dado de baja correctamente.";
         }
 
         public async Task<bool> Habilitar(int id)

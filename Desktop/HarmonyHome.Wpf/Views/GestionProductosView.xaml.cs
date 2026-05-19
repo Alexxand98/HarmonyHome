@@ -125,6 +125,31 @@ namespace HarmonyHome.Wpf.Views
         }
 
 
+
+        private async void BtnEliminarProducto_Click(object sender, RoutedEventArgs e)
+        {
+            if (_productoSeleccionado == null) {
+
+                TxtMensajeGestionProductos.Text = "Selecciona un producto.";
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show("¿Seguro que quieres eliminar este producto?","Confirmar eliminación",MessageBoxButton.YesNo,MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)  {
+                return;
+            }
+
+            string mensaje = await _productoService.EliminarProductoAsync(_productoSeleccionado.Id);
+
+            TxtMensajeGestionProductos.Text = mensaje;
+
+            LimpiarFormulario();
+
+            await CargarProductos();
+        }
+
+
         private bool ValidarFormulario()
         {
             if (string.IsNullOrWhiteSpace(TxtReferencia.Text)){

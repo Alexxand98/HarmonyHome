@@ -101,6 +101,7 @@
 
                 <CheckBox x:Name="ChkActivo"
                           Content="Activo"
+                          IsEnabled="False"
                           Margin="0,0,0,10"/>
 
                 <TextBlock Text="Imagen URL"/>
@@ -132,21 +133,8 @@
                             Content="Eliminar"
                             Width="80"
                             Height="30"
-                            Margin="0,0,5,5"/>
-                </WrapPanel>
-
-                <WrapPanel>
-                    <Button x:Name="BtnHabilitarProducto"
-                            Content="Habilitar"
-                            Width="90"
-                            Height="30"
-                            Margin="0,0,5,5"/>
-
-                    <Button x:Name="BtnDeshabilitarProducto"
-                            Content="Deshabilitar"
-                            Width="100"
-                            Height="30"
-                            Margin="0,0,5,5"/>
+                            Margin="0,0,5,5"
+                            Click="BtnEliminarProducto_Click"/>
                 </WrapPanel>
 
                 <TextBlock x:Name="TxtMensajeGestionProductos"

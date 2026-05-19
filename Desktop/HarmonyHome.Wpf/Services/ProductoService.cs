@@ -54,11 +54,19 @@ namespace HarmonyHome.Wpf.Services
             return response != null && response.IsSuccess;
         }
 
-        public async Task<bool> EliminarProductoAsync(int id)
+        public async Task<string> EliminarProductoAsync(int id)
         {
-            ResponseApi<bool>? response = await _apiService.DeleteAsync<ResponseApi<bool>>($"api/Producto/{id}");
+            ResponseApi<string>? response = await _apiService.DeleteAsync<ResponseApi<string>>($"api/Producto/{id}");
 
-            return response != null && response.IsSuccess;
+            if (response != null && response.IsSuccess && response.Result != null) {
+                return response.Result;
+            }
+
+            if (response != null && response.ErrorMessages.Count > 0)  {
+                return response.ErrorMessages[0];
+            }
+
+            return "No se pudo eliminar el producto.";
         }
 
         public async Task<bool> HabilitarProductoAsync(int id)

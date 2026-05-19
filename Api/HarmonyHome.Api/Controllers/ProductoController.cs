@@ -174,23 +174,29 @@ namespace HarmonyHome.Api.Controllers
         [Authorize(Roles = "SupervisorLogistico,Administrador")]
         public async Task<IActionResult> EliminarProducto(int id)
         {
-            var eliminado = await _productoRepository.Delete(id);
+            var resultado = await _productoRepository.Delete(id);
 
-            if (!eliminado)
-            {
+            if (resultado == null) {
                 _responseApi.StatusCode = HttpStatusCode.NotFound;
+
                 _responseApi.IsSuccess = false;
+
                 _responseApi.ErrorMessages.Add("Producto no encontrado.");
 
                 return NotFound(_responseApi);
             }
 
             _responseApi.StatusCode = HttpStatusCode.OK;
+
             _responseApi.IsSuccess = true;
-            _responseApi.Result = "Producto dado de baja correctamente.";
+
+            _responseApi.Result = resultado;
 
             return Ok(_responseApi);
         }
+
+
+
 
         [HttpPatch("{id:int}/habilitar")]
         [Authorize(Roles = "SupervisorLogistico,Administrador")]

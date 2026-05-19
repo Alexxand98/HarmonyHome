@@ -18,8 +18,7 @@ namespace HarmonyHome.Api.Repository.IRepository
 
         Task<ProductoDTO?> Update(int id, UpdateProductoDTO updateProductoDTO);
 
-        Task<bool> Delete(int id);
-
+        Task<string?> Delete(int id);
         Task<bool> Habilitar(int id);
 
         Task<bool> Deshabilitar(int id);

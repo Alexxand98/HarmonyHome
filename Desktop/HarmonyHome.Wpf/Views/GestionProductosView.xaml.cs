@@ -90,75 +90,74 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnGuardarProducto_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidarFormulario())
-            {
+            if (!ValidarFormulario()){
                 return;
             }
 
-            if (_productoSeleccionado == null)
-            {
+            if (_productoSeleccionado == null){
                 CreateProductoDTO producto = CrearDtoProducto();
 
                 bool creado = await _productoService.CrearProductoAsync(producto);
 
-                if (creado)
-                {
+                if (creado){
                     TxtMensajeGestionProductos.Text = "Producto creado correctamente.";
+                    LimpiarFormulario();
+                    await CargarProductos();
+                }else {
+                    TxtMensajeGestionProductos.Text = "No se pudo crear el producto.";
+                }
+            }else {
+                UpdateProductoDTO productoEditado = CrearDtoUpdateProducto();
+
+                bool actualizado = await _productoService.ActualizarProductoAsync(_productoSeleccionado.Id, productoEditado);
+
+                if (actualizado)
+                {
+                    TxtMensajeGestionProductos.Text = "Producto actualizado correctamente.";
                     LimpiarFormulario();
                     await CargarProductos();
                 }
                 else
                 {
-                    TxtMensajeGestionProductos.Text = "No se pudo crear el producto.";
+                    TxtMensajeGestionProductos.Text = "No se pudo actualizar el producto.";
                 }
-            }
-            else
-            {
-                TxtMensajeGestionProductos.Text = "Más adelante actualizaremos el producto seleccionado.";
             }
         }
 
 
         private bool ValidarFormulario()
         {
-            if (string.IsNullOrWhiteSpace(TxtReferencia.Text))
-            {
+            if (string.IsNullOrWhiteSpace(TxtReferencia.Text)){
                 TxtMensajeGestionProductos.Text = "La referencia es obligatoria.";
                 return false;
             }
-
-            if (string.IsNullOrWhiteSpace(TxtNombre.Text))
-            {
+            
+            if (string.IsNullOrWhiteSpace(TxtNombre.Text)){
                 TxtMensajeGestionProductos.Text = "El nombre es obligatorio.";
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(TxtCategoria.Text))
-            {
+            if (string.IsNullOrWhiteSpace(TxtCategoria.Text)){
                 TxtMensajeGestionProductos.Text = "La categoría es obligatoria.";
                 return false;
             }
 
-            if (!decimal.TryParse(TxtPrecioCoste.Text, out decimal precioCoste) || precioCoste < 0)
-            {
+            if (!decimal.TryParse(TxtPrecioCoste.Text, out decimal precioCoste) || precioCoste < 0){
                 TxtMensajeGestionProductos.Text = "El precio de coste no es válido.";
                 return false;
             }
 
-            if (!decimal.TryParse(TxtPrecioVenta.Text, out decimal precioVenta) || precioVenta < 0)
-            {
+            if (!decimal.TryParse(TxtPrecioVenta.Text, out decimal precioVenta) || precioVenta < 0) {
                 TxtMensajeGestionProductos.Text = "El precio de venta no es válido.";
                 return false;
             }
 
-            if (!int.TryParse(TxtStockMinimo.Text, out int stockMinimo) || stockMinimo < 0)
-            {
+            if (!int.TryParse(TxtStockMinimo.Text, out int stockMinimo) || stockMinimo < 0) {
                 TxtMensajeGestionProductos.Text = "El stock mínimo no es válido.";
                 return false;
             }
 
-            if (CmbTipoTrazabilidad.SelectedValue == null)
-            {
+            if (CmbTipoTrazabilidad.SelectedValue == null)  {
                 TxtMensajeGestionProductos.Text = "Selecciona un tipo de trazabilidad.";
                 return false;
             }
@@ -180,6 +179,29 @@ namespace HarmonyHome.Wpf.Views
             producto.StockMinimo = int.Parse(TxtStockMinimo.Text);
             producto.TipoTrazabilidad = (int)CmbTipoTrazabilidad.SelectedValue;
             producto.Habilitado = ChkHabilitado.IsChecked == true;
+            producto.ImagenUrl = TxtImagenUrl.Text.Trim();
+            producto.Observaciones = TxtObservaciones.Text.Trim();
+
+            return producto;
+        }
+
+        private UpdateProductoDTO CrearDtoUpdateProducto()
+        {
+
+
+            UpdateProductoDTO producto = new UpdateProductoDTO();
+
+            producto.Referencia = TxtReferencia.Text.Trim();
+            producto.Nombre = TxtNombre.Text.Trim();
+            producto.Descripcion = TxtDescripcion.Text.Trim();
+            producto.Categoria = TxtCategoria.Text.Trim();
+            producto.PrecioCoste = decimal.Parse(TxtPrecioCoste.Text);
+            producto.PrecioVenta = decimal.Parse(TxtPrecioVenta.Text);
+            producto.StockMinimo = int.Parse(TxtStockMinimo.Text);
+            producto.TipoTrazabilidad = (int)CmbTipoTrazabilidad.SelectedValue;
+
+            producto.Habilitado = ChkHabilitado.IsChecked == true;
+            producto.Activo = ChkActivo.IsChecked == true;
             producto.ImagenUrl = TxtImagenUrl.Text.Trim();
             producto.Observaciones = TxtObservaciones.Text.Trim();
 

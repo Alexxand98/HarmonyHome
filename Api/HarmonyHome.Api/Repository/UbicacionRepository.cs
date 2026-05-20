@@ -97,22 +97,26 @@ namespace HarmonyHome.Api.Repository
             return ApplicationMapper.ToUbicacionDTO(ubicacion);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<string?> Delete(int id)
         {
             var ubicacion = await _context.Ubicaciones
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            if (ubicacion == null)
-            {
-                return false;
+            if (ubicacion == null)  {
+                return null;
             }
 
-            var tieneStock = await _context.StockUbicaciones
-                .AnyAsync(s => s.UbicacionId == id && s.Cantidad > 0);
+            var tieneRelaciones =
+                await _context.StockUbicaciones.AnyAsync(s => s.UbicacionId == id) ||
+                await _context.MovimientosStock.AnyAsync(m =>
+                    m.UbicacionOrigenId == id ||
+                    m.UbicacionDestinoId == id);
 
-            if (tieneStock)
-            {
-                return false;
+            if (!tieneRelaciones) {
+                _context.Ubicaciones.Remove(ubicacion);
+                await _context.SaveChangesAsync();
+
+                return "Ubicacion eliminada correctamente";
             }
 
             ubicacion.Activa = false;
@@ -120,7 +124,7 @@ namespace HarmonyHome.Api.Repository
             _context.Ubicaciones.Update(ubicacion);
             await _context.SaveChangesAsync();
 
-            return true;
+            return "La ubicacion tiene datos asociados";
         }
 
         public async Task<bool> ExisteCodigo(string codigo)

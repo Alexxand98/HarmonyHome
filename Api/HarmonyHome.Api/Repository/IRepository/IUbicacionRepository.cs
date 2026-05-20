@@ -20,8 +20,7 @@ namespace HarmonyHome.Api.Repository.IRepository
 
         Task<UbicacionDTO?> Update(int id, UpdateUbicacionDTO updateUbicacionDTO);
 
-        Task<bool> Delete(int id);
-
+        Task<string?> Delete(int id);
         Task<bool> ExisteCodigo(string codigo);
 
         Task<bool> ExisteCodigoEnOtraUbicacion(string codigo, int id);

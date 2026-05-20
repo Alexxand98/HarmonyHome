@@ -32,13 +32,12 @@ namespace HarmonyHome.Wpf
             TxtRol.Text = SessionManager.Rol;
 
 
-            if (SessionManager.Rol == "Logistico")
-            {
+            if (SessionManager.Rol == "Logistico") {
                 BtnGestionProductos.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
+                BtnGestionUbicaciones.Visibility = Visibility.Collapsed;
+            }else {
                 BtnGestionProductos.Visibility = Visibility.Visible;
+                BtnGestionUbicaciones.Visibility = Visibility.Visible;
             }
         }
 
@@ -87,6 +86,16 @@ namespace HarmonyHome.Wpf
             GestionProductosView gestionProductosView = new GestionProductosView();
 
             gestionProductosView.ShowDialog();
+        }
+
+
+
+
+        private void BtnGestionUbicaciones_Click(object sender, RoutedEventArgs e)
+        {
+            GestionUbicacionesView gestionUbicacionesView = new GestionUbicacionesView();
+
+            gestionUbicacionesView.ShowDialog();
         }
 
 

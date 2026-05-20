@@ -157,18 +157,19 @@ namespace HarmonyHome.Api.Controllers
         [Authorize(Roles = "SupervisorLogistico,Administrador")]
         public async Task<IActionResult> EliminarUbicacion(int id)
         {
-            var eliminado = await _ubicacionRepository.Delete(id);
+            var resultado = await _ubicacionRepository.Delete(id);
 
-            if (!eliminado)
-            {
-                _responseApi.StatusCode = HttpStatusCode.BadRequest;
+            if (resultado == null){
+                _responseApi.StatusCode = HttpStatusCode.NotFound;
                 _responseApi.IsSuccess = false;
-                _responseApi.ErrorMessages.Add("No se pudo eliminar la ubicación. Puede que no exista o que tenga stock activo.");
-                return BadRequest(_responseApi);
+                _responseApi.ErrorMessages.Add("Ubicacion no encontrada.");
+
+                return NotFound(_responseApi);
             }
 
             _responseApi.StatusCode = HttpStatusCode.OK;
-            _responseApi.Result = "Ubicación desactivada correctamente.";
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = resultado;
 
             return Ok(_responseApi);
         }

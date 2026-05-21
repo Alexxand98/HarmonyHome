@@ -63,6 +63,9 @@ namespace HarmonyHome.Wpf.Services
 
                 string json = await response.Content.ReadAsStringAsync();
 
+                MessageBox.Show("POST " + endpoint + "\n" + response.StatusCode + "\n" + json);
+
+
                 if (!response.IsSuccessStatusCode){
                     return default;
                 }

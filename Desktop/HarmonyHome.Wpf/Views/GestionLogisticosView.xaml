@@ -1,0 +1,117 @@
+﻿<Window x:Class="HarmonyHome.Wpf.Views.GestionLogisticosView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
+        mc:Ignorable="d"
+        Title="Gestion logisticos" Height="500" Width="1000"
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+     <Grid Grid.Column="0" Margin="0,0,15,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Gestion de logisticos"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"/>
+
+            <Button x:Name="BtnCargarLogisticos"
+                    Grid.Row="1"
+                    Content="Cargar logisticos"
+                    Width="140"
+                    Height="32"
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,10"
+                    Click="BtnCargarLogisticos_Click"/>
+
+            <DataGrid x:Name="TablaLogisticos"
+                      Grid.Row="2"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionChanged="TablaLogisticos_SelectionChanged">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Usuario" Binding="{Binding UserName}" Width="120"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="180"/>
+                    <DataGridTextColumn Header="Nombre" Binding="{Binding NombreCompleto}" Width="160"/>
+                    <DataGridTextColumn Header="Rol" Binding="{Binding Role}" Width="90"/>
+                    <DataGridCheckBoxColumn Header="Activo" Binding="{Binding Activo}" Width="70"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Datos del logístico"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="0,0,0,15"/>
+
+            <TextBlock Text="Usuario"/>
+            <TextBox x:Name="TxtUserName" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Email"/>
+            <TextBox x:Name="TxtEmail" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Nombre completo"/>
+            <TextBox x:Name="TxtNombreCompleto" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Contraseña"/>
+            <PasswordBox x:Name="TxtPassword" Margin="0,0,0,8"/>
+
+            <CheckBox x:Name="ChkActivo"
+                      Content="Activo"
+                      IsEnabled="False"
+                      Margin="0,5,0,15"/>
+
+            <WrapPanel Margin="0,5,0,10">
+                <Button x:Name="BtnNuevoLogistico"
+                        Content="Nuevo"
+                        Width="80"
+                        Height="30"
+                        Margin="0,0,5,5"
+                        Click="BtnNuevoLogistico_Click"/>
+
+                <Button x:Name="BtnGuardarLogistico"
+                        Content="Guardar"
+                        Width="80"
+                        Height="30"
+                        Margin="0,0,5,5"
+                        Click="BtnGuardarLogistico_Click"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <Button x:Name="BtnActivarLogistico"
+                        Content="Activar"
+                        Width="80"
+                        Height="30"
+                        Margin="0,0,5,5"
+                        Click="BtnActivarLogistico_Click"/>
+
+                <Button x:Name="BtnDesactivarLogistico"
+                        Content="Desactivar"
+                        Width="90"
+                        Height="30"
+                        Margin="0,0,5,5"
+                        Click="BtnDesactivarLogistico_Click"/>
+            </WrapPanel>
+
+            <TextBlock x:Name="TxtMensajeGestionLogisticos"
+                       Text=""
+                       Foreground="Gray"
+                       TextWrapping="Wrap"
+                       Margin="0,10,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

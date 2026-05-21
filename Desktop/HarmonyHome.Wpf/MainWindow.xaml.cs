@@ -35,9 +35,14 @@ namespace HarmonyHome.Wpf
             if (SessionManager.Rol == "Logistico") {
                 BtnGestionProductos.Visibility = Visibility.Collapsed;
                 BtnGestionUbicaciones.Visibility = Visibility.Collapsed;
+                BtnGestionLogisticos.Visibility = Visibility.Collapsed;
+
+
             }else {
                 BtnGestionProductos.Visibility = Visibility.Visible;
                 BtnGestionUbicaciones.Visibility = Visibility.Visible;
+                BtnGestionLogisticos.Visibility = Visibility.Visible;
+
             }
         }
 
@@ -96,6 +101,15 @@ namespace HarmonyHome.Wpf
             GestionUbicacionesView gestionUbicacionesView = new GestionUbicacionesView();
 
             gestionUbicacionesView.ShowDialog();
+        }
+
+
+
+        private void BtnGestionLogisticos_Click(object sender, RoutedEventArgs e)
+        {
+            GestionLogisticosView gestionLogisticosView = new GestionLogisticosView();
+
+            gestionLogisticosView.ShowDialog();
         }
 
 

@@ -65,6 +65,13 @@
                 Margin="15,0,15,10"
                 Click="BtnGestionUbicaciones_Click"/>
 
+
+            <Button x:Name="BtnGestionLogisticos"
+                    Content="Gestión logisticos"
+                    Height="38"
+                    Margin="15,0,15,10"
+                    Click="BtnGestionLogisticos_Click"/>
+
             <Button x:Name="BtnUbicaciones"
                     Content="Ubicaciones"
                     Height="38"

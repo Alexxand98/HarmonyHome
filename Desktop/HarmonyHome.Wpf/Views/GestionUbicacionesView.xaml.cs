@@ -161,11 +161,12 @@ namespace HarmonyHome.Wpf.Views
 
             string mensaje = await _ubicacionService.EliminarUbicacionAsync(_ubicacionSeleccionada.Id);
 
-            TxtMensajeGestionUbicaciones.Text = mensaje;
 
             LimpiarFormulario();
 
             await CargarUbicaciones();
+            TxtMensajeGestionUbicaciones.Text = mensaje;
+
         }
 
 

@@ -113,6 +113,14 @@ namespace HarmonyHome.Wpf
         }
 
 
+
+
+        private void BtnStock_Click(object sender, RoutedEventArgs e)
+        {
+            StockView stockView = new StockView();
+
+            stockView.ShowDialog();
+        }
     }
 
 

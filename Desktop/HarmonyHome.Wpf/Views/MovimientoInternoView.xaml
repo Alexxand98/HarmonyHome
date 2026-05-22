@@ -1,0 +1,61 @@
+﻿<Window x:Class="HarmonyHome.Wpf.Views.MovimientoInternoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
+        mc:Ignorable="d"
+        Title="MovimientoInternoView" Height="500" Width="500"
+        
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <StackPanel>
+
+            <TextBlock Text="Movimiento interno stock"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="0,0,0,20"/>
+
+            <TextBlock Text="Producto"/>
+            <ComboBox x:Name="CmbProducto"
+                      DisplayMemberPath="Nombre"
+                      SelectedValuePath="Id"
+                      Margin="0,0,0,10"/>
+
+            <TextBlock Text="Ubicacion origen"/>
+            <ComboBox x:Name="CmbOrigen"
+                      DisplayMemberPath="Nombre"
+                      SelectedValuePath="Id"
+                      Margin="0,0,0,10"/>
+
+            <TextBlock Text="Ubicacion destino"/>
+            <ComboBox x:Name="CmbDestino"
+                      DisplayMemberPath="Nombre"
+                      SelectedValuePath="Id"
+                      Margin="0,0,0,10"/>
+
+            <TextBlock Text="Cantidad"/>
+            <TextBox x:Name="TxtCantidad"
+                     Margin="0,0,0,10"/>
+
+            <TextBlock Text="Observaciones"/>
+            <TextBox x:Name="TxtObservaciones"
+                     Height="70"
+                     TextWrapping="Wrap" AcceptsReturn="True"
+                     Margin="0,0,0,15"/>
+
+            <Button x:Name="BtnMover"
+                    Content="Mover stock"
+                    Height="35"
+                    Width="120" HorizontalAlignment="Left"
+                    Click="BtnMover_Click"/>
+
+            <TextBlock x:Name="TxtMensaje" Text=""
+                       Foreground="Gray"
+                       TextWrapping="Wrap"
+                       Margin="0,15,0,0"/>
+
+        </StackPanel>
+    </Grid>
+</Window>

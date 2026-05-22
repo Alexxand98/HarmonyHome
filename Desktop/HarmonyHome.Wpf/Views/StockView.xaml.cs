@@ -61,5 +61,15 @@ namespace HarmonyHome.Wpf.Views
 
             TxtMensajeStock.Text = "Registros cargados: " + stock.Count;
         }
+
+
+
+
+        private void BtnMoverStock_Click(object sender, RoutedEventArgs e)
+        {
+            MovimientoInternoView movimientoInternoView = new MovimientoInternoView();
+
+            movimientoInternoView.ShowDialog();
+        }
     }
 }

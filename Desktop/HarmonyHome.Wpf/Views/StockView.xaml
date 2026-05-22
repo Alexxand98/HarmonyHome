@@ -41,6 +41,13 @@
                     Width="100"
                     Height="32"
                     Click="BtnCargarAlmacen_Click"/>
+
+            <Button x:Name="BtnMoverStock"
+                Content="Mover stock"
+                Width="110"
+                Height="32"
+                Margin="8,0,0,0"
+                Click="BtnMoverStock_Click"/>
         </WrapPanel>
 
         <DataGrid x:Name="TablaStock"

@@ -58,6 +58,13 @@
                 Height="38"
                 Margin="15,0,15,10"
                 Click="BtnStock_Click"/>
+            
+            <Button x:Name="BtnMovimientos"
+                Content="Movimientos"
+                Height="38"
+                Margin="15,0,15,10"
+                Click="BtnMovimientos_Click"/>
+            
 
             <Button x:Name="BtnGestionProductos"
                 Content="Gestión productos"

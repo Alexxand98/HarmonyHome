@@ -121,6 +121,14 @@ namespace HarmonyHome.Wpf
 
             stockView.ShowDialog();
         }
+
+
+        private void BtnMovimientos_Click(object sender, RoutedEventArgs e)
+        {
+            MovimientosStockView movimientosStockView = new MovimientosStockView();
+
+            movimientosStockView.ShowDialog();
+        }
     }
 
 

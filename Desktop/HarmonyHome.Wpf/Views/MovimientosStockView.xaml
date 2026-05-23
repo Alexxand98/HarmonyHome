@@ -1,0 +1,55 @@
+﻿<Window x:Class="HarmonyHome.Wpf.Views.MovimientosStockView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
+        mc:Ignorable="d" Title="MovimientosStockView" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Historial de movimientos"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
+
+        <Button x:Name="BtnCargarMovimientos"
+                Grid.Row="1"
+                Content="Cargar movimientos"
+                Width="160"
+                Height="32"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,10"
+                Click="BtnCargarMovimientos_Click"/>
+
+        <DataGrid x:Name="TablaMovimientos"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" Width="140"/>
+                <DataGridTextColumn Header="Referencia" Binding="{Binding ProductoReferencia}" Width="120"/>
+                <DataGridTextColumn Header="Producto" Binding="{Binding ProductoNombre}" Width="150"/>
+                <DataGridTextColumn Header="Origen" Binding="{Binding UbicacionOrigenCodigo}" Width="100"/>
+                <DataGridTextColumn Header="Destino" Binding="{Binding UbicacionDestinoCodigo}" Width="100"/>
+                <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="80"/>
+                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoMovimientoNombre}" Width="130"/>
+                <DataGridTextColumn Header="Observaciones" Binding="{Binding Observaciones}" Width="220"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock x:Name="TxtMensajeMovimientos"
+                   Grid.Row="3"
+                   Text=""
+                   Foreground="Gray"
+                   TextWrapping="Wrap"
+                   Margin="0,10,0,0"/>
+    </Grid>
+</Window>

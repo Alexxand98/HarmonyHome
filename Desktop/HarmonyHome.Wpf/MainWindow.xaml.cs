@@ -129,6 +129,14 @@ namespace HarmonyHome.Wpf
 
             movimientosStockView.ShowDialog();
         }
+
+
+        private void BtnDemarca_Click(object sender, RoutedEventArgs e)
+        {
+            DemarcaView demarcaView = new DemarcaView();
+
+            demarcaView.ShowDialog();
+        }
     }
 
 

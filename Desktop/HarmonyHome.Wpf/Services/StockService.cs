@@ -54,17 +54,17 @@ namespace HarmonyHome.Wpf.Services
 
         public async Task<string> MoverStockAsync(CreateMovimientoInternoDTO movimiento)
         {
-            ResponseApi<string>? response = await _apiService.PostAsync<ResponseApi<string>>("api/Stock/mover", movimiento);
+            ResponseApi<MovimientoStockDTO>? response = await _apiService.PostAsync<ResponseApi<MovimientoStockDTO>>("api/Stock/mover", movimiento);
 
-            if (response != null && response.IsSuccess && response.Result != null) {
-                return response.Result;
+            if (response != null && response.IsSuccess){
+                return "Movimiento realizado correctamente.";
             }
 
             if (response != null && response.ErrorMessages.Count > 0){
                 return response.ErrorMessages[0];
             }
 
-            return "No se pudo mover el stock";
+            return "No se pudo mover el stock.";
         }
 
 

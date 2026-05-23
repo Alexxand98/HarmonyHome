@@ -1,5 +1,6 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,6 +48,8 @@ namespace HarmonyHome.Wpf.Views
             TxtMensaje.Text = "Cargando datos...";
 
             List<ProductoDTO> productos = await _productoService.GetProductosAsync();
+
+            productos = productos.Where(p => p.Activo && p.Habilitado).ToList();
 
             List<UbicacionDTO> ubicaciones = await _ubicacionService.GetUbicacionesPorTipoAsync(2);
 

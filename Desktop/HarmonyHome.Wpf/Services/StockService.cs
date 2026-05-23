@@ -66,5 +66,29 @@ namespace HarmonyHome.Wpf.Services
 
             return "No se pudo mover el stock";
         }
+
+
+
+        public async Task<string> CrearStockAsync(CreateStockUbicacionDTO stock)
+        {
+            ResponseApi<StockUbicacionDTO>? response = await _apiService.PostAsync<ResponseApi<StockUbicacionDTO>>("api/Stock", stock);
+
+            if (response != null && response.IsSuccess) {
+
+                return "Stock creado correctamente";
+
+            }
+
+            if (response != null && response.ErrorMessages.Count > 0){
+
+                return response.ErrorMessages[0];
+
+            }
+
+            return "No se pudo crear el stock";
+        }
     }
+
+
+
 }

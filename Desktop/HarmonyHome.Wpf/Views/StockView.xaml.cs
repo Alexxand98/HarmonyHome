@@ -62,8 +62,12 @@ namespace HarmonyHome.Wpf.Views
             TxtMensajeStock.Text = "Registros cargados: " + stock.Count;
         }
 
+        private void BtnAltaStock_Click(object sender, RoutedEventArgs e)
+        {
+            AltaStockView altaStockView = new AltaStockView();
 
-
+            altaStockView.ShowDialog();
+        }
 
         private void BtnMoverStock_Click(object sender, RoutedEventArgs e)
         {

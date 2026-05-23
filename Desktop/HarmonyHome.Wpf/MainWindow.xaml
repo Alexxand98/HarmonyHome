@@ -97,6 +97,12 @@
                     Margin="15,0,15,10"  
                     Click="BtnUbicaciones_Click"/>
 
+            <Button x:Name="BtnOrdenesRecogida"
+                    Content="Órdenes recogida"
+                    Height="38"
+                    Margin="15,0,15,10"
+                    Click="BtnOrdenesRecogida_Click"/>
+
             <Button x:Name="BtnServidor"
                     Content="Servidor"
                     Height="38"

@@ -137,6 +137,14 @@ namespace HarmonyHome.Wpf
 
             demarcaView.ShowDialog();
         }
+
+
+        private void BtnOrdenesRecogida_Click(object sender, RoutedEventArgs e)
+        {
+            OrdenesRecogidaView ordenesRecogidaView = new OrdenesRecogidaView();
+
+            ordenesRecogidaView.ShowDialog();
+        }
     }
 
 

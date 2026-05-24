@@ -1,2 +1,38 @@
 <h1>Productos</h1>
-<p>Pantalla de productos habilitados de HarmonyHome.</p>
+<p>Listado de productos habilitados para tienda.</p>
+
+<button type="button" (click)="cargarProductos()">Actualizar</button>
+
+<p *ngIf="isLoading">Cargando productos...</p>
+
+<p class="error" *ngIf="errorMessage">
+  {{ errorMessage }}
+</p>
+
+<table *ngIf="!isLoading && productos.length > 0">
+  <thead>
+    <tr>
+      <th>Referencia</th>
+      <th>Nombre</th>
+      <th>Categoría</th>
+      <th>Precio venta</th>
+      <th>Trazabilidad</th>
+      <th>Activo</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let producto of productos">
+      <td>{{ producto.referencia }}</td>
+      <td>{{ producto.nombre }}</td>
+      <td>{{ producto.categoria }}</td>
+      <td>{{ producto.precioVenta }} €</td>
+      <td>{{ producto.tipoTrazabilidadNombre }}</td>
+      <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!isLoading && productos.length === 0 && !errorMessage">
+  No hay productos habilitados.
+</p>

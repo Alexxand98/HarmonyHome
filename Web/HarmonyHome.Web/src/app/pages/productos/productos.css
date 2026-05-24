@@ -1,0 +1,39 @@
+h1 {
+  margin-bottom: 4px;
+}
+
+p {
+  color: #4b5563;
+}
+
+button {
+  margin: 12px 0;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  margin-top: 12px;
+}
+
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+th {
+  background: #f9fafb;
+}
+
+.error {
+  color: #dc2626;
+}

@@ -69,6 +69,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>{options.AddPolicy("AllowAngular", policy =>{policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();});});
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
@@ -91,6 +93,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAngular");
 
 app.UseAuthentication();
 

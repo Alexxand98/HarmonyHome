@@ -6,14 +6,30 @@ p {
   color: #4b5563;
 }
 
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.search-box input {
+  width: 280px;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
 button {
-  margin: 12px 0;
   padding: 8px 14px;
   border: none;
   border-radius: 6px;
   background: #2563eb;
   color: white;
   cursor: pointer;
+}
+
+button.secondary {
+  background: #6b7280;
 }
 
 table {

@@ -1,7 +1,17 @@
 <h1>Productos</h1>
 <p>Listado de productos habilitados para tienda.</p>
 
-<button type="button" (click)="cargarProductos()">Actualizar</button>
+<div class="search-box">
+  <input
+    type="text"
+    placeholder="Buscar por nombre o referencia"
+    [(ngModel)]="textoBusqueda"
+    (keyup.enter)="buscarProductos()"
+  />
+
+  <button type="button" (click)="buscarProductos()">Buscar</button>
+  <button type="button" class="secondary" (click)="limpiarBusqueda()">Limpiar</button>
+</div>
 
 <p *ngIf="isLoading">Cargando productos...</p>
 
@@ -34,5 +44,5 @@
 </table>
 
 <p *ngIf="!isLoading && productos.length === 0 && !errorMessage">
-  No hay productos habilitados.
+  No hay productos para mostrar.
 </p>

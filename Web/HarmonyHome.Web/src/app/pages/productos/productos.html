@@ -28,6 +28,7 @@
       <th>Precio venta</th>
       <th>Trazabilidad</th>
       <th>Activo</th>
+      <th>Stock</th>
     </tr>
   </thead>
 
@@ -39,6 +40,11 @@
       <td>{{ producto.precioVenta }} €</td>
       <td>{{ producto.tipoTrazabilidadNombre }}</td>
       <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
+      <td>
+        <button type="button" class="small" (click)="verStock(producto.id)">
+          Ver stock
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -46,3 +52,31 @@
 <p *ngIf="!isLoading && productos.length === 0 && !errorMessage">
   No hay productos para mostrar.
 </p>
+
+<p *ngIf="isLoadingStock">Cargando stock...</p>
+
+<p class="error" *ngIf="stockErrorMessage">
+  {{ stockErrorMessage }}
+</p>
+
+<div class="stock-card" *ngIf="stockSeleccionado">
+  <h2>{{ stockSeleccionado.productoNombre }}</h2>
+  <p>Referencia: {{ stockSeleccionado.productoReferencia }}</p>
+
+  <div class="stock-grid">
+    <div>
+      <strong>{{ stockSeleccionado.stockTienda }}</strong>
+      <span>Stock tienda</span>
+    </div>
+
+    <div>
+      <strong>{{ stockSeleccionado.stockAlmacen }}</strong>
+      <span>Stock almacén</span>
+    </div>
+
+    <div>
+      <strong>{{ stockSeleccionado.stockTotal }}</strong>
+      <span>Stock total</span>
+    </div>
+  </div>
+</div>

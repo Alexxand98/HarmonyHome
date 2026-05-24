@@ -32,6 +32,11 @@ button.secondary {
   background: #6b7280;
 }
 
+button.small {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -52,4 +57,40 @@ th {
 
 .error {
   color: #dc2626;
+}
+
+.stock-card {
+  margin-top: 20px;
+  padding: 18px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.stock-card h2 {
+  margin-top: 0;
+}
+
+.stock-grid {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.stock-grid div {
+  flex: 1;
+  padding: 14px;
+  background: #f9fafb;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stock-grid strong {
+  display: block;
+  font-size: 24px;
+  color: #111827;
+}
+
+.stock-grid span {
+  color: #4b5563;
 }

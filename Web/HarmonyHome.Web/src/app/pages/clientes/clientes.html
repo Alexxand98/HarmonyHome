@@ -1,0 +1,82 @@
+<h1>Clientes</h1>
+<p>Gestión básica de clientes de tienda.</p>
+
+<div class="client-layout">
+  <section class="form-card">
+    <h2>{{ clienteEditandoId ? 'Editar cliente' : 'Nuevo cliente' }}</h2>
+
+    <label>Nombre</label>
+    <input type="text" [(ngModel)]="clienteForm.nombre" />
+
+    <label>Apellidos</label>
+    <input type="text" [(ngModel)]="clienteForm.apellidos" />
+
+    <label>Teléfono</label>
+    <input type="text" [(ngModel)]="clienteForm.telefono" />
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="clienteForm.email" />
+
+    <label>Dirección</label>
+    <input type="text" [(ngModel)]="clienteForm.direccion" />
+
+    <div class="buttons">
+      <button type="button" (click)="guardarCliente()">
+        {{ clienteEditandoId ? 'Actualizar' : 'Guardar' }}
+      </button>
+
+      <button type="button" class="secondary" (click)="limpiarFormulario()">Limpiar</button>
+    </div>
+
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </section>
+
+  <section class="table-card">
+    <h2>Listado de clientes</h2>
+
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Buscar cliente"
+        [(ngModel)]="textoBusqueda"
+        (keyup.enter)="buscarClientes()"
+      />
+
+      <button type="button" (click)="buscarClientes()">Buscar</button>
+      <button type="button" class="secondary" (click)="limpiarBusqueda()">Limpiar</button>
+    </div>
+
+    <p *ngIf="isLoading">Cargando clientes...</p>
+
+    <table *ngIf="!isLoading && clientes.length > 0">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.nombre }} {{ cliente.apellidos }}</td>
+          <td>{{ cliente.telefono }}</td>
+          <td>{{ cliente.email }}</td>
+          <td>{{ cliente.direccion }}</td>
+          <td>
+            <button type="button" class="small" (click)="editarCliente(cliente)">Editar</button>
+
+            <button type="button" class="small danger" (click)="eliminarCliente(cliente)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!isLoading && clientes.length === 0">No hay clientes activos.</p>
+  </section>
+</div>

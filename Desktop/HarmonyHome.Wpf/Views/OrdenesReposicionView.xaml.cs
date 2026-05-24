@@ -96,11 +96,45 @@ namespace HarmonyHome.Wpf.Views
                 return;
             }
 
+            if (_ordenSeleccionada.EstadoNombre != "Asignada"){
+
+                TxtMensaje.Text = "Solo se puede finalizar una reposición asignada";
+                return;
+            }
+
             string mensaje = await _ordenService.FinalizarAsync(_ordenSeleccionada.Id);
 
             await CargarOrdenes();
 
             TxtMensaje.Text = mensaje;
+        }
+
+
+
+        private async void BtnVerPreparacion_Click(object sender, RoutedEventArgs e)
+        {
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una reposición";
+                return;
+            }
+
+            if (_ordenSeleccionada.EstadoNombre != "Asignada") {
+
+                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
+                return;
+            }
+
+            PreparacionReposicionDTO? preparacion = await _ordenService.GetPreparacionAsync(_ordenSeleccionada.Id);
+
+            if (preparacion == null){
+                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
+                return;
+            }
+
+            PreparacionReposicionView view = new PreparacionReposicionView(preparacion);
+
+            view.ShowDialog();
         }
     }
 }

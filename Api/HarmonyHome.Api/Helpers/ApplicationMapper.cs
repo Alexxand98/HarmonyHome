@@ -227,28 +227,32 @@ namespace HarmonyHome.Api.Helpers
 
 
 
-        public static OrdenRecogidaDTO ToOrdenRecogidaDTO(OrdenRecogida orden)
-        {
+        public static OrdenRecogidaDTO ToOrdenRecogidaDTO(OrdenRecogida orden,ApplicationUser? usuarioAsignado = null){
 
             var pedido = orden.PedidoVenta;
 
             return new OrdenRecogidaDTO
             {
-               
                 Id = orden.Id,
-               
+
                 PedidoVentaId = orden.PedidoVentaId,
-                
+
                 FechaCreacion = orden.FechaCreacion,
-               
+
                 Estado = orden.Estado,
-               
+
                 EstadoNombre = orden.Estado.ToString(),
+
                 UsuarioAsignadoId = orden.UsuarioAsignadoId,
-               
+
+                UsuarioAsignadoUserName = usuarioAsignado?.UserName,
+
+                UsuarioAsignadoEmail = usuarioAsignado?.Email,
+
                 Observaciones = orden.Observaciones,
 
                 ClienteId = pedido?.ClienteId ?? 0,
+
                 ClienteNombreCompleto = pedido?.Cliente == null ? string.Empty : $"{pedido.Cliente.Nombre} {pedido.Cliente.Apellidos}".Trim(),
 
                 TotalPedido = pedido?.Total ?? 0,
@@ -274,17 +278,35 @@ namespace HarmonyHome.Api.Helpers
 
 
 
-        public static OrdenReposicionDTO ToOrdenReposicionDTO(OrdenReposicion orden)
+        public static OrdenReposicionDTO ToOrdenReposicionDTO(
+            OrdenReposicion orden,
+            ApplicationUser? usuarioSolicitante = null,
+            ApplicationUser? usuarioPreparador = null)
         {
             return new OrdenReposicionDTO
             {
                 Id = orden.Id,
+
                 FechaSolicitud = orden.FechaSolicitud,
+
                 Estado = orden.Estado,
+
                 EstadoNombre = orden.Estado.ToString(),
+
                 UsuarioSolicitanteId = orden.UsuarioSolicitanteId,
+
+                UsuarioSolicitanteUserName = usuarioSolicitante?.UserName,
+
+                UsuarioSolicitanteEmail = usuarioSolicitante?.Email,
+
                 UsuarioPreparadorId = orden.UsuarioPreparadorId,
+
+                UsuarioPreparadorUserName = usuarioPreparador?.UserName,
+
+                UsuarioPreparadorEmail = usuarioPreparador?.Email,
+
                 Observaciones = orden.Observaciones,
+
                 Lineas = orden.Lineas.Select(ToLineaOrdenReposicionDTO).ToList()
             };
         }

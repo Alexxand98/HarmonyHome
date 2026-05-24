@@ -1,6 +1,7 @@
 ﻿using HarmonyHome.Api.Data;
 using HarmonyHome.Api.Helpers;
 using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.PreparacionReposicionDto;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Models.Enums;
 using HarmonyHome.Api.Repository.IRepository;
@@ -20,22 +21,39 @@ namespace HarmonyHome.Api.Repository
 
         public async Task<List<OrdenReposicionDTO>> GetAll()
         {
-            return await _context.OrdenesReposicion
-                .Include(o => o.Lineas)
-                    .ThenInclude(l => l.Producto)
-                .OrderByDescending(o => o.FechaSolicitud)
-                .Select(o => ApplicationMapper.ToOrdenReposicionDTO(o))
-                .ToListAsync();
+            var ordenes = await _context.OrdenesReposicion.Include(o => o.Lineas).ThenInclude(l => l.Producto).OrderByDescending(o => o.FechaSolicitud).ToListAsync();
+
+            var resultado = new List<OrdenReposicionDTO>();
+
+            foreach (var orden in ordenes){
+
+                var dto = await MapearOrdenReposicionCompleta(orden);
+
+                if (dto != null){
+
+                    resultado.Add(dto);
+                }
+            }
+
+            return resultado;
         }
         public async Task<List<OrdenReposicionDTO>> GetPendientes()
         {
-            return await _context.OrdenesReposicion
-                .Include(o => o.Lineas)
-                    .ThenInclude(l => l.Producto)
-                .Where(o => o.Estado == EstadoOrden.Pendiente)
-                .OrderBy(o => o.FechaSolicitud)
-                .Select(o => ApplicationMapper.ToOrdenReposicionDTO(o))
-                .ToListAsync();
+            var ordenes = await _context.OrdenesReposicion.Include(o => o.Lineas).ThenInclude(l => l.Producto).Where(o => o.Estado == EstadoOrden.Pendiente).OrderBy(o => o.FechaSolicitud).ToListAsync();
+
+            var resultado = new List<OrdenReposicionDTO>();
+
+            foreach (var orden in ordenes) {
+
+                var dto = await MapearOrdenReposicionCompleta(orden);
+
+                if (dto != null) {
+
+                    resultado.Add(dto);
+                }
+            }
+
+            return resultado;
         }
 
 
@@ -43,7 +61,7 @@ namespace HarmonyHome.Api.Repository
         {
             var orden = await _context.OrdenesReposicion.Include(o => o.Lineas).ThenInclude(l => l.Producto).FirstOrDefaultAsync(o => o.Id == id);
 
-            return orden == null ? null : ApplicationMapper.ToOrdenReposicionDTO(orden);
+            return await MapearOrdenReposicionCompleta(orden);
         }
 
 
@@ -52,11 +70,9 @@ namespace HarmonyHome.Api.Repository
         {
             foreach (var linea in dto.Lineas)
             {
-                var productoExiste = await _context.Productos
-                    .AnyAsync(p => p.Id == linea.ProductoId && p.Activo && p.Habilitado);
+                var productoExiste = await _context.Productos.AnyAsync(p => p.Id == linea.ProductoId && p.Activo && p.Habilitado);
 
-                if (!productoExiste)
-                {
+                if (!productoExiste){
                     return null;
                 }
 
@@ -68,8 +84,7 @@ namespace HarmonyHome.Api.Repository
                         s.Ubicacion.TipoUbicacion == TipoUbicacion.Almacen)
                     .SumAsync(s => s.Cantidad);
 
-                if (stockAlmacen < linea.CantidadSolicitada)
-                {
+                if (stockAlmacen < linea.CantidadSolicitada){
                     return null;
                 }
             }
@@ -105,8 +120,7 @@ namespace HarmonyHome.Api.Repository
             var orden = await _context.OrdenesReposicion
                 .FirstOrDefaultAsync(o => o.Id == id);
 
-            if (orden == null || orden.Estado != EstadoOrden.Pendiente)
-            {
+            if (orden == null || orden.Estado != EstadoOrden.Pendiente) {
                 return null;
             }
 
@@ -123,30 +137,24 @@ namespace HarmonyHome.Api.Repository
         public async Task<OrdenReposicionDTO?> Finalizar(int id, string usuarioPreparadorId, FinalizarOrdenReposicionDTO dto)
         
         {
-            var orden = await _context.OrdenesReposicion
-                .Include(o => o.Lineas)
-                .FirstOrDefaultAsync(o => o.Id == id);
+            var orden = await _context.OrdenesReposicion.Include(o => o.Lineas).FirstOrDefaultAsync(o => o.Id == id);
 
-            if (orden == null)
-            {
+            if (orden == null){
                
                 return null;
             }
 
            
-            if (orden.Estado != EstadoOrden.Asignada && orden.Estado != EstadoOrden.EnPreparacion)
-            {
+            if (orden.Estado != EstadoOrden.Asignada && orden.Estado != EstadoOrden.EnPreparacion){
                
                 
                 return null;
             }
 
-            var ubicacionTienda = await _context.Ubicaciones
-                .FirstOrDefaultAsync(u => u.TipoUbicacion == TipoUbicacion.Tienda && u.Activa);
+            var ubicacionTienda = await _context.Ubicaciones.FirstOrDefaultAsync(u => u.TipoUbicacion == TipoUbicacion.Tienda && u.Activa);
 
            
-            if (ubicacionTienda == null)
-            {
+            if (ubicacionTienda == null) {
                 return null;
             }
 
@@ -242,6 +250,104 @@ namespace HarmonyHome.Api.Repository
 
                 return null;
             }
+
         }
+
+
+
+
+        public async Task<PreparacionReposicionDTO?> GetPreparacion(int id)
+        {
+            var orden = await _context.OrdenesReposicion.Include(o => o.Lineas).ThenInclude(l => l.Producto).FirstOrDefaultAsync(o => o.Id == id);
+
+            if (orden == null) {
+                return null;
+            }
+
+
+            if (orden.Estado == EstadoOrden.Finalizada || orden.Estado == EstadoOrden.Cancelada){
+
+                return null;
+            }
+
+            var preparacion = new PreparacionReposicionDTO
+            {
+                OrdenReposicionId = orden.Id,
+                EstadoOrden = orden.Estado.ToString()
+            };
+
+            foreach (var linea in orden.Lineas){
+
+                var lineaPreparacion = new LineaPreparacionReposicionDTO
+                {
+                    ProductoId = linea.ProductoId,
+                    ProductoReferencia = linea.Producto?.Referencia ?? string.Empty,
+                    ProductoNombre = linea.Producto?.Nombre ?? string.Empty,
+                    CantidadSolicitada = linea.CantidadSolicitada
+                };
+
+                var cantidadPendiente = linea.CantidadSolicitada;
+
+                var stocksAlmacen = await _context.StockUbicaciones.Include(s => s.Ubicacion).Where(s =>
+                        s.ProductoId == linea.ProductoId &&
+                        s.Ubicacion != null &&
+                        s.Ubicacion.TipoUbicacion == TipoUbicacion.Almacen &&
+                        s.Cantidad > 0).OrderBy(s => s.Ubicacion!.Codigo).ToListAsync();
+
+                foreach (var stock in stocksAlmacen){
+
+                    if (cantidadPendiente <= 0){
+
+                        break;
+                    }
+
+                    var cantidadARecoger = Math.Min(stock.Cantidad, cantidadPendiente);
+
+                    lineaPreparacion.Ubicaciones.Add(new UbicacionPreparacionReposicionDTO
+                    {
+
+                        UbicacionId = stock.UbicacionId,
+
+                        UbicacionCodigo = stock.Ubicacion?.Codigo ?? string.Empty,
+
+                        UbicacionNombre = stock.Ubicacion?.Nombre ?? string.Empty,
+
+                        CantidadDisponible = stock.Cantidad,
+
+                        CantidadARecoger = cantidadARecoger
+                    });
+
+
+                    cantidadPendiente -= cantidadARecoger;
+                }
+
+                preparacion.Lineas.Add(lineaPreparacion);
+            }
+
+            return preparacion;
+        }
+
+
+
+        private async Task<OrdenReposicionDTO?> MapearOrdenReposicionCompleta(OrdenReposicion? orden)
+        {
+            if (orden == null) {
+
+                return null;
+            }
+
+            var usuarioSolicitante = await _context.Users.FirstOrDefaultAsync(u => u.Id == orden.UsuarioSolicitanteId);
+
+            ApplicationUser? usuarioPreparador = null;
+
+            if (!string.IsNullOrEmpty(orden.UsuarioPreparadorId)) {
+
+                usuarioPreparador = await _context.Users.FirstOrDefaultAsync(u => u.Id == orden.UsuarioPreparadorId);
+            }
+
+            return ApplicationMapper.ToOrdenReposicionDTO(orden,usuarioSolicitante,usuarioPreparador);
+        }
+
+
     }
 }

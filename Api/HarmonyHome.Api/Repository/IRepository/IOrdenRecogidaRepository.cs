@@ -1,4 +1,5 @@
 ﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.PreparacionRecogidaDto;
 
 namespace HarmonyHome.Api.Repository.IRepository
 {
@@ -9,6 +10,9 @@ namespace HarmonyHome.Api.Repository.IRepository
         Task<List<OrdenRecogidaDTO>> GetPendientes();
 
         Task<OrdenRecogidaDTO?> GetById(int id);
+
+        Task<PreparacionRecogidaDTO?> GetPreparacion(int id);
+
 
         Task<OrdenRecogidaDTO?> Asignar(int id, string usuarioId);
 

@@ -67,6 +67,7 @@ namespace HarmonyHome.Wpf.Views
             if (_ordenSeleccionada == null){
 
                 TablaLineas.ItemsSource = null;
+
                 return;
             }
 
@@ -78,6 +79,12 @@ namespace HarmonyHome.Wpf.Views
             if (_ordenSeleccionada == null){
 
                 TxtMensaje.Text = "Selecciona una orden";
+                return;
+            }
+
+            if (_ordenSeleccionada.EstadoNombre != "Pendiente"){
+
+                TxtMensaje.Text = "Solo se puede asignar una orden pendiente";
                 return;
             }
 
@@ -93,7 +100,12 @@ namespace HarmonyHome.Wpf.Views
             if (_ordenSeleccionada == null){
 
                 TxtMensaje.Text = "Selecciona una orden";
+                return;
+            }
 
+            if (_ordenSeleccionada.EstadoNombre != "Asignada"){
+
+                TxtMensaje.Text = "Solo se puede pasar a preparación una orden asignada";
                 return;
             }
 
@@ -112,11 +124,44 @@ namespace HarmonyHome.Wpf.Views
                 return;
             }
 
+            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion") {
+
+                TxtMensaje.Text = "Solo se puede finalizar una orden en preparación";
+                return;
+            }
+
             string mensaje = await _ordenService.FinalizarAsync(_ordenSeleccionada.Id);
 
             await CargarOrdenes();
 
             TxtMensaje.Text = mensaje;
+        }
+
+        private async void BtnVerPreparacion_Click(object sender, RoutedEventArgs e)
+        {
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una orden";
+                return;
+            }
+
+            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion")
+            {
+                TxtMensaje.Text = "Solo se puede ver la preparación de una orden en preparación";
+                return;
+            }
+
+            PreparacionRecogidaDTO? preparacion = await _ordenService.GetPreparacionAsync(_ordenSeleccionada.Id);
+
+            if (preparacion == null)
+            {
+                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
+                return;
+            }
+
+            PreparacionRecogidaView view = new PreparacionRecogidaView(preparacion);
+
+            view.ShowDialog();
         }
     }
 }

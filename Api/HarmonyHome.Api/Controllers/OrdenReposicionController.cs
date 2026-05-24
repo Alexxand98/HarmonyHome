@@ -186,5 +186,29 @@ namespace HarmonyHome.Api.Controllers
 
             return Ok(_responseApi);
         }
+
+        [HttpGet("{id:int}/preparacion")]
+        [Authorize(Roles = "Logistico,SupervisorLogistico,Administrador")]
+        public async Task<IActionResult> GetPreparacion(int id)
+        {
+            var preparacion = await _ordenReposicionRepository.GetPreparacion(id);
+
+            if (preparacion == null){
+
+                _responseApi.StatusCode = HttpStatusCode.NotFound;
+
+                _responseApi.IsSuccess = false;
+
+                _responseApi.ErrorMessages.Add("Orden de reposición no encontrada");
+
+                return NotFound(_responseApi);
+            }
+
+            _responseApi.StatusCode = HttpStatusCode.OK;
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = preparacion;
+
+            return Ok(_responseApi);
+        }
     }
 }

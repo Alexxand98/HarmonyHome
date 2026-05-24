@@ -89,5 +89,19 @@ namespace HarmonyHome.Wpf.Services
 
             return "No se pudo finalizar la reposición";
         }
+
+
+
+        public async Task<PreparacionReposicionDTO?> GetPreparacionAsync(int id)
+        {
+            ResponseApi<PreparacionReposicionDTO>? response = await _apiService.GetAsync<ResponseApi<PreparacionReposicionDTO>>($"api/OrdenReposicion/{id}/preparacion");
+
+            if (response != null && response.IsSuccess) {
+
+                return response.Result;
+            }
+
+            return null;
+        }
     }
 }

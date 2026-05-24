@@ -17,6 +17,10 @@ namespace HarmonyHome.Api.Models.DTOs
 
         public string? UsuarioAsignadoId { get; set; }
 
+        public string? UsuarioAsignadoUserName { get; set; }
+
+        public string? UsuarioAsignadoEmail { get; set; }
+
         public string? Observaciones { get; set; }
 
         public int ClienteId { get; set; }

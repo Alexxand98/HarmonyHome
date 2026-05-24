@@ -51,6 +51,7 @@
                 <DataGridTextColumn Header="Pedido" Binding="{Binding PedidoVentaId}" Width="80"/>
                 <DataGridTextColumn Header="Fecha" Binding="{Binding FechaCreacion}" Width="150"/>
                 <DataGridTextColumn Header="Estado" Binding="{Binding EstadoNombre}" Width="120"/>
+                <DataGridTextColumn Header="Asignado a" Binding="{Binding AsignadoTexto}" Width="240"/>
                 <DataGridTextColumn Header="Cliente" Binding="{Binding ClienteNombreCompleto}" Width="180"/>
                 <DataGridTextColumn Header="Total" Binding="{Binding TotalPedido}" Width="90"/>
                 <DataGridTextColumn Header="Observaciones" Binding="{Binding Observaciones}" Width="250"/>
@@ -91,6 +92,13 @@
                     Height="32"
                     Margin="0,0,8,0"
                     Click="BtnPreparacion_Click"/>
+
+            <Button x:Name="BtnVerPreparacion"
+                    Content="Ver preparación"
+                    Width="130"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="BtnVerPreparacion_Click"/>
 
             <Button x:Name="BtnFinalizar"
                     Content="Finalizar"

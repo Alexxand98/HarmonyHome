@@ -69,17 +69,36 @@ namespace HarmonyHome.Wpf.Services
 
         public async Task<string> FinalizarAsync(int id)
         {
-            ResponseApi<object>? response = await _apiService.PatchAsync<ResponseApi<object>>($"api/OrdenRecogida/{id}/finalizar");
+            var data = new
+            {
+                observaciones = "Orden de recogida finalizada y stock descontado"
+            };
+
+            ResponseApi<object>? response = await _apiService.PatchAsync<ResponseApi<object>>($"api/OrdenRecogida/{id}/finalizar", data);
 
             if (response != null && response.IsSuccess){
-                return "Orden finalizada";
+
+                return "Orden finalizada correctamente.";
             }
 
-            if (response != null && response.ErrorMessages.Count > 0) {
+            if (response != null && response.ErrorMessages.Count > 0){
+
                 return response.ErrorMessages[0];
             }
 
-            return "No se pudo finalizar";
+            return "No se pudo finalizar la orden.";
+        }
+
+        public async Task<PreparacionRecogidaDTO?> GetPreparacionAsync(int id)
+        {
+            ResponseApi<PreparacionRecogidaDTO>? response = await _apiService.GetAsync<ResponseApi<PreparacionRecogidaDTO>>($"api/OrdenRecogida/{id}/preparacion");
+
+            if (response != null && response.IsSuccess){
+
+                return response.Result;
+            }
+
+            return null;
         }
     }
 }

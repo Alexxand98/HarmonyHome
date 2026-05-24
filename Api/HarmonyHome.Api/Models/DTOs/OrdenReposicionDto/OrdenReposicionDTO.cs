@@ -18,6 +18,15 @@ namespace HarmonyHome.Api.Models.DTOs
 
         public string? Observaciones { get; set; }
 
+        public string? UsuarioSolicitanteUserName { get; set; }
+
+        public string? UsuarioSolicitanteEmail { get; set; }
+
+        public string? UsuarioPreparadorUserName { get; set; }
+
+        public string? UsuarioPreparadorEmail { get; set; }
+
+
         public List<LineaOrdenReposicionDTO> Lineas { get; set; } = new List<LineaOrdenReposicionDTO>();
     }
 }

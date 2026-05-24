@@ -51,8 +51,8 @@
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="60"/>
                 <DataGridTextColumn Header="Fecha" Binding="{Binding FechaSolicitud}" Width="150"/>
                 <DataGridTextColumn Header="Estado" Binding="{Binding EstadoNombre}" Width="120"/>
-                <DataGridTextColumn Header="Solicitante" Binding="{Binding UsuarioSolicitanteId}" Width="220"/>
-                <DataGridTextColumn Header="Preparador" Binding="{Binding UsuarioPreparadorId}" Width="220"/>
+                <DataGridTextColumn Header="Solicitante" Binding="{Binding SolicitanteTexto}" Width="220"/>
+                <DataGridTextColumn Header="Preparador" Binding="{Binding PreparadorTexto}" Width="220"/>
                 <DataGridTextColumn Header="Observaciones" Binding="{Binding Observaciones}" Width="220"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -83,6 +83,13 @@
                     Height="32"
                     Margin="0,0,8,0"
                     Click="BtnAsignar_Click"/>
+
+            <Button x:Name="BtnVerPreparacion"
+                    Content="Ver preparación"
+                    Width="130"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="BtnVerPreparacion_Click"/>
 
             <Button x:Name="BtnFinalizar"
                     Content="Finalizar"

@@ -71,6 +71,12 @@
                 Margin="15,0,15,10"
                 Click="BtnDemarca_Click"/>
 
+            <Button x:Name="BtnOrdenesReposicion"
+                Content="Órdenes reposición"
+                Height="38"
+                Margin="15,0,15,10"
+                Click="BtnOrdenesReposicion_Click"/>
+
 
             <Button x:Name="BtnGestionProductos"
                 Content="Gestión productos"

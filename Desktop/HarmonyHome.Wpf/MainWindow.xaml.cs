@@ -145,6 +145,14 @@ namespace HarmonyHome.Wpf
 
             ordenesRecogidaView.ShowDialog();
         }
+
+
+        private void BtnOrdenesReposicion_Click(object sender, RoutedEventArgs e)
+        {
+            OrdenesReposicionView ordenesReposicionView = new OrdenesReposicionView();
+
+            ordenesReposicionView.ShowDialog();
+        }
     }
 
 

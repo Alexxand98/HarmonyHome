@@ -1,0 +1,69 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f3f4f6;
+}
+
+.sidebar {
+  width: 230px;
+  background: #1f2937;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin: 0 0 24px;
+  font-size: 22px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+nav a {
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+nav a:hover {
+  background: #374151;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+}
+
+.user-box {
+  margin-top: auto;
+  border-top: 1px solid #4b5563;
+  padding-top: 16px;
+}
+
+.user-box p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.user-box span {
+  display: block;
+  margin: 4px 0 12px;
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.user-box button {
+  width: 100%;
+  padding: 9px;
+  border: none;
+  border-radius: 8px;
+  background: #dc2626;
+  color: white;
+  cursor: pointer;
+}

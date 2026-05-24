@@ -11,6 +11,10 @@ export interface AuthUser {
 }
 
 export interface LoginResponse {
-  user: AuthUser;
+  id: string;
+  userName: string;
+  email: string;
+  role: string;
   token: string;
+  expiration: string;
 }

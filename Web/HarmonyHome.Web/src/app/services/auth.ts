@@ -43,11 +43,15 @@ export class Auth {
   getUser(): AuthUser | null {
     const userJson = localStorage.getItem(this.userKey);
 
-    if (!userJson) {
+    if (!userJson || userJson === 'undefined') {
       return null;
     }
 
-    return JSON.parse(userJson) as AuthUser;
+    try {
+      return JSON.parse(userJson) as AuthUser;
+    } catch {
+      return null;
+    }
   }
 
   getRole(): string | null {
@@ -55,7 +59,14 @@ export class Auth {
   }
 
   private saveSession(response: LoginResponse): void {
+    const user: AuthUser = {
+      id: response.id,
+      userName: response.userName,
+      email: response.email,
+      role: response.role
+    };
+
     localStorage.setItem(this.tokenKey, response.token);
-    localStorage.setItem(this.userKey, JSON.stringify(response.user));
+    localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 }

@@ -10,6 +10,10 @@ import { CarritoService } from '../../services/carrito';
 import { ClienteService } from '../../services/cliente';
 import { VentaService } from '../../services/venta';
 
+import { PedidoClienteRequest } from '../../models/pedido-cliente.model';
+import { PedidoClienteService } from '../../services/pedido-cliente';
+import { StockService } from '../../services/stock';
+
 @Component({
   selector: 'app-venta',
   imports: [CommonModule, FormsModule],
@@ -34,7 +38,10 @@ export class Venta implements OnInit {
     private carritoService: CarritoService,
     private clienteService: ClienteService,
     private ventaService: VentaService,
+    private pedidoClienteService: PedidoClienteService,
+    private stockService: StockService,
     private cdr: ChangeDetectorRef
+
   ) { }
 
   ngOnInit(): void {
@@ -147,18 +154,18 @@ export class Venta implements OnInit {
         productoId: linea.productoId,
         cantidad: linea.cantidad
       })),
-      observaciones: this.observaciones || 'Venta directa desde Angular'
+      observaciones: this.observaciones || 'Operación confirmada desde Angular'
     };
 
     this.isLoading = true;
     this.cdr.detectChanges();
 
-    this.ventaService.crearVentaDirecta(request).subscribe({
+    this.ventaService.crearVentaMixta(request).subscribe({
       next: response => {
         this.isLoading = false;
 
         if (response.isSuccess) {
-          this.successMessage = 'Venta realizada correctamente';
+          this.successMessage = 'Operación confirmada correctamente';
           this.vaciarCarrito();
           this.observaciones = '';
           this.quitarCliente();
@@ -180,4 +187,114 @@ export class Venta implements OnInit {
       }
     });
   }
+
+  crearPedidoCliente(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    if (this.lineas.length === 0) {
+      this.errorMessage = 'El carrito está vacío';
+      return;
+    }
+
+    if (!this.clienteSeleccionado) {
+      this.errorMessage = 'Busca y selecciona un cliente para crear el pedido';
+      return;
+    }
+
+    const lineaInvalida = this.lineas.find(linea => linea.cantidad < 1);
+
+    if (lineaInvalida) {
+      this.errorMessage = 'Todas las cantidades deben ser mayores que cero';
+      return;
+    }
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    let comprobacionesPendientes = this.lineas.length;
+    let stockCorrecto = true;
+
+    for (const linea of this.lineas) {
+      this.stockService.getResumenProducto(linea.productoId).subscribe({
+        next: response => {
+          comprobacionesPendientes--;
+
+          if (!response.isSuccess || !response.result) {
+            stockCorrecto = false;
+            this.errorMessage = `No se pudo comprobar el stock de ${linea.nombre}`;
+          } else if (linea.cantidad > response.result.stockAlmacen) {
+            stockCorrecto = false;
+            this.errorMessage = `Stock insuficiente en almacén para ${linea.nombre}`;
+          }
+
+          if (comprobacionesPendientes === 0) {
+            if (!stockCorrecto) {
+              this.isLoading = false;
+              this.cdr.detectChanges();
+              return;
+            }
+
+            this.enviarPedidoCliente();
+          }
+        },
+        error: () => {
+          comprobacionesPendientes--;
+          stockCorrecto = false;
+          this.errorMessage = `Error al comprobar stock de ${linea.nombre}`;
+
+          if (comprobacionesPendientes === 0) {
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+    }
+  }
+
+  private enviarPedidoCliente(): void {
+    if (!this.clienteSeleccionado) {
+      this.isLoading = false;
+      this.errorMessage = 'Selecciona un cliente para crear el pedido';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const request: PedidoClienteRequest = {
+      clienteId: this.clienteSeleccionado.id,
+      lineas: this.lineas.map(linea => ({
+        productoId: linea.productoId,
+        cantidad: linea.cantidad
+      })),
+      observaciones: this.observaciones || 'Pedido cliente desde Angular'
+    };
+
+    this.pedidoClienteService.crearPedidoCliente(request).subscribe({
+      next: response => {
+        this.isLoading = false;
+
+        if (response.isSuccess) {
+          this.successMessage = 'Pedido de cliente creado correctamente';
+          this.vaciarCarrito();
+          this.observaciones = '';
+          this.quitarCliente();
+        } else {
+          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo crear el pedido de cliente';
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: error => {
+        this.isLoading = false;
+        this.errorMessage =
+          error.error?.errorMessages?.[0] ??
+          error.error?.title ??
+          error.message ??
+          'Error al crear el pedido de cliente';
+
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
 }

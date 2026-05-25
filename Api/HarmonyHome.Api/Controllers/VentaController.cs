@@ -1,9 +1,10 @@
-﻿using System.Net;
-using System.Security.Claims;
-using HarmonyHome.Api.Models.DTOs;
+﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.VentaMixtaDto;
 using HarmonyHome.Api.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace HarmonyHome.Api.Controllers
 {
@@ -62,6 +63,40 @@ namespace HarmonyHome.Api.Controllers
             _responseApi.Result = venta;
 
             return StatusCode(StatusCodes.Status201Created, _responseApi);
+        }
+
+
+        [HttpPost("mixta")]
+        [Authorize(Roles = "Vendedor,EncargadoTienda,Administrador")]
+        public async Task<IActionResult> VentaMixta([FromBody] CreateVentaMixtaDTO dto)
+        {
+            var usuarioId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(usuarioId))
+            {
+                _responseApi.StatusCode = HttpStatusCode.Unauthorized;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("No se pudo identificar el usuario");
+
+                return Unauthorized(_responseApi);
+            }
+
+            var resultado = await _ventaRepository.CrearVentaMixta(dto, usuarioId);
+
+            if (resultado == null)
+            {
+                _responseApi.StatusCode = HttpStatusCode.BadRequest;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("No se pudo realizar la venta mixta. Verifica cliente, productos, stock disponible y cantidades");
+
+                return BadRequest(_responseApi);
+            }
+
+            _responseApi.StatusCode = HttpStatusCode.Created;
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = resultado;
+
+            return StatusCode((int)HttpStatusCode.Created, _responseApi);
         }
     }
 }

@@ -143,3 +143,7 @@ button.danger {
 .error {
   color: #dc2626;
 }
+
+button.warning {
+  background: #d97706;
+}

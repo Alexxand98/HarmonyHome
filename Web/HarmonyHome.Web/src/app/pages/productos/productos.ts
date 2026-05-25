@@ -131,36 +131,26 @@ export class Productos implements OnInit {
     const cantidad = this.cantidadesCarrito[producto.id] ?? 1;
 
     if (cantidad < 1) {
-      alert('La cantidad debe ser mayor que cero.');
+      alert('La cantidad debe ser mayor que cero');
       return;
     }
 
     this.stockService.getResumenProducto(producto.id).subscribe({
       next: response => {
         if (!response.isSuccess || !response.result) {
-          alert(response.errorMessages?.[0] ?? 'No se pudo comprobar el stock del producto.');
+          alert(response.errorMessages?.[0] ?? 'No se pudo comprobar el stock del producto');
           return;
         }
 
         const stock = response.result;
 
         if (stock.stockTotal <= 0) {
-          alert('Producto sin existencias.');
+          alert('Producto sin existencias');
           return;
         }
 
         if (cantidad > stock.stockTotal) {
-          alert('No hay existencias suficientes para esa cantidad.');
-          return;
-        }
-
-        if (cantidad > stock.stockTienda) {
-          if (stock.stockAlmacen > 0) {
-            alert('Stock insuficiente en tienda. Hay stock en almacén. Crea un pedido de cliente o solicita reposición.');
-          } else {
-            alert('Stock insuficiente en tienda.');
-          }
-
+          alert('No hay existencias suficientes para esa cantidad');
           return;
         }
 

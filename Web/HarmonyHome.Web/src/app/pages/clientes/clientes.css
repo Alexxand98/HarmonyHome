@@ -6,22 +6,42 @@ p {
   color: #4b5563;
 }
 
-.client-layout {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 20px;
-  align-items: start;
-}
-
-.form-card,
-.table-card {
+.table-card,
+.form-card {
   background: white;
   padding: 18px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
+  margin-bottom: 18px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+}
+
+.header-row h2 {
+  margin-bottom: 4px;
+}
+
+.header-row p {
+  margin-top: 0;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.search-box input {
+  width: 280px;
 }
 
 .form-card {
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -94,14 +114,4 @@ th {
 
 .error {
   color: #dc2626;
-}
-
-.search-box {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.search-box input {
-  width: 260px;
 }

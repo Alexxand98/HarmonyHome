@@ -13,8 +13,10 @@ import { ClienteService } from '../../services/cliente';
 })
 export class Clientes implements OnInit {
   clientes: Cliente[] = [];
-
   textoBusqueda = '';
+
+  mostrarFormulario = false;
+  clienteEditandoId: number | null = null;
 
   clienteForm: CreateCliente = {
     nombre: '',
@@ -23,8 +25,6 @@ export class Clientes implements OnInit {
     email: '',
     direccion: ''
   };
-
-  clienteEditandoId: number | null = null;
 
   isLoading = false;
   errorMessage = '';
@@ -52,126 +52,17 @@ export class Clientes implements OnInit {
         if (response.isSuccess && response.result) {
           this.clientes = response.result;
         } else {
-          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudieron cargar los clientes.';
+          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudieron cargar los clientes';
         }
 
         this.cdr.detectChanges();
       },
       error: () => {
         this.isLoading = false;
-        this.errorMessage = 'Error al cargar clientes desde la API.';
+        this.errorMessage = 'Error al cargar clientes desde la API';
         this.cdr.detectChanges();
       }
     });
-  }
-
-  guardarCliente(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    if (!this.clienteForm.nombre || !this.clienteForm.apellidos) {
-      this.errorMessage = 'Nombre y apellidos son obligatorios.';
-      return;
-    }
-
-    if (this.clienteEditandoId) {
-      this.actualizarCliente();
-    } else {
-      this.crearCliente();
-    }
-  }
-
-  crearCliente(): void {
-    this.clienteService.crearCliente(this.clienteForm).subscribe({
-      next: response => {
-        if (response.isSuccess) {
-          this.successMessage = 'Cliente creado correctamente.';
-          this.limpiarFormulario();
-          this.cargarClientes();
-        } else {
-          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo crear el cliente.';
-        }
-
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.errorMessage = 'Error al crear el cliente.';
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  actualizarCliente(): void {
-    if (!this.clienteEditandoId) {
-      return;
-    }
-
-    this.clienteService.actualizarCliente(this.clienteEditandoId, this.clienteForm).subscribe({
-      next: response => {
-        if (response.isSuccess) {
-          this.successMessage = 'Cliente actualizado correctamente.';
-          this.limpiarFormulario();
-          this.cargarClientes();
-        } else {
-          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo actualizar el cliente.';
-        }
-
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.errorMessage = 'Error al actualizar el cliente.';
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  editarCliente(cliente: Cliente): void {
-    this.clienteEditandoId = cliente.id;
-
-    this.clienteForm = {
-      nombre: cliente.nombre,
-      apellidos: cliente.apellidos,
-      telefono: cliente.telefono ?? '',
-      email: cliente.email ?? '',
-      direccion: cliente.direccion ?? ''
-    };
-  }
-
-  eliminarCliente(cliente: Cliente): void {
-    const confirmar = confirm(`¿Eliminar o desactivar al cliente ${cliente.nombre} ${cliente.apellidos}?`);
-
-    if (!confirmar) {
-      return;
-    }
-
-    this.clienteService.eliminarCliente(cliente.id).subscribe({
-      next: response => {
-        if (response.isSuccess) {
-          this.successMessage = 'Cliente eliminado o desactivado correctamente.';
-          this.cargarClientes();
-        } else {
-          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo eliminar el cliente.';
-        }
-
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.errorMessage = 'Error al eliminar el cliente.';
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  limpiarFormulario(): void {
-    this.clienteEditandoId = null;
-
-    this.clienteForm = {
-      nombre: '',
-      apellidos: '',
-      telefono: '',
-      email: '',
-      direccion: ''
-    };
   }
 
   buscarClientes(): void {
@@ -192,20 +83,20 @@ export class Clientes implements OnInit {
         this.isLoading = false;
 
         if (response.isSuccess && response.result) {
-
           this.clientes = response.result.filter(cliente => cliente.activo);
-          
         } else {
+          this.errorMessage = response.errorMessages?.[0] ?? 'No se encontraron clientes';
+        }
 
-          this.errorMessage = response.errorMessages?.[0] ?? 'No se encontraron clientes.';
-          
+        if (this.clientes.length === 0 && !this.errorMessage) {
+          this.errorMessage = 'No se encontraron clientes activos';
         }
 
         this.cdr.detectChanges();
       },
       error: () => {
         this.isLoading = false;
-        this.errorMessage = 'Error al buscar clientes.';
+        this.errorMessage = 'Error al buscar clientes';
         this.cdr.detectChanges();
       }
     });
@@ -214,5 +105,195 @@ export class Clientes implements OnInit {
   limpiarBusqueda(): void {
     this.textoBusqueda = '';
     this.cargarClientes();
+  }
+
+  nuevoCliente(): void {
+    this.limpiarFormulario();
+    this.mostrarFormulario = true;
+  }
+
+  guardarCliente(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    const nombre = this.clienteForm.nombre.trim();
+    const apellidos = this.clienteForm.apellidos.trim();
+    const telefono = this.clienteForm.telefono?.trim() ?? '';
+    const email = this.clienteForm.email?.trim() ?? '';
+    const direccion = this.clienteForm.direccion?.trim() ?? '';
+
+    const textoValido = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const telefonoValido = /^[69][0-9]{8}$/;
+    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!nombre) {
+      this.errorMessage = 'Introduce el nombre del cliente';
+      return;
+    }
+
+    if (!textoValido.test(nombre)) {
+      this.errorMessage = 'El nombre solo puede contener letras';
+      return;
+    }
+
+    if (!apellidos) {
+      this.errorMessage = 'Introduce los apellidos del cliente';
+      return;
+    }
+
+    if (!textoValido.test(apellidos)) {
+      this.errorMessage = 'Los apellidos solo pueden contener letras';
+      return;
+    }
+
+    if (!telefono) {
+      this.errorMessage = 'Introduce el teléfono del cliente';
+      return;
+    }
+
+    if (!telefonoValido.test(telefono)) {
+      this.errorMessage = 'El teléfono debe tener 9 dígitos y empezar por 6 o 9';
+      return;
+    }
+
+    if (!email) {
+      this.errorMessage = 'Introduce el email del cliente';
+      return;
+    }
+
+    if (!emailValido.test(email)) {
+      this.errorMessage = 'Introduce un email válido';
+      return;
+    }
+
+    if (!direccion) {
+      this.errorMessage = 'Introduce la dirección del cliente';
+      return;
+    }
+
+    const clienteParaEnviar: CreateCliente = {
+      nombre,
+      apellidos,
+      telefono,
+      email,
+      direccion
+    };
+
+    if (this.clienteEditandoId) {
+      this.actualizarCliente(clienteParaEnviar);
+    } else {
+      this.crearCliente(clienteParaEnviar);
+    }
+  }
+
+  crearCliente(clienteParaEnviar: CreateCliente): void {
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.clienteService.crearCliente(clienteParaEnviar).subscribe({
+      next: response => {
+        this.isLoading = false;
+
+        if (response.isSuccess) {
+          this.successMessage = 'Cliente creado correctamente';
+          this.cerrarFormulario();
+          this.cargarClientes();
+        } else {
+          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo crear el cliente';
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.errorMessage = 'Error al crear el cliente';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  actualizarCliente(clienteParaEnviar: CreateCliente): void {
+    if (!this.clienteEditandoId) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.clienteService.actualizarCliente(this.clienteEditandoId, clienteParaEnviar).subscribe({
+      next: response => {
+        this.isLoading = false;
+
+        if (response.isSuccess) {
+          this.successMessage = 'Cliente actualizado correctamente';
+          this.cerrarFormulario();
+          this.cargarClientes();
+        } else {
+          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo actualizar el cliente';
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.errorMessage = 'Error al actualizar el cliente';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  editarCliente(cliente: Cliente): void {
+    this.clienteEditandoId = cliente.id;
+    this.mostrarFormulario = true;
+
+    this.clienteForm = {
+      nombre: cliente.nombre,
+      apellidos: cliente.apellidos,
+      telefono: cliente.telefono ?? '',
+      email: cliente.email ?? '',
+      direccion: cliente.direccion ?? ''
+    };
+  }
+
+  eliminarCliente(cliente: Cliente): void {
+    const confirmar = confirm(`¿Eliminar o desactivar a ${cliente.nombre} ${cliente.apellidos}?`);
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.clienteService.eliminarCliente(cliente.id).subscribe({
+      next: response => {
+        if (response.isSuccess) {
+          this.successMessage = 'Cliente eliminado o desactivado correctamente';
+          this.cargarClientes();
+        } else {
+          this.errorMessage = response.errorMessages?.[0] ?? 'No se pudo eliminar el cliente';
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.errorMessage = 'Error al eliminar el cliente';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  cerrarFormulario(): void {
+    this.limpiarFormulario();
+    this.mostrarFormulario = false;
+  }
+
+  limpiarFormulario(): void {
+    this.clienteEditandoId = null;
+
+    this.clienteForm = {
+      nombre: '',
+      apellidos: '',
+      telefono: '',
+      email: '',
+      direccion: ''
+    };
   }
 }

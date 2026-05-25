@@ -131,20 +131,55 @@ export class Productos implements OnInit {
     const cantidad = this.cantidadesCarrito[producto.id] ?? 1;
 
     if (cantidad < 1) {
-      alert('La cantidad debe ser mayor que cero');
+      alert('La cantidad debe ser mayor que cero.');
       return;
     }
 
-    this.carritoService.agregarProducto({
-      productoId: producto.id,
-      referencia: producto.referencia,
-      nombre: producto.nombre,
-      precioVenta: producto.precioVenta,
-      cantidad: cantidad
+    this.stockService.getResumenProducto(producto.id).subscribe({
+      next: response => {
+        if (!response.isSuccess || !response.result) {
+          alert(response.errorMessages?.[0] ?? 'No se pudo comprobar el stock del producto.');
+          return;
+        }
+
+        const stock = response.result;
+
+        if (stock.stockTotal <= 0) {
+          alert('Producto sin existencias.');
+          return;
+        }
+
+        if (cantidad > stock.stockTotal) {
+          alert('No hay existencias suficientes para esa cantidad.');
+          return;
+        }
+
+        if (cantidad > stock.stockTienda) {
+          if (stock.stockAlmacen > 0) {
+            alert('Stock insuficiente en tienda. Hay stock en almacén. Crea un pedido de cliente o solicita reposición.');
+          } else {
+            alert('Stock insuficiente en tienda.');
+          }
+
+          return;
+        }
+
+        this.carritoService.agregarProducto({
+          productoId: producto.id,
+          referencia: producto.referencia,
+          nombre: producto.nombre,
+          precioVenta: producto.precioVenta,
+          cantidad: cantidad
+        });
+
+        this.cantidadesCarrito[producto.id] = 1;
+
+        alert('Producto añadido al carrito');
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        alert('Error al comprobar el stock del producto');
+      }
     });
-
-    this.cantidadesCarrito[producto.id] = 1;
-
-    alert('Producto añadido al carrito');
   }
 }

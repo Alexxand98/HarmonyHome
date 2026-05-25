@@ -94,3 +94,20 @@ th {
 .stock-grid span {
   color: #4b5563;
 }
+
+button.success {
+  background: #15803d;
+}
+
+.cart-box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.cart-box input {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}

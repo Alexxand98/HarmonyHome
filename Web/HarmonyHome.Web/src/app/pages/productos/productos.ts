@@ -6,6 +6,7 @@ import { Producto } from '../../models/producto.model';
 import { StockResumen } from '../../models/stock.model';
 import { ProductoService } from '../../services/producto';
 import { StockService } from '../../services/stock';
+import { CarritoService } from '../../services/carrito';
 
 @Component({
   selector: 'app-productos',
@@ -16,6 +17,8 @@ import { StockService } from '../../services/stock';
 export class Productos implements OnInit {
   productos: Producto[] = [];
   stockSeleccionado: StockResumen | null = null;
+  cantidadesCarrito: { [productoId: number]: number } = {};
+
 
   textoBusqueda = '';
   isLoading = false;
@@ -26,8 +29,9 @@ export class Productos implements OnInit {
   constructor(
     private productoService: ProductoService,
     private stockService: StockService,
+    private carritoService: CarritoService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -121,5 +125,26 @@ export class Productos implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  agregarAlCarrito(producto: Producto): void {
+    const cantidad = this.cantidadesCarrito[producto.id] ?? 1;
+
+    if (cantidad < 1) {
+      alert('La cantidad debe ser mayor que cero');
+      return;
+    }
+
+    this.carritoService.agregarProducto({
+      productoId: producto.id,
+      referencia: producto.referencia,
+      nombre: producto.nombre,
+      precioVenta: producto.precioVenta,
+      cantidad: cantidad
+    });
+
+    this.cantidadesCarrito[producto.id] = 1;
+
+    alert('Producto añadido al carrito');
   }
 }

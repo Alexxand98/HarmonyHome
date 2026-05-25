@@ -1,0 +1,49 @@
+<h1>Venta</h1>
+<p>Carrito de venta directa de tienda.</p>
+
+<table *ngIf="lineas.length > 0">
+  <thead>
+    <tr>
+      <th>Referencia</th>
+      <th>Producto</th>
+      <th>Precio</th>
+      <th>Cantidad</th>
+      <th>Subtotal</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let linea of lineas">
+      <td>{{ linea.referencia }}</td>
+      <td>{{ linea.nombre }}</td>
+      <td>{{ linea.precioVenta }} €</td>
+      <td>
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="linea.cantidad"
+          (change)="actualizarCantidad(linea)"
+        />
+      </td>
+      <td>{{ linea.precioVenta * linea.cantidad }} €</td>
+      <td>
+        <button type="button" class="danger" (click)="eliminarLinea(linea.productoId)">
+          Quitar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="total-box" *ngIf="lineas.length > 0">
+  <strong>Total: {{ calcularTotal() }} €</strong>
+
+  <div>
+    <button type="button" class="secondary" (click)="vaciarCarrito()">Vaciar carrito</button>
+
+    <button type="button">Confirmar venta</button>
+  </div>
+</div>
+
+<p *ngIf="lineas.length === 0">El carrito está vacío.</p>

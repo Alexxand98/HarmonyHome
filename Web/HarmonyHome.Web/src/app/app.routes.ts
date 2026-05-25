@@ -4,6 +4,7 @@ import { Login } from './pages/login/login';
 import { Layout } from './pages/layout/layout';
 import { Productos } from './pages/productos/productos';
 import { Clientes } from './pages/clientes/clientes';
+import { Venta } from './pages/venta/venta';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
@@ -23,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'clientes',
         component: Clientes
+      },
+      {
+        path: 'venta',
+        component: Venta
       },
       {
         path: '',

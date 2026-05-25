@@ -29,6 +29,7 @@
       <th>Trazabilidad</th>
       <th>Activo</th>
       <th>Stock</th>
+      <th>Carrito</th>
     </tr>
   </thead>
 
@@ -41,17 +42,28 @@
       <td>{{ producto.tipoTrazabilidadNombre }}</td>
       <td>{{ producto.activo ? 'Sí' : 'No' }}</td>
       <td>
-        <button type="button" class="small" (click)="verStock(producto.id)">
-          Ver stock
-        </button>
+        <button type="button" class="small" (click)="verStock(producto.id)">Ver stock</button>
+      </td>
+
+      <td>
+        <div class="cart-box">
+          <input
+            type="number"
+            min="1"
+            [(ngModel)]="cantidadesCarrito[producto.id]"
+            placeholder="1"
+          />
+
+          <button type="button" class="small success" (click)="agregarAlCarrito(producto)">
+            Añadir
+          </button>
+        </div>
       </td>
     </tr>
   </tbody>
 </table>
 
-<p *ngIf="!isLoading && productos.length === 0 && !errorMessage">
-  No hay productos para mostrar.
-</p>
+<p *ngIf="!isLoading && productos.length === 0 && !errorMessage">No hay productos para mostrar.</p>
 
 <p *ngIf="isLoadingStock">Cargando stock...</p>
 

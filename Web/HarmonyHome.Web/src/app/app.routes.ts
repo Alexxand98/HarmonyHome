@@ -5,6 +5,7 @@ import { Layout } from './pages/layout/layout';
 import { Productos } from './pages/productos/productos';
 import { Clientes } from './pages/clientes/clientes';
 import { Venta } from './pages/venta/venta';
+import { Reposiciones } from './pages/reposiciones/reposiciones';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
@@ -28,6 +29,10 @@ export const routes: Routes = [
       {
         path: 'venta',
         component: Venta
+      },
+      {
+        path: 'reposiciones',
+        component: Reposiciones
       },
       {
         path: '',

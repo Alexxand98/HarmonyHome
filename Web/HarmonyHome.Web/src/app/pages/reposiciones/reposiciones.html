@@ -1,0 +1,79 @@
+<h1>Reposiciones</h1>
+<p>Solicita stock desde almacén hacia tienda</p>
+
+<section class="card">
+  <h2>Nueva solicitud</h2>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Buscar producto por nombre o referencia"
+      [(ngModel)]="textoBusqueda"
+      (keyup.enter)="buscarProductos()"
+    />
+
+    <button type="button" (click)="buscarProductos()">Buscar</button>
+  </div>
+
+  <p *ngIf="isLoading">Cargando...</p>
+
+  <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="results" *ngIf="productos.length > 0">
+    <h3>Productos encontrados</h3>
+
+    <div class="result-row" *ngFor="let producto of productos">
+      <span> {{ producto.referencia }} - {{ producto.nombre }} - {{ producto.categoria }} </span>
+
+      <button type="button" class="small" (click)="seleccionarProducto(producto)">
+        Seleccionar
+      </button>
+    </div>
+  </div>
+
+  <div class="selected-product" *ngIf="productoSeleccionado && stockSeleccionado">
+    <h3>Producto seleccionado</h3>
+
+    <p>
+      <strong>{{ productoSeleccionado.nombre }}</strong>
+      - {{ productoSeleccionado.referencia }}
+    </p>
+
+    <div class="stock-grid">
+      <div>
+        <strong>{{ stockSeleccionado.stockTienda }}</strong>
+        <span>Stock tienda</span>
+      </div>
+
+      <div>
+        <strong>{{ stockSeleccionado.stockAlmacen }}</strong>
+        <span>Stock almacén</span>
+      </div>
+
+      <div>
+        <strong>{{ cantidadPendienteReposicion }}</strong>
+        <span>Pendiente reposición</span>
+      </div>
+
+      <div>
+        <strong>{{ stockAlmacenDisponible }}</strong>
+        <span>Disponible almacén</span>
+      </div>
+    </div>
+
+    <label>Cantidad a solicitar</label>
+    <input type="number" min="1" [(ngModel)]="cantidadSolicitada" />
+
+    <label>Observaciones</label>
+    <input type="text" [(ngModel)]="observaciones" placeholder="Observaciones de la reposición" />
+
+    <div class="buttons">
+      <button type="button" [disabled]="isLoading" (click)="crearReposicion()">
+        Solicitar reposición
+      </button>
+
+      <button type="button" class="secondary" (click)="limpiarFormulario()">Limpiar</button>
+    </div>
+  </div>
+</section>

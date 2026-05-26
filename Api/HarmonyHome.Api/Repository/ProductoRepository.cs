@@ -154,7 +154,7 @@ namespace HarmonyHome.Api.Repository
             _context.Productos.Update(producto);
             await _context.SaveChangesAsync();
 
-            return "El producto tiene datos asociados. Se ha dado de baja correctamente.";
+            return "El producto tiene datos asociados, baja lógica realizada correctamente";
         }
 
         public async Task<bool> Habilitar(int id)

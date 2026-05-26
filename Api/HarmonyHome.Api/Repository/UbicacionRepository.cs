@@ -116,7 +116,7 @@ namespace HarmonyHome.Api.Repository
                 _context.Ubicaciones.Remove(ubicacion);
                 await _context.SaveChangesAsync();
 
-                return "Ubicacion eliminada correctamente";
+                return "Ubicación eliminada correctamente";
             }
 
             ubicacion.Activa = false;
@@ -124,7 +124,7 @@ namespace HarmonyHome.Api.Repository
             _context.Ubicaciones.Update(ubicacion);
             await _context.SaveChangesAsync();
 
-            return "La ubicacion tiene datos asociados";
+            return "La ubicación tiene datos asociados, baja lógica realizada correctamente";
         }
 
         public async Task<bool> ExisteCodigo(string codigo)

@@ -14,6 +14,8 @@ namespace HarmonyHome.Wpf.Views
     {
         private readonly ProductoService _productoService;
 
+        private List<ProductoDTO> _productos = new List<ProductoDTO>();
+
         public ProductosView()
         {
 
@@ -25,27 +27,64 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnCargarProductos_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("Boton pulsado");
-
             TxtMensajeProductos.Text = "Cargando productos...";
 
             BtnCargarProductos.IsEnabled = false;
 
-            List<ProductoDTO> productos = await _productoService.GetProductosAsync();
+            try{
+                _productos = await _productoService.GetProductosAsync();
 
-            TablaProductos.ItemsSource = productos;
+                TablaProductos.ItemsSource = _productos;
 
-            if (productos.Count == 0)  {
+                if (_productos.Count == 0){
 
-                TxtMensajeProductos.Text = "No se encontraron productos";
-            }else {
+                    TxtMensajeProductos.Text = "No se encontraron productos";
 
+                }else{
 
-                TxtMensajeProductos.Text = "Productos cargados " + productos.Count;
+                    TxtMensajeProductos.Text = "Productos cargados: " + _productos.Count;
+
+                }
+
+            }finally {
+
+                BtnCargarProductos.IsEnabled = true;
+
+            }
+        }
+
+        private async void BtnBuscarProducto_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarProducto.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(texto)) {
+
+                TablaProductos.ItemsSource = _productos;
+
+                TxtMensajeProductos.Text = "Productos cargados: " + _productos.Count;
+
+                return;
             }
 
-            BtnCargarProductos.IsEnabled = true;
+            List<ProductoDTO> productosFiltrados = await _productoService.BuscarProductosAsync(texto);
+
+
+            TablaProductos.ItemsSource = productosFiltrados;
+
+
+            TxtMensajeProductos.Text = "Resultados encontrados: " + productosFiltrados.Count;
+        }
+
+        private void BtnLimpiarBusquedaProducto_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarProducto.Text = "";
+
+            TablaProductos.ItemsSource = _productos;
+
+            TxtMensajeProductos.Text = "Búsqueda limpiada.";
         }
     }
+
+
 }
  

@@ -1,5 +1,6 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +22,7 @@ namespace HarmonyHome.Wpf.Views
     {
         private readonly ProductoService _productoService;
         private ProductoDTO? _productoSeleccionado;
+        private List<ProductoDTO> _productos = new List<ProductoDTO>();
 
         public GestionProductosView()
         {
@@ -49,15 +51,15 @@ namespace HarmonyHome.Wpf.Views
             await CargarProductos();
         }
 
-        private async System.Threading.Tasks.Task CargarProductos()
+        private async Task CargarProductos()
         {
             TxtMensajeGestionProductos.Text = "Cargando productos...";
 
-            List<ProductoDTO> productos = await _productoService.GetProductosAsync();
+            _productos = await _productoService.GetProductosAsync();
 
-            TablaProductosGestion.ItemsSource = productos;
+            TablaProductosGestion.ItemsSource = _productos;
 
-            TxtMensajeGestionProductos.Text = "Productos cargados: " + productos.Count;
+            TxtMensajeGestionProductos.Text = "Productos cargados: " + _productos.Count;
         }
 
         private void TablaProductosGestion_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -258,6 +260,32 @@ namespace HarmonyHome.Wpf.Views
         }
 
 
+        private async void BtnBuscarProducto_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarProducto.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(texto)){
+                TablaProductosGestion.ItemsSource = _productos;
+
+                TxtMensajeGestionProductos.Text = "Productos cargados: " + _productos.Count;
+                return;
+            }
+
+            List<ProductoDTO> productosFiltrados = await _productoService.BuscarProductosAsync(texto);
+
+            TablaProductosGestion.ItemsSource = productosFiltrados;
+
+            TxtMensajeGestionProductos.Text = "Resultados encontrados: " + productosFiltrados.Count;
+        }
+
+        private void BtnLimpiarBusquedaProducto_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarProducto.Text = "";
+
+            TablaProductosGestion.ItemsSource = _productos;
+
+            TxtMensajeGestionProductos.Text = "Búsqueda limpiada";
+        }
 
     }
 
@@ -267,5 +295,7 @@ namespace HarmonyHome.Wpf.Views
 
         public string Nombre { get; set; } = string.Empty;
     }
+
+
 
 }

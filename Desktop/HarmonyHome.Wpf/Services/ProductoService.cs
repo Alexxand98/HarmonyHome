@@ -85,14 +85,17 @@ namespace HarmonyHome.Wpf.Services
 
         public async Task<List<ProductoDTO>> BuscarProductosAsync(string texto)
         {
-            ResponseApi<List<ProductoDTO>>? response = await _apiService.GetAsync<ResponseApi<List<ProductoDTO>>>($"api/Producto/buscar?texto={texto}");
+            string textoSeguro = Uri.EscapeDataString(texto);
 
-            if (response != null && response.IsSuccess && response.Result != null)
-            {
+            ResponseApi<List<ProductoDTO>>? response = await _apiService.GetAsync<ResponseApi<List<ProductoDTO>>>($"api/Producto/buscar?texto={textoSeguro}");
+
+            if (response != null && response.IsSuccess && response.Result != null) {
+
                 return response.Result;
             }
 
             return new List<ProductoDTO>();
         }
+
     }
 }

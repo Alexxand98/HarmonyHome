@@ -30,14 +30,34 @@
                        FontWeight="Bold"
                        Margin="0,0,0,10"/>
 
-            <Button x:Name="BtnCargarProductosGestion"
-                    Grid.Row="1"
-                    Content="Cargar productos"
-                    Width="140"
-                    Height="32"
-                    HorizontalAlignment="Left"
-                    Margin="0,0,0,10"
-                    Click="BtnCargarProductosGestion_Click"/>
+            <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+
+                <Button x:Name="BtnCargarProductosGestion"
+                        Content="Cargar productos"
+                        Width="140"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnCargarProductosGestion_Click"/>
+
+                <TextBox x:Name="TxtBuscarProducto"
+                         Width="220"
+                         Height="32"
+                         Margin="0,0,8,0"/>
+
+                <Button x:Name="BtnBuscarProducto"
+                        Content="Buscar"
+                        Width="80"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnBuscarProducto_Click"/>
+
+                <Button x:Name="BtnLimpiarBusquedaProducto"
+                        Content="Limpiar"
+                        Width="80"
+                        Height="32"
+                        Click="BtnLimpiarBusquedaProducto_Click"/>
+
+            </WrapPanel>
 
             <DataGrid x:Name="TablaProductosGestion"
                       Grid.Row="2"

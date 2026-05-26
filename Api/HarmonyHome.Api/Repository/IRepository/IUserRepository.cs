@@ -17,7 +17,6 @@ namespace HarmonyHome.Api.Repository.IRepository
 
         Task<List<UserDTO>> GetUsers();
 
-
         Task<List<UserDTO>> GetLogisticos();
 
         Task<UserDTO?> CreateLogistico(CreateLogisticoDTO createLogisticoDTO);
@@ -27,5 +26,7 @@ namespace HarmonyHome.Api.Repository.IRepository
         Task<bool> ActivarUser(string id);
 
         Task<bool> DesactivarUser(string id);
+
+        Task<string?> DeleteUser(string id);
     }
 }

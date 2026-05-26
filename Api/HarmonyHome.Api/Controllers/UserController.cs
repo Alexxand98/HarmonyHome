@@ -169,5 +169,36 @@ namespace HarmonyHome.Api.Controllers
 
             return Ok(_responseApi);
         }
+
+
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "SupervisorLogistico,Administrador")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var resultado = await _userRepository.DeleteUser(id);
+
+            if (resultado == null) {
+                _responseApi.StatusCode = HttpStatusCode.NotFound;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("Usuario no encontrado");
+
+                return NotFound(_responseApi);
+            }
+
+            if (resultado == "No se pudo eliminar el usuario." || resultado == "No se pudo desactivar el usuario") {
+                _responseApi.StatusCode = HttpStatusCode.BadRequest;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add(resultado);
+
+                return BadRequest(_responseApi);
+            }
+
+            _responseApi.StatusCode = HttpStatusCode.OK;
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = resultado;
+
+            return Ok(_responseApi);
+        }
     }
 }

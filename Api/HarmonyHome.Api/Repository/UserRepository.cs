@@ -1,8 +1,10 @@
-﻿using HarmonyHome.Api.Models.DTOs;
+﻿using HarmonyHome.Api.Data;
+using HarmonyHome.Api.Models.DTOs;
 using HarmonyHome.Api.Models.DTOs.UsuarioDto;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,17 +18,20 @@ namespace HarmonyHome.Api.Repository
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
         public UserRepository(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _context = context;
         }
 
         public bool IsUniqueUser(string email)
@@ -300,6 +305,47 @@ namespace HarmonyHome.Api.Repository
             var result = await _userManager.UpdateAsync(user);
 
             return result.Succeeded;
+        }
+
+        public async Task<string?> DeleteUser(string id)
+        {
+            var usuario = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (usuario == null)
+            {
+                return null;
+            }
+
+            var tieneRelaciones =
+                await _context.OrdenesRecogida.AnyAsync(o => o.UsuarioAsignadoId == id) ||
+                await _context.OrdenesReposicion.AnyAsync(o =>
+                    o.UsuarioSolicitanteId == id ||
+                    o.UsuarioPreparadorId == id) ||
+                await _context.MovimientosStock.AnyAsync(m => m.UsuarioId == id) ||
+                await _context.PedidosVenta.AnyAsync(p => p.UsuarioId == id);
+
+            if (!tieneRelaciones)
+            {
+                var resultadoDelete = await _userManager.DeleteAsync(usuario);
+
+                if (!resultadoDelete.Succeeded)
+                {
+                    return "No se pudo eliminar el usuario.";
+                }
+
+                return "Usuario eliminado correctamente.";
+            }
+
+            usuario.Activo = false;
+
+            var resultadoUpdate = await _userManager.UpdateAsync(usuario);
+
+            if (!resultadoUpdate.Succeeded)
+            {
+                return "No se pudo desactivar el usuario.";
+            }
+
+            return "El usuario tiene datos asociados. Baja lógica realizada correctamente.";
         }
     }
 }

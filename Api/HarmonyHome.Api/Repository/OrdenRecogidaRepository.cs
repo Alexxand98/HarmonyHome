@@ -1,6 +1,7 @@
 ﻿using HarmonyHome.Api.Data;
 using HarmonyHome.Api.Helpers;
 using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.OrdenDto;
 using HarmonyHome.Api.Models.DTOs.PreparacionRecogidaDto;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Models.Enums;
@@ -285,6 +286,30 @@ namespace HarmonyHome.Api.Repository
             }
 
             return preparacion;
+        }
+
+        public async Task<OrdenRecogidaDTO?> Cancelar(int id, string usuarioId, CancelarOrdenDTO dto)
+        {
+            var orden = await _context.OrdenesRecogida.Include(o => o.PedidoVenta).FirstOrDefaultAsync(o => o.Id == id);
+
+            if (orden == null){
+                return null;
+            }
+
+            if (orden.Estado != EstadoOrden.Asignada && orden.Estado != EstadoOrden.EnPreparacion){
+                return null;
+            }
+
+            orden.Estado = EstadoOrden.Cancelada;
+            orden.Observaciones = $"Cancelada: {dto.MotivoCancelacion}";
+
+            if (orden.PedidoVenta != null){
+                orden.PedidoVenta.Estado = EstadoPedido.Cancelado;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return await GetById(id);
         }
     }
 }

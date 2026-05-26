@@ -1,9 +1,10 @@
-﻿using System.Net;
-using System.Security.Claims;
-using HarmonyHome.Api.Models.DTOs;
+﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.OrdenDto;
 using HarmonyHome.Api.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace HarmonyHome.Api.Controllers
 {
@@ -207,6 +208,38 @@ namespace HarmonyHome.Api.Controllers
             _responseApi.StatusCode = HttpStatusCode.OK;
             _responseApi.IsSuccess = true;
             _responseApi.Result = preparacion;
+
+            return Ok(_responseApi);
+        }
+
+
+        [HttpPatch("{id:int}/cancelar")]
+        [Authorize(Roles = "Logistico,SupervisorLogistico,Administrador")]
+        public async Task<IActionResult> Cancelar(int id, [FromBody] CancelarOrdenDTO dto)
+        {
+            var usuarioId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(usuarioId)){
+                _responseApi.StatusCode = HttpStatusCode.Unauthorized;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("No se pudo identificar el usuario");
+
+                return Unauthorized(_responseApi);
+            }
+
+            var resultado = await _ordenReposicionRepository.Cancelar(id, usuarioId, dto);
+
+            if (resultado == null) {
+                _responseApi.StatusCode = HttpStatusCode.BadRequest;
+                _responseApi.IsSuccess = false;
+                _responseApi.ErrorMessages.Add("No se pudo cancelar la orden de reposición, debe estar asignada o en preparación");
+
+                return BadRequest(_responseApi);
+            }
+
+            _responseApi.StatusCode = HttpStatusCode.OK;
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = resultado;
 
             return Ok(_responseApi);
         }

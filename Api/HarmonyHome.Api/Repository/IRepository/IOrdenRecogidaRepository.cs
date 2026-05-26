@@ -1,4 +1,5 @@
 ﻿using HarmonyHome.Api.Models.DTOs;
+using HarmonyHome.Api.Models.DTOs.OrdenDto;
 using HarmonyHome.Api.Models.DTOs.PreparacionRecogidaDto;
 
 namespace HarmonyHome.Api.Repository.IRepository
@@ -19,5 +20,7 @@ namespace HarmonyHome.Api.Repository.IRepository
         Task<OrdenRecogidaDTO?> MarcarEnPreparacion(int id);
 
         Task<OrdenRecogidaDTO?> Finalizar(int id, string usuarioId, FinalizarOrdenRecogidaDTO dto);
+
+        Task<OrdenRecogidaDTO?> Cancelar(int id, string usuarioId, CancelarOrdenDTO dto);
     }
 }

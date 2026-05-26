@@ -1,0 +1,62 @@
+h1 {
+  margin-bottom: 4px;
+}
+
+p {
+  color: #4b5563;
+}
+
+button {
+  margin: 12px 0;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-top: 18px;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f9fafb;
+}
+
+.error {
+  color: #dc2626;
+}
+
+.search-box {
+  margin: 12px 0;
+}
+
+.search-box input {
+  width: 320px;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}

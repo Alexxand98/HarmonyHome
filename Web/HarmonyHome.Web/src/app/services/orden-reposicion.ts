@@ -18,6 +18,10 @@ export class OrdenReposicionService {
     return this.http.post<ResponseApi<unknown>>(this.apiUrl, request);
   }
 
+  getOrdenes(): Observable<ResponseApi<OrdenReposicion[]>> {
+    return this.http.get<ResponseApi<OrdenReposicion[]>>(this.apiUrl);
+  }
+
   getOrdenesPendientes(): Observable<ResponseApi<OrdenReposicion[]>> {
     return this.http.get<ResponseApi<OrdenReposicion[]>>(`${this.apiUrl}/pendientes`);
   }

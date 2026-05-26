@@ -1,0 +1,97 @@
+<h1>Órdenes</h1>
+<p>Consulta de órdenes generadas desde tienda</p>
+
+<button type="button" (click)="cargarOrdenes()">Actualizar</button>
+
+<p *ngIf="isLoading">Cargando órdenes...</p>
+<p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<section class="card">
+  <h2>Órdenes de recogida</h2>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Buscar por ID, cliente, estado o producto"
+      [(ngModel)]="textoBusquedaRecogida"
+    />
+  </div>
+
+  <table *ngIf="ordenesRecogidaFiltradas.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Estado</th>
+        <th>Total</th>
+        <th>Fecha</th>
+        <th>Líneas</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let orden of ordenesRecogidaFiltradas">
+        <td>{{ orden.id }}</td>
+        <td>{{ orden.clienteNombreCompleto }}</td>
+        <td>{{ orden.estadoNombre }}</td>
+        <td>{{ orden.totalPedido }} €</td>
+        <td>{{ orden.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <div *ngFor="let linea of orden.lineasPedido">
+            {{ linea.productoNombre }} x {{ linea.cantidad }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="ordenesRecogidaFiltradas.length === 0 && !isLoading">
+    No hay órdenes de recogida
+  </p>
+</section>
+
+<section class="card">
+  <h2>Órdenes de reposición</h2>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Buscar por ID, estado, usuario o producto"
+      [(ngModel)]="textoBusquedaReposicion"
+    />
+  </div>
+
+  <table *ngIf="ordenesReposicionFiltradas.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Estado</th>
+        <th>Solicitante</th>
+        <th>Preparador</th>
+        <th>Fecha</th>
+        <th>Líneas</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let orden of ordenesReposicionFiltradas">
+        <td>{{ orden.id }}</td>
+        <td>{{ orden.estadoNombre }}</td>
+        <td>{{ orden.usuarioSolicitanteUserName }}</td>
+        <td>{{ orden.usuarioPreparadorUserName || 'Sin asignar' }}</td>
+        <td>{{ orden.fechaSolicitud | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <div *ngFor="let linea of orden.lineas">
+            {{ linea.productoNombre }} - solicitadas:
+            {{ linea.cantidadSolicitada }}, preparadas:
+            {{ linea.cantidadPreparada }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="ordenesReposicionFiltradas.length === 0 && !isLoading">
+    No hay órdenes de reposición
+  </p>
+</section>

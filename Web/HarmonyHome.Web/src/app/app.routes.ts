@@ -7,6 +7,7 @@ import { Clientes } from './pages/clientes/clientes';
 import { Venta } from './pages/venta/venta';
 import { Reposiciones } from './pages/reposiciones/reposiciones';
 import { authGuard } from './guards/auth-guard';
+import { Ordenes } from './pages/ordenes/ordenes';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
       {
         path: 'reposiciones',
         component: Reposiciones
+      },
+      {
+        path: 'ordenes',
+        component: Ordenes
       },
       {
         path: '',

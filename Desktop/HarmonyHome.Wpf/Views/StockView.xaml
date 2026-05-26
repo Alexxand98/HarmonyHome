@@ -23,7 +23,6 @@
 
         <WrapPanel Grid.Row="1" Margin="0,0,0,10">
 
-            
             <Button x:Name="BtnCargarTodo"
                     Content="Todo"
                     Width="100"
@@ -42,21 +41,41 @@
                     Content="Almacén"
                     Width="100"
                     Height="32"
+                    Margin="0,0,8,0"
                     Click="BtnCargarAlmacen_Click"/>
 
             <Button x:Name="BtnMoverStock"
                     Content="Mover stock"
                     Width="110"
                     Height="32"
-                    Margin="8,0,0,0"
+                    Margin="0,0,8,0"
                     Click="BtnMoverStock_Click"/>
 
             <Button x:Name="BtnAltaStock"
                     Content="Añadir stock"
                     Width="110"
                     Height="32"
-                    Margin="8,0,0,0"
+                    Margin="0,0,8,0"
                     Click="BtnAltaStock_Click"/>
+
+            <TextBox x:Name="TxtBuscarStock"
+                     Width="220"
+                     Height="32"
+                     Margin="0,0,8,0"/>
+
+            <Button x:Name="BtnBuscarStock"
+                    Content="Buscar"
+                    Width="80"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="BtnBuscarStock_Click"/>
+
+            <Button x:Name="BtnLimpiarBusquedaStock"
+                    Content="Limpiar"
+                    Width="80"
+                    Height="32"
+                    Click="BtnLimpiarBusquedaStock_Click"/>
+
         </WrapPanel>
 
         <DataGrid x:Name="TablaStock"
@@ -79,5 +98,7 @@
                    Text=""
                    Foreground="Gray"
                    Margin="0,10,0,0"/>
+        
+        
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Linq;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -20,6 +21,8 @@ namespace HarmonyHome.Wpf.Views
     public partial class StockView : Window
     {
         private readonly StockService _stockService;
+
+        private List<StockUbicacionDTO> _stock = new List<StockUbicacionDTO>();
 
         public StockView()
         {
@@ -57,23 +60,58 @@ namespace HarmonyHome.Wpf.Views
                 stock = await _stockService.GetStockAsync();
             }
 
-            TablaStock.ItemsSource = stock;
+            _stock = stock;
+
+            TablaStock.ItemsSource = _stock;
 
             TxtMensajeStock.Text = "Registros cargados: " + stock.Count;
         }
 
-        private void BtnAltaStock_Click(object sender, RoutedEventArgs e)
+        private async void BtnAltaStock_Click(object sender, RoutedEventArgs e)
         {
             AltaStockView altaStockView = new AltaStockView();
 
             altaStockView.ShowDialog();
+
+            await CargarStock("todo");
         }
 
-        private void BtnMoverStock_Click(object sender, RoutedEventArgs e)
+        private async void BtnMoverStock_Click(object sender, RoutedEventArgs e)
         {
             MovimientoInternoView movimientoInternoView = new MovimientoInternoView();
 
             movimientoInternoView.ShowDialog();
+
+            await CargarStock("todo");
+        }
+
+        private void BtnBuscarStock_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarStock.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto)) {
+
+                TablaStock.ItemsSource = _stock;
+
+                TxtMensajeStock.Text = "Registros cargados: " + _stock.Count;
+
+                return;
+            }
+
+            List<StockUbicacionDTO> stockFiltrado = _stock.Where(s =>(s.ProductoReferencia != null && s.ProductoReferencia.ToLower().Contains(texto)) || (s.ProductoNombre != null && s.ProductoNombre.ToLower().Contains(texto))).ToList();
+
+            TablaStock.ItemsSource = stockFiltrado;
+
+            TxtMensajeStock.Text = "Resultados encontrados: " + stockFiltrado.Count;
+        }
+
+        private void BtnLimpiarBusquedaStock_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarStock.Text = "";
+
+            TablaStock.ItemsSource = _stock;
+
+            TxtMensajeStock.Text = "Búsqueda limpia";
         }
     }
 }

@@ -163,5 +163,34 @@ namespace HarmonyHome.Wpf.Views
 
             view.ShowDialog();
         }
+
+
+        private async void BtnCancelarOrden_Click(object sender, RoutedEventArgs e)
+        {
+            if (_ordenSeleccionada == null){
+                TxtMensaje.Text = "Selecciona una orden";
+                return;
+            }
+
+            if (_ordenSeleccionada.EstadoNombre != "Asignada" && _ordenSeleccionada.EstadoNombre != "EnPreparacion") {
+
+                TxtMensaje.Text = "Solo se pueden cancelar órdenes asignadas o en preparación";
+                return;
+            }
+
+            CancelarOrdenView cancelarView = new CancelarOrdenView();
+
+            bool? resultado = cancelarView.ShowDialog();
+
+            if (resultado != true)  {
+                return;
+            }
+
+            string mensaje = await _ordenService.CancelarAsync(_ordenSeleccionada.Id, cancelarView.MotivoCancelacion);
+
+            await CargarOrdenes();
+
+            TxtMensaje.Text = mensaje;
+        }
     }
 }

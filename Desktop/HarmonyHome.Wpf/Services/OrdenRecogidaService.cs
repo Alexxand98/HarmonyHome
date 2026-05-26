@@ -100,5 +100,26 @@ namespace HarmonyHome.Wpf.Services
 
             return null;
         }
+
+
+        public async Task<string> CancelarAsync(int id, string motivoCancelacion)
+        {
+            CancelarOrdenDTO data = new CancelarOrdenDTO();
+
+            data.MotivoCancelacion = motivoCancelacion;
+
+            ResponseApi<object>? response = await _apiService.PatchAsync<ResponseApi<object>>($"api/OrdenRecogida/{id}/cancelar", data);
+
+            if (response != null && response.IsSuccess) {
+
+                return "Orden de recogida cancelada correctamente";
+            }
+
+            if (response != null && response.ErrorMessages.Count > 0) {
+                return response.ErrorMessages[0];
+            }
+
+            return "No se pudo cancelar la orden de recogida";
+        }
     }
 }

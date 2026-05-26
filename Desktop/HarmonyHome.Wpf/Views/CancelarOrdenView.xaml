@@ -1,0 +1,46 @@
+﻿<Window x:Class="HarmonyHome.Wpf.Views.CancelarOrdenView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cancelar orden"
+        Height="300"
+        Width="450"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <StackPanel>
+
+            <TextBlock Text="Cancelar orden"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Margin="0,0,0,15"/>
+
+            <TextBlock Text="Motivo de cancelación"/>
+
+            <TextBox x:Name="TxtMotivo"
+                     Height="90"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     Margin="0,5,0,15"/>
+
+            <WrapPanel>
+                <Button x:Name="BtnAceptar"
+                        Content="Aceptar"
+                        Width="90"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnAceptar_Click"/>
+
+                <Button x:Name="BtnCancelar"
+                        Content="Cancelar"
+                        Width="90"
+                        Height="32"
+                        Click="BtnCancelar_Click"/>
+            </WrapPanel>
+
+            <TextBlock x:Name="TxtMensaje"
+                       Foreground="Gray"
+                       TextWrapping="Wrap"
+                       Margin="0,12,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

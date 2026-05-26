@@ -105,6 +105,14 @@
                     Width="100"
                     Height="32"
                     Click="BtnFinalizar_Click"/>
+
+            <Button x:Name="BtnCancelarOrden"
+                    Content="Cancelar"
+                    Width="100"
+                    Height="32"
+                    Margin="8,0,0,0"
+                    Click="BtnCancelarOrden_Click"/>
+            
         </WrapPanel>
 
         <TextBlock x:Name="TxtMensaje"

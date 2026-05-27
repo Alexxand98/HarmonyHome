@@ -125,6 +125,13 @@
                         Height="30"
                         Margin="0,0,5,5"
                         Click="BtnDesactivarLogistico_Click"/>
+
+                <Button x:Name="BtnEliminarLogistico"
+                        Content="Eliminar"
+                        Width="80"
+                        Height="30"
+                        Margin="0,0,5,5"
+                        Click="BtnEliminarLogistico_Click"/>
             </WrapPanel>
 
             <TextBlock x:Name="TxtMensajeGestionLogisticos"

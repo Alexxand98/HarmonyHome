@@ -103,21 +103,21 @@ namespace HarmonyHome.Wpf.Services
         }
         public async Task<T?> DeleteAsync<T>(string endpoint)
         {
-            try{
-                AddToken();
+            HttpResponseMessage response = await _httpClient.DeleteAsync(endpoint);
 
-                HttpResponseMessage response = await _httpClient.DeleteAsync(endpoint);
+            string json = await response.Content.ReadAsStringAsync();
 
-                string json = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json)) {
 
-                if (!response.IsSuccessStatusCode){
-                    return default;
-                }
-
-                return JsonSerializer.Deserialize<T>(json, GetJsonOptions());
-            } catch {
                 return default;
             }
+
+            T? result = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return result;
         }
 
 

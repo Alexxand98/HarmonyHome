@@ -69,5 +69,20 @@ namespace HarmonyHome.Wpf.Services
             return response != null && response.IsSuccess;
 
         }
+
+        public async Task<string> EliminarLogisticoAsync(string id)
+        {
+            ResponseApi<string>? response = await _apiService.DeleteAsync<ResponseApi<string>>($"api/User/{id}");
+
+            if (response != null && response.IsSuccess && response.Result != null){
+                return response.Result;
+            }
+
+            if (response != null && response.ErrorMessages.Count > 0){
+                return response.ErrorMessages[0];
+            }
+
+            return "No se pudo eliminar el logístico";
+        }
     }
 }

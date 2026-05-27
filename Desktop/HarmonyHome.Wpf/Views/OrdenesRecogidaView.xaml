@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="OrdenesRecogidaView" Height="450" Width="800"
+        Title="OrdenesRecogidaView"
+        Height="520"
+        Width="1000"
         WindowStartupLocation="CenterScreen">
 
     <Grid Margin="15">
@@ -36,7 +38,26 @@
                     Content="Pendientes"
                     Width="120"
                     Height="32"
+                    Margin="0,0,8,0"
                     Click="BtnCargarPendientes_Click"/>
+
+            <TextBox x:Name="TxtBuscarOrden"
+                     Width="220"
+                     Height="32"
+                     Margin="0,0,8,0"/>
+
+            <Button x:Name="BtnBuscarOrden"
+                    Content="Buscar"
+                    Width="80"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="BtnBuscarOrden_Click"/>
+
+            <Button x:Name="BtnLimpiarBusquedaOrden"
+                    Content="Limpiar"
+                    Width="80"
+                    Height="32"
+                    Click="BtnLimpiarBusquedaOrden_Click"/>
         </WrapPanel>
 
         <DataGrid x:Name="TablaOrdenes"
@@ -104,15 +125,14 @@
                     Content="Finalizar"
                     Width="100"
                     Height="32"
+                    Margin="0,0,8,0"
                     Click="BtnFinalizar_Click"/>
 
             <Button x:Name="BtnCancelarOrden"
                     Content="Cancelar"
                     Width="100"
                     Height="32"
-                    Margin="8,0,0,0"
                     Click="BtnCancelarOrden_Click"/>
-            
         </WrapPanel>
 
         <TextBlock x:Name="TxtMensaje"

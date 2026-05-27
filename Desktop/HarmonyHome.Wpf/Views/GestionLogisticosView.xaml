@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="Gestion logisticos" Height="500" Width="1000"
+        Title="Gestion logisticos"
+        Height="500"
+        Width="1050"
         WindowStartupLocation="CenterScreen">
-    
+
     <Grid Margin="15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-     <Grid Grid.Column="0" Margin="0,0,15,0">
+        <Grid Grid.Column="0" Margin="0,0,15,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -26,14 +28,32 @@
                        FontWeight="Bold"
                        Margin="0,0,0,10"/>
 
-            <Button x:Name="BtnCargarLogisticos"
-                    Grid.Row="1"
-                    Content="Cargar logisticos"
-                    Width="140"
-                    Height="32"
-                    HorizontalAlignment="Left"
-                    Margin="0,0,0,10"
-                    Click="BtnCargarLogisticos_Click"/>
+            <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+                <Button x:Name="BtnCargarLogisticos"
+                        Content="Cargar logisticos"
+                        Width="140"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnCargarLogisticos_Click"/>
+
+                <TextBox x:Name="TxtBuscarLogistico"
+                         Width="220"
+                         Height="32"
+                         Margin="0,0,8,0"/>
+
+                <Button x:Name="BtnBuscarLogistico"
+                        Content="Buscar"
+                        Width="80"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnBuscarLogistico_Click"/>
+
+                <Button x:Name="BtnLimpiarBusquedaLogistico"
+                        Content="Limpiar"
+                        Width="80"
+                        Height="32"
+                        Click="BtnLimpiarBusquedaLogistico_Click"/>
+            </WrapPanel>
 
             <DataGrid x:Name="TablaLogisticos"
                       Grid.Row="2"

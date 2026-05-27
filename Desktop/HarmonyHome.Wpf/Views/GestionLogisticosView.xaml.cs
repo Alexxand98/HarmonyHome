@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using HarmonyHome.Wpf.Services;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using HarmonyHome.Wpf.Models.DTOs;
-
+using HarmonyHome.Wpf.Services;
 
 namespace HarmonyHome.Wpf.Views
 {
-    /// <summary>
-    /// Lógica de interacción para GestionLogisticosView.xaml
-    /// </summary>
     public partial class GestionLogisticosView : Window
     {
         private readonly UsuarioLogisticoService _usuarioService;
+
         private UsuarioLogisticoDTO? _usuarioSeleccionado;
+
+        private List<UsuarioLogisticoDTO> _logisticos = new List<UsuarioLogisticoDTO>();
 
         public GestionLogisticosView()
         {
@@ -39,11 +32,43 @@ namespace HarmonyHome.Wpf.Views
         {
             TxtMensajeGestionLogisticos.Text = "Cargando logisticos...";
 
-            List<UsuarioLogisticoDTO> logisticos = await _usuarioService.GetLogisticosAsync();
+            _logisticos = await _usuarioService.GetLogisticosAsync();
 
-            TablaLogisticos.ItemsSource = logisticos;
+            TablaLogisticos.ItemsSource = _logisticos;
 
-            TxtMensajeGestionLogisticos.Text = "Logisticos cargados: " + logisticos.Count;
+            TxtMensajeGestionLogisticos.Text = "Logisticos cargados: " + _logisticos.Count;
+        }
+
+        private void BtnBuscarLogistico_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarLogistico.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto)) {
+                TablaLogisticos.ItemsSource = _logisticos;
+                TxtMensajeGestionLogisticos.Text = "Logisticos cargados: " + _logisticos.Count;
+                return;
+            }
+
+            List<UsuarioLogisticoDTO> logisticosFiltrados = _logisticos
+                .Where(l =>
+                    (l.UserName != null && l.UserName.ToLower().Contains(texto)) ||
+                    (l.Email != null && l.Email.ToLower().Contains(texto)) ||
+                    (l.NombreCompleto != null && l.NombreCompleto.ToLower().Contains(texto)) ||
+                    (l.Role != null && l.Role.ToLower().Contains(texto)))
+                .ToList();
+
+            TablaLogisticos.ItemsSource = logisticosFiltrados;
+
+            TxtMensajeGestionLogisticos.Text = "Resultados encontrados: " + logisticosFiltrados.Count;
+        }
+
+        private void BtnLimpiarBusquedaLogistico_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarLogistico.Text = "";
+
+            TablaLogisticos.ItemsSource = _logisticos;
+
+            TxtMensajeGestionLogisticos.Text = "Búsqueda limpiada";
         }
 
         private void TablaLogisticos_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -68,7 +93,7 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnGuardarLogistico_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidarFormulario())  {
+            if (!ValidarFormulario()) {
                 return;
             }
 
@@ -82,19 +107,21 @@ namespace HarmonyHome.Wpf.Views
 
                     LimpiarFormulario();
                     await CargarLogisticos();
-                } else{
+                } else {
                     TxtMensajeGestionLogisticos.Text = "No se pudo crear el logístico.";
                 }
-            } else{
+            } else {
                 UpdateUsuarioLogisticoDTO usuarioEditado = CrearDtoUpdateUsuario();
 
                 bool actualizado = await _usuarioService.ActualizarLogisticoAsync(_usuarioSeleccionado.Id, usuarioEditado);
 
-                if (actualizado){
+                if (actualizado) {
                     TxtMensajeGestionLogisticos.Text = "Logístico actualizado correctamente.";
+
                     LimpiarFormulario();
                     await CargarLogisticos();
-                } else {
+
+                }else{
                     TxtMensajeGestionLogisticos.Text = "No se pudo actualizar el logístico.";
                 }
             }
@@ -102,35 +129,49 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnActivarLogistico_Click(object sender, RoutedEventArgs e)
         {
-            if (_usuarioSeleccionado == null){
-                TxtMensajeGestionLogisticos.Text = "Selecciona un logístico.";
+            if (_usuarioSeleccionado == null) {
+
+                TxtMensajeGestionLogisticos.Text = "Selecciona un logístico";
+
                 return;
             }
 
             bool activado = await _usuarioService.ActivarLogisticoAsync(_usuarioSeleccionado.Id);
 
-            if (activado) {
+            if (activado){
+
                 await CargarLogisticos();
-                TxtMensajeGestionLogisticos.Text = "Logístico activado correctamente.";
+
+                TxtMensajeGestionLogisticos.Text = "Logístico activado correctamente";
+
             } else{
-                TxtMensajeGestionLogisticos.Text = "No se pudo activar el logístico.";
+
+                TxtMensajeGestionLogisticos.Text = "No se pudo activar el logístico";
+
             }
         }
 
         private async void BtnDesactivarLogistico_Click(object sender, RoutedEventArgs e)
         {
-            if (_usuarioSeleccionado == null){
-                TxtMensajeGestionLogisticos.Text = "Selecciona un logístico.";
+            if (_usuarioSeleccionado == null) {
+
+                TxtMensajeGestionLogisticos.Text = "Selecciona un logístico";
+
                 return;
             }
 
             bool desactivado = await _usuarioService.DesactivarLogisticoAsync(_usuarioSeleccionado.Id);
 
             if (desactivado){
+
                 await CargarLogisticos();
-                TxtMensajeGestionLogisticos.Text = "Logistico desactivado correctamente.";
-            } else{
-                TxtMensajeGestionLogisticos.Text = "No se pudo desactivar el logístico.";
+
+                TxtMensajeGestionLogisticos.Text = "Logistico desactivado correctamente";
+
+            }else {
+
+                TxtMensajeGestionLogisticos.Text = "No se pudo desactivar el logístico";
+
             }
         }
 
@@ -141,7 +182,7 @@ namespace HarmonyHome.Wpf.Views
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(TxtEmail.Text)){
+            if (string.IsNullOrWhiteSpace(TxtEmail.Text)) {
                 TxtMensajeGestionLogisticos.Text = "El email es obligatorio";
                 return false;
             }
@@ -156,7 +197,7 @@ namespace HarmonyHome.Wpf.Views
                 return false;
             }
 
-            if (_usuarioSeleccionado == null && TxtPassword.Password.Length < 6) {
+            if (_usuarioSeleccionado == null && TxtPassword.Password.Length < 6){
                 TxtMensajeGestionLogisticos.Text = "La contraseña debe tener al menos 6 caracteres";
                 return false;
             }
@@ -169,8 +210,11 @@ namespace HarmonyHome.Wpf.Views
             CreateUsuarioLogisticoDTO usuario = new CreateUsuarioLogisticoDTO();
 
             usuario.UserName = TxtUserName.Text.Trim();
+
             usuario.Email = TxtEmail.Text.Trim();
+
             usuario.NombreCompleto = TxtNombreCompleto.Text.Trim();
+
             usuario.Password = TxtPassword.Password;
 
             return usuario;
@@ -181,7 +225,9 @@ namespace HarmonyHome.Wpf.Views
             UpdateUsuarioLogisticoDTO usuario = new UpdateUsuarioLogisticoDTO();
 
             usuario.UserName = TxtUserName.Text.Trim();
+
             usuario.Email = TxtEmail.Text.Trim();
+
             usuario.NombreCompleto = TxtNombreCompleto.Text.Trim();
 
             return usuario;

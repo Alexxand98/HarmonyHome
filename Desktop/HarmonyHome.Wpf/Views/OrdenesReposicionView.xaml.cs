@@ -20,7 +20,10 @@ namespace HarmonyHome.Wpf.Views
     public partial class OrdenesReposicionView : Window
     {
         private readonly OrdenReposicionService _ordenService;
+
         private OrdenReposicionDTO? _ordenSeleccionada;
+
+        private List<OrdenReposicionDTO> _ordenes = new List<OrdenReposicionDTO>();
 
         public OrdenesReposicionView()
         {
@@ -38,26 +41,26 @@ namespace HarmonyHome.Wpf.Views
         {
             TxtMensaje.Text = "Cargando reposiciones pendientes...";
 
-            List<OrdenReposicionDTO> ordenes = await _ordenService.GetPendientesAsync();
+            _ordenes = await _ordenService.GetPendientesAsync();
 
-            TablaOrdenes.ItemsSource = ordenes;
+            TablaOrdenes.ItemsSource = _ordenes;
 
             TablaLineas.ItemsSource = null;
 
-            TxtMensaje.Text = "Reposiciones pendientes cargadas: " + ordenes.Count;
+            TxtMensaje.Text = "Reposiciones pendientes cargadas: " + _ordenes.Count;
         }
 
         private async Task CargarOrdenes()
         {
             TxtMensaje.Text = "Cargando reposiciones...";
 
-            List<OrdenReposicionDTO> ordenes = await _ordenService.GetOrdenesAsync();
+            _ordenes = await _ordenService.GetOrdenesAsync();
 
-            TablaOrdenes.ItemsSource = ordenes;
+            TablaOrdenes.ItemsSource = _ordenes;
 
             TablaLineas.ItemsSource = null;
 
-            TxtMensaje.Text = "Reposiciones cargadas: " + ordenes.Count;
+            TxtMensaje.Text = "Reposiciones cargadas: " + _ordenes.Count;
         }
 
         private void TablaOrdenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -165,6 +168,39 @@ namespace HarmonyHome.Wpf.Views
             await CargarOrdenes();
 
             TxtMensaje.Text = mensaje;
+        }
+
+        private void BtnBuscarOrden_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarOrden.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                TablaOrdenes.ItemsSource = _ordenes;
+                TxtMensaje.Text = "Reposiciones cargadas: " + _ordenes.Count;
+                return;
+            }
+
+            List<OrdenReposicionDTO> ordenesFiltradas = _ordenes
+                .Where(o =>
+                    o.Id.ToString().Contains(texto) ||
+                    (o.EstadoNombre != null && o.EstadoNombre.ToLower().Contains(texto)) ||
+                    (o.SolicitanteTexto != null && o.SolicitanteTexto.ToLower().Contains(texto)) ||
+                    (o.PreparadorTexto != null && o.PreparadorTexto.ToLower().Contains(texto)))
+                .ToList();
+
+            TablaOrdenes.ItemsSource = ordenesFiltradas;
+
+            TxtMensaje.Text = "Resultados encontrados: " + ordenesFiltradas.Count;
+        }
+
+        private void BtnLimpiarBusquedaOrden_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarOrden.Text = "";
+
+            TablaOrdenes.ItemsSource = _ordenes;
+
+            TxtMensaje.Text = "Búsqueda limpia";
         }
     }
 }

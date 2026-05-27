@@ -1,27 +1,20 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
-    /// <summary>
-    /// Lógica de interacción para GestionUbicacionesView.xaml
-    /// </summary>
     public partial class GestionUbicacionesView : Window
     {
         private readonly UbicacionService _ubicacionService;
 
         private UbicacionDTO? _ubicacionSeleccionada;
+
+        private List<UbicacionDTO> _ubicaciones = new List<UbicacionDTO>();
 
         public GestionUbicacionesView()
         {
@@ -42,7 +35,6 @@ namespace HarmonyHome.Wpf.Views
                 new OpcionComboDTO { Id = 4, Nombre = "Preparacion" },
                 new OpcionComboDTO { Id = 5, Nombre = "Recogida" },
                 new OpcionComboDTO { Id = 6, Nombre = "Demarca" }
-
             };
 
             CmbTipoUbicacion.ItemsSource = tipos;
@@ -59,19 +51,51 @@ namespace HarmonyHome.Wpf.Views
         {
             TxtMensajeGestionUbicaciones.Text = "Cargando ubicaciones...";
 
-            List<UbicacionDTO> ubicaciones = await _ubicacionService.GetUbicacionesAsync();
+            _ubicaciones = await _ubicacionService.GetUbicacionesAsync();
 
-            TablaUbicaciones.ItemsSource = ubicaciones;
+            TablaUbicaciones.ItemsSource = _ubicaciones;
 
-            TxtMensajeGestionUbicaciones.Text = "Ubicaciones cargadas: " + ubicaciones.Count;
+            TxtMensajeGestionUbicaciones.Text = "Ubicaciones cargadas: " + _ubicaciones.Count;
+        }
+
+        private void BtnBuscarUbicacion_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarUbicacion.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                TablaUbicaciones.ItemsSource = _ubicaciones;
+                TxtMensajeGestionUbicaciones.Text = "Ubicaciones cargadas: " + _ubicaciones.Count;
+                return;
+            }
+
+            List<UbicacionDTO> ubicacionesFiltradas = _ubicaciones
+                .Where(u =>
+                    u.Codigo.ToLower().Contains(texto) ||
+                    u.Nombre.ToLower().Contains(texto) ||
+                    u.TipoUbicacionNombre.ToLower().Contains(texto))
+                .ToList();
+
+            TablaUbicaciones.ItemsSource = ubicacionesFiltradas;
+
+            TxtMensajeGestionUbicaciones.Text = "Resultados encontrados: " + ubicacionesFiltradas.Count;
+        }
+
+        private void BtnLimpiarBusquedaUbicacion_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarUbicacion.Text = "";
+
+            TablaUbicaciones.ItemsSource = _ubicaciones;
+
+            TxtMensajeGestionUbicaciones.Text = "Búsqueda limpiada.";
         }
 
         private void TablaUbicaciones_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _ubicacionSeleccionada = TablaUbicaciones.SelectedItem as UbicacionDTO;
 
-            if (_ubicacionSeleccionada == null) {
-
+            if (_ubicacionSeleccionada == null)
+            {
                 return;
             }
 
@@ -83,7 +107,6 @@ namespace HarmonyHome.Wpf.Views
 
         private void BtnNuevaUbicacion_Click(object sender, RoutedEventArgs e)
         {
-
             LimpiarFormulario();
         }
 
@@ -104,47 +127,56 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnGuardarUbicacion_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidarFormulario()) {
+            if (!ValidarFormulario()){
 
                 return;
             }
 
-            if (_ubicacionSeleccionada == null)
-            {
+            if (_ubicacionSeleccionada == null){
+
                 CreateUbicacionDTO nuevaUbicacion = CrearDtoUbicacion();
 
                 bool creada = await _ubicacionService.CrearUbicacionAsync(nuevaUbicacion);
 
-                if (creada) {
+                if (creada){
+
                     TxtMensajeGestionUbicaciones.Text = "Ubicacion creada correctamente.";
                     LimpiarFormulario();
 
                     await CargarUbicaciones();
+
                 } else{
+
                     TxtMensajeGestionUbicaciones.Text = "No se pudo crear la ubicacion.";
                 }
-            }
-            else
-            {
+
+            }else{
+
                 UpdateUbicacionDTO ubicacionEditada = CrearDtoUpdateUbicacion();
 
                 bool actualizada = await _ubicacionService.ActualizarUbicacionAsync(_ubicacionSeleccionada.Id, ubicacionEditada);
 
                 if (actualizada){
+
                     TxtMensajeGestionUbicaciones.Text = "Ubicacion actualizada correctamente.";
+
                     LimpiarFormulario();
+
                     await CargarUbicaciones();
-                }
-                else
-                {
-                    TxtMensajeGestionUbicaciones.Text = "No se pudo actualizar la ubicacin.";
+
+                }else{
+
+                    TxtMensajeGestionUbicaciones.Text = "No se pudo actualizar la ubicacion.";
                 }
             }
         }
-        private async  void BtnEliminarUbicacion_Click(object sender, RoutedEventArgs e)
+
+        private async void BtnEliminarUbicacion_Click(object sender, RoutedEventArgs e)
         {
             if (_ubicacionSeleccionada == null){
+
                 TxtMensajeGestionUbicaciones.Text = "Selecciona una ubicacion.";
+
                 return;
             }
 
@@ -156,35 +188,34 @@ namespace HarmonyHome.Wpf.Views
             );
 
             if (result != MessageBoxResult.Yes){
+
                 return;
             }
 
             string mensaje = await _ubicacionService.EliminarUbicacionAsync(_ubicacionSeleccionada.Id);
 
-
             LimpiarFormulario();
 
             await CargarUbicaciones();
+
             TxtMensajeGestionUbicaciones.Text = mensaje;
-
         }
-
-
 
         private bool ValidarFormulario()
         {
-            if (string.IsNullOrWhiteSpace(TxtCodigo.Text))  {
-                TxtMensajeGestionUbicaciones.Text = "El código obligatorio.";
+            if (string.IsNullOrWhiteSpace(TxtCodigo.Text)){
 
+                TxtMensajeGestionUbicaciones.Text = "El código es obligatorio.";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(TxtNombre.Text)) {
-                TxtMensajeGestionUbicaciones.Text = "El nombre obligatorio.";
+
+                TxtMensajeGestionUbicaciones.Text = "El nombre es obligatorio.";
                 return false;
             }
 
-            if (CmbTipoUbicacion.SelectedValue == null){
+            if (CmbTipoUbicacion.SelectedValue == null) {
 
                 TxtMensajeGestionUbicaciones.Text = "Selecciona tipo de ubicacion.";
                 return false;
@@ -198,8 +229,11 @@ namespace HarmonyHome.Wpf.Views
             CreateUbicacionDTO ubicacion = new CreateUbicacionDTO();
 
             ubicacion.Codigo = TxtCodigo.Text.Trim();
+
             ubicacion.Nombre = TxtNombre.Text.Trim();
+
             ubicacion.TipoUbicacion = (int)CmbTipoUbicacion.SelectedValue;
+
             ubicacion.Activa = ChkActiva.IsChecked == true;
 
             return ubicacion;
@@ -210,8 +244,11 @@ namespace HarmonyHome.Wpf.Views
             UpdateUbicacionDTO ubicacion = new UpdateUbicacionDTO();
 
             ubicacion.Codigo = TxtCodigo.Text.Trim();
+
             ubicacion.Nombre = TxtNombre.Text.Trim();
+
             ubicacion.TipoUbicacion = (int)CmbTipoUbicacion.SelectedValue;
+
             ubicacion.Activa = ChkActiva.IsChecked == true;
 
             return ubicacion;

@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="GestionUbicacionesView" Height="500" Width="1000"
-         WindowStartupLocation="CenterScreen">
-    
+        Title="GestionUbicacionesView"
+        Height="500"
+        Width="1050"
+        WindowStartupLocation="CenterScreen">
+
     <Grid Margin="15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -26,14 +28,32 @@
                        FontWeight="Bold"
                        Margin="0,0,0,10"/>
 
-            <Button x:Name="BtnCargarUbicaciones"
-                    Grid.Row="1"
-                    Content="Cargar ubicaciones"
-                    Width="150"
-                    Height="32"
-                    HorizontalAlignment="Left"
-                    Margin="0,0,0,10"
-                    Click="BtnCargarUbicaciones_Click"/>
+            <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+                <Button x:Name="BtnCargarUbicaciones"
+                        Content="Cargar ubicaciones"
+                        Width="150"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnCargarUbicaciones_Click"/>
+
+                <TextBox x:Name="TxtBuscarUbicacion"
+                         Width="220"
+                         Height="32"
+                         Margin="0,0,8,0"/>
+
+                <Button x:Name="BtnBuscarUbicacion"
+                        Content="Buscar"
+                        Width="80"
+                        Height="32"
+                        Margin="0,0,8,0"
+                        Click="BtnBuscarUbicacion_Click"/>
+
+                <Button x:Name="BtnLimpiarBusquedaUbicacion"
+                        Content="Limpiar"
+                        Width="80"
+                        Height="32"
+                        Click="BtnLimpiarBusquedaUbicacion_Click"/>
+            </WrapPanel>
 
             <DataGrid x:Name="TablaUbicaciones"
                       Grid.Row="2"
@@ -41,7 +61,6 @@
                       IsReadOnly="True"
                       SelectionMode="Single"
                       SelectionChanged="TablaUbicaciones_SelectionChanged">
-
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="120"/>
@@ -68,7 +87,8 @@
             <TextBlock Text="Tipo ubicacion"/>
             <ComboBox x:Name="CmbTipoUbicacion"
                       DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id" Margin="0,0,0,8"/>
+                      SelectedValuePath="Id"
+                      Margin="0,0,0,8"/>
 
             <CheckBox x:Name="ChkActiva"
                       Content="Activa"
@@ -84,20 +104,21 @@
 
                 <Button x:Name="BtnGuardarUbicacion"
                         Content="Guardar"
-                        Width="80" Height="30"
+                        Width="80"
+                        Height="30"
                         Margin="0,0,5,5"
                         Click="BtnGuardarUbicacion_Click"/>
 
-
                 <Button x:Name="BtnEliminarUbicacion"
                         Content="Eliminar"
-                        Width="80" Height="30" Margin="0,0,5,5"
-                       Click="BtnEliminarUbicacion_Click"/>
-                
-                
+                        Width="80"
+                        Height="30"
+                        Margin="0,0,5,5"
+                        Click="BtnEliminarUbicacion_Click"/>
             </WrapPanel>
 
-            <TextBlock x:Name="TxtMensajeGestionUbicaciones" Text=""
+            <TextBlock x:Name="TxtMensajeGestionUbicaciones"
+                       Text=""
                        Foreground="Gray"
                        TextWrapping="Wrap"
                        Margin="0,10,0,0"/>

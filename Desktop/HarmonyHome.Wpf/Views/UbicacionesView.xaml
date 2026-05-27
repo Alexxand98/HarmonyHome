@@ -5,46 +5,72 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="Ubicaciones" Height="450" Width="800"
+        Title="Ubicaciones"
+        Height="450"
+        Width="850"
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="White" Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
         <TextBlock Text="Ubicaciones"
                    FontSize="24"
                    FontWeight="Bold"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"/>
+                   Margin="0,0,0,10"/>
 
-        <Button x:Name="BtnCargarUbicaciones"
-                Content="Cargar ubicaciones"
-                Width="150"
-                Height="32"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top" Click="BtnCargarUbicaciones_Click"/>
+        <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+
+            <Button x:Name="BtnCargarUbicaciones"
+                    Content="Cargar ubicaciones"
+                    Width="150"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="BtnCargarUbicaciones_Click"/>
+
+            <TextBox x:Name="TxtBuscarUbicacion"
+                     Width="220"
+                     Height="32"
+                     Margin="0,0,8,0"/>
+
+            <Button x:Name="BtnBuscarUbicacion"
+                    Content="Buscar"
+                    Width="80"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Click="BtnBuscarUbicacion_Click"/>
+
+            <Button x:Name="BtnLimpiarBusquedaUbicacion"
+                    Content="Limpiar"
+                    Width="80"
+                    Height="32"
+                    Click="BtnLimpiarBusquedaUbicacion_Click"/>
+
+        </WrapPanel>
 
         <DataGrid x:Name="TablaUbicaciones"
+                  Grid.Row="2"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Margin="0,50,0,35">
+                  IsReadOnly="True">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Codigo" 
-                                    Binding="{Binding Codigo}" Width="130"/>
-                <DataGridTextColumn Header="Nombre" 
-                                    Binding="{Binding Nombre}" Width="220"/>
-                <DataGridTextColumn Header="Tipo" 
-                                    Binding="{Binding TipoUbicacionNombre}" Width="160"/>
-                <DataGridCheckBoxColumn Header="Activa" 
-                                        Binding="{Binding Activa}" Width="80"/>
+                <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" Width="130"/>
+                <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="220"/>
+                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoUbicacionNombre}" Width="160"/>
+                <DataGridCheckBoxColumn Header="Activa" Binding="{Binding Activa}" Width="80"/>
             </DataGrid.Columns>
 
         </DataGrid>
 
-        <TextBlock x:Name="TxtMensajeUbicaciones" Text=""
+        <TextBlock x:Name="TxtMensajeUbicaciones"
+                   Grid.Row="3"
+                   Text=""
                    Foreground="Gray"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Bottom"/>
+                   Margin="0,10,0,0"/>
 
     </Grid>
 </Window>

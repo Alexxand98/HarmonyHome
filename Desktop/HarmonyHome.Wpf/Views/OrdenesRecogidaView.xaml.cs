@@ -1,5 +1,6 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,10 @@ namespace HarmonyHome.Wpf.Views
     public partial class OrdenesRecogidaView : Window
     {
         private readonly OrdenRecogidaService _ordenService;
+
         private OrdenRecogidaDTO? _ordenSeleccionada;
+
+        private List<OrdenRecogidaDTO> _ordenes = new List<OrdenRecogidaDTO>();
 
         public OrdenesRecogidaView()
         {
@@ -38,26 +42,26 @@ namespace HarmonyHome.Wpf.Views
         {
             TxtMensaje.Text = "Cargando ordenes pendientes...";
 
-            List<OrdenRecogidaDTO> ordenes = await _ordenService.GetPendientesAsync();
+            _ordenes = await _ordenService.GetPendientesAsync();
 
-            TablaOrdenes.ItemsSource = ordenes;
+            TablaOrdenes.ItemsSource = _ordenes;
 
             TablaLineas.ItemsSource = null;
 
-            TxtMensaje.Text = "Ordenes pendientes cargadas: " + ordenes.Count;
+            TxtMensaje.Text = "Ordenes pendientes cargadas: " + _ordenes.Count;
         }
 
         private async Task CargarOrdenes()
         {
             TxtMensaje.Text = "Cargando ordenes...";
 
-            List<OrdenRecogidaDTO> ordenes = await _ordenService.GetOrdenesAsync();
+            _ordenes = await _ordenService.GetOrdenesAsync();
 
-            TablaOrdenes.ItemsSource = ordenes;
+            TablaOrdenes.ItemsSource = _ordenes;
 
             TablaLineas.ItemsSource = null;
 
-            TxtMensaje.Text = "Ordenes cargadas: " + ordenes.Count;
+            TxtMensaje.Text = "Ordenes cargadas: " + _ordenes.Count;
         }
 
         private void TablaOrdenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -139,22 +143,19 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnVerPreparacion_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null)
-            {
+            if (_ordenSeleccionada == null){
                 TxtMensaje.Text = "Selecciona una orden";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion")
-            {
+            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion"){
                 TxtMensaje.Text = "Solo se puede ver la preparación de una orden en preparación";
                 return;
             }
 
             PreparacionRecogidaDTO? preparacion = await _ordenService.GetPreparacionAsync(_ordenSeleccionada.Id);
 
-            if (preparacion == null)
-            {
+            if (preparacion == null){
                 TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
                 return;
             }
@@ -191,6 +192,38 @@ namespace HarmonyHome.Wpf.Views
             await CargarOrdenes();
 
             TxtMensaje.Text = mensaje;
+        }
+
+        private void BtnBuscarOrden_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarOrden.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto)) {
+
+                TablaOrdenes.ItemsSource = _ordenes;
+
+                TxtMensaje.Text = "Ordenes cargadas: " + _ordenes.Count;
+
+                return;
+            }
+
+            List<OrdenRecogidaDTO> ordenesFiltradas = _ordenes.Where(o => o.Id.ToString().Contains(texto) ||
+                (o.EstadoNombre != null && o.EstadoNombre.ToLower().Contains(texto)) ||
+                (o.ClienteNombreCompleto != null && o.ClienteNombreCompleto.ToLower().Contains(texto)) ||
+                (o.AsignadoTexto != null && o.AsignadoTexto.ToLower().Contains(texto))).ToList();
+
+            TablaOrdenes.ItemsSource = ordenesFiltradas;
+
+            TxtMensaje.Text = "Resultados encontrados: " + ordenesFiltradas.Count;
+        }
+
+        private void BtnLimpiarBusquedaOrden_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarOrden.Text = "";
+
+            TablaOrdenes.ItemsSource = _ordenes;
+
+            TxtMensaje.Text = "Búsqueda limpia";
         }
     }
 }

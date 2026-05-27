@@ -1,25 +1,16 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
-    /// <summary>
-    /// Lógica de interacción para UbicacionesView.xaml
-    /// </summary>
     public partial class UbicacionesView : Window
     {
         private readonly UbicacionService _ubicacionService;
+
+        private List<UbicacionDTO> _ubicaciones = new List<UbicacionDTO>();
 
         public UbicacionesView()
         {
@@ -30,22 +21,60 @@ namespace HarmonyHome.Wpf.Views
         private async void BtnCargarUbicaciones_Click(object sender, RoutedEventArgs e)
         {
             TxtMensajeUbicaciones.Text = "Cargando ubicaciones...";
+
             BtnCargarUbicaciones.IsEnabled = false;
 
-            List<UbicacionDTO> ubicaciones = await _ubicacionService.GetUbicacionesAsync();
+            try {
+                _ubicaciones = await _ubicacionService.GetUbicacionesAsync();
 
-            TablaUbicaciones.ItemsSource = ubicaciones;
+                TablaUbicaciones.ItemsSource = _ubicaciones;
 
-            if (ubicaciones.Count == 0)
-            {
-                TxtMensajeUbicaciones.Text = "No se encontraron ubicaciones";
+                if (_ubicaciones.Count == 0){
+
+                    TxtMensajeUbicaciones.Text = "No se encontraron ubicaciones";
+
+                }else {
+
+                    TxtMensajeUbicaciones.Text = "Ubicaciones cargadas: " + _ubicaciones.Count;
+
+                }
+            } finally {
+
+                BtnCargarUbicaciones.IsEnabled = true;
+
             }
-            else
-            {
-                TxtMensajeUbicaciones.Text = "Ubicaciones cargadas " + ubicaciones.Count;
+        }
+
+        private void BtnBuscarUbicacion_Click(object sender, RoutedEventArgs e)
+        {
+            string texto = TxtBuscarUbicacion.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto)) {
+
+                TablaUbicaciones.ItemsSource = _ubicaciones;
+
+                TxtMensajeUbicaciones.Text = "Ubicaciones cargadas: " + _ubicaciones.Count;
+
+                return;
             }
 
-            BtnCargarUbicaciones.IsEnabled = true;
+            List<UbicacionDTO> ubicacionesFiltradas = _ubicaciones.Where(u =>
+                    u.Codigo.ToLower().Contains(texto) ||
+                    u.Nombre.ToLower().Contains(texto) ||
+                    u.TipoUbicacionNombre.ToLower().Contains(texto)).ToList();
+
+            TablaUbicaciones.ItemsSource = ubicacionesFiltradas;
+
+            TxtMensajeUbicaciones.Text = "Resultados encontrados: " + ubicacionesFiltradas.Count;
+        }
+
+        private void BtnLimpiarBusquedaUbicacion_Click(object sender, RoutedEventArgs e)
+        {
+            TxtBuscarUbicacion.Text = "";
+
+            TablaUbicaciones.ItemsSource = _ubicaciones;
+
+            TxtMensajeUbicaciones.Text = "Búsqueda limpia";
         }
     }
 }

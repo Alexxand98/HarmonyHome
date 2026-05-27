@@ -87,8 +87,21 @@ namespace HarmonyHome.Wpf.Services
 
             return "No se pudo crear el stock";
         }
-    }
 
+
+
+        public async Task<List<StockUbicacionDTO>> GetStockByUbicacionAsync(int ubicacionId)
+        {
+            ResponseApi<List<StockUbicacionDTO>>? response =await _apiService.GetAsync<ResponseApi<List<StockUbicacionDTO>>>($"api/Stock/ubicacion/{ubicacionId}");
+
+            if (response != null && response.IsSuccess && response.Result != null) {
+
+                return response.Result;
+            }
+
+            return new List<StockUbicacionDTO>();
+        }
+    }
 
 
 }

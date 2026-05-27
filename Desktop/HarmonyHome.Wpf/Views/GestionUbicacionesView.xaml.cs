@@ -11,6 +11,7 @@ namespace HarmonyHome.Wpf.Views
     public partial class GestionUbicacionesView : Window
     {
         private readonly UbicacionService _ubicacionService;
+        private readonly StockService _stockService;
 
         private UbicacionDTO? _ubicacionSeleccionada;
 
@@ -21,6 +22,7 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _ubicacionService = new UbicacionService();
+            _stockService = new StockService();
 
             CargarTiposUbicacion();
         }
@@ -38,7 +40,6 @@ namespace HarmonyHome.Wpf.Views
             };
 
             CmbTipoUbicacion.ItemsSource = tipos;
-
             CmbTipoUbicacion.SelectedValue = 2;
         }
 
@@ -127,45 +128,45 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnGuardarUbicacion_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidarFormulario()){
-
+            if (!ValidarFormulario())
+            {
                 return;
             }
 
-            if (_ubicacionSeleccionada == null){
-
+            if (_ubicacionSeleccionada == null)
+            {
                 CreateUbicacionDTO nuevaUbicacion = CrearDtoUbicacion();
 
                 bool creada = await _ubicacionService.CrearUbicacionAsync(nuevaUbicacion);
 
-                if (creada){
-
+                if (creada)
+                {
                     TxtMensajeGestionUbicaciones.Text = "Ubicacion creada correctamente.";
                     LimpiarFormulario();
 
                     await CargarUbicaciones();
-
-                } else{
-
+                }
+                else
+                {
                     TxtMensajeGestionUbicaciones.Text = "No se pudo crear la ubicacion.";
                 }
-
-            }else{
-
+            }
+            else
+            {
                 UpdateUbicacionDTO ubicacionEditada = CrearDtoUpdateUbicacion();
 
                 bool actualizada = await _ubicacionService.ActualizarUbicacionAsync(_ubicacionSeleccionada.Id, ubicacionEditada);
 
-                if (actualizada){
-
+                if (actualizada)
+                {
                     TxtMensajeGestionUbicaciones.Text = "Ubicacion actualizada correctamente.";
 
                     LimpiarFormulario();
 
                     await CargarUbicaciones();
-
-                }else{
-
+                }
+                else
+                {
                     TxtMensajeGestionUbicaciones.Text = "No se pudo actualizar la ubicacion.";
                 }
             }
@@ -173,10 +174,19 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnEliminarUbicacion_Click(object sender, RoutedEventArgs e)
         {
-            if (_ubicacionSeleccionada == null){
-
+            if (_ubicacionSeleccionada == null)
+            {
                 TxtMensajeGestionUbicaciones.Text = "Selecciona una ubicacion.";
+                return;
+            }
 
+            List<StockUbicacionDTO> stockUbicacion = await _stockService.GetStockByUbicacionAsync(_ubicacionSeleccionada.Id);
+
+            bool tieneStockActivo = stockUbicacion.Any(s => s.Cantidad > 0);
+
+            if (tieneStockActivo)
+            {
+                TxtMensajeGestionUbicaciones.Text = "No se puede eliminar la ubicación porque tiene stock activo.";
                 return;
             }
 
@@ -187,8 +197,8 @@ namespace HarmonyHome.Wpf.Views
                 MessageBoxImage.Warning
             );
 
-            if (result != MessageBoxResult.Yes){
-
+            if (result != MessageBoxResult.Yes)
+            {
                 return;
             }
 
@@ -203,20 +213,20 @@ namespace HarmonyHome.Wpf.Views
 
         private bool ValidarFormulario()
         {
-            if (string.IsNullOrWhiteSpace(TxtCodigo.Text)){
-
+            if (string.IsNullOrWhiteSpace(TxtCodigo.Text))
+            {
                 TxtMensajeGestionUbicaciones.Text = "El código es obligatorio.";
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(TxtNombre.Text)) {
-
+            if (string.IsNullOrWhiteSpace(TxtNombre.Text))
+            {
                 TxtMensajeGestionUbicaciones.Text = "El nombre es obligatorio.";
                 return false;
             }
 
-            if (CmbTipoUbicacion.SelectedValue == null) {
-
+            if (CmbTipoUbicacion.SelectedValue == null)
+            {
                 TxtMensajeGestionUbicaciones.Text = "Selecciona tipo de ubicacion.";
                 return false;
             }
@@ -229,11 +239,8 @@ namespace HarmonyHome.Wpf.Views
             CreateUbicacionDTO ubicacion = new CreateUbicacionDTO();
 
             ubicacion.Codigo = TxtCodigo.Text.Trim();
-
             ubicacion.Nombre = TxtNombre.Text.Trim();
-
             ubicacion.TipoUbicacion = (int)CmbTipoUbicacion.SelectedValue;
-
             ubicacion.Activa = ChkActiva.IsChecked == true;
 
             return ubicacion;
@@ -244,11 +251,8 @@ namespace HarmonyHome.Wpf.Views
             UpdateUbicacionDTO ubicacion = new UpdateUbicacionDTO();
 
             ubicacion.Codigo = TxtCodigo.Text.Trim();
-
             ubicacion.Nombre = TxtNombre.Text.Trim();
-
             ubicacion.TipoUbicacion = (int)CmbTipoUbicacion.SelectedValue;
-
             ubicacion.Activa = ChkActiva.IsChecked == true;
 
             return ubicacion;

@@ -81,7 +81,21 @@ namespace HarmonyHome.Wpf.Views
 
             TablaProductos.ItemsSource = _productos;
 
-            TxtMensajeProductos.Text = "Búsqueda limpiada.";
+            TxtMensajeProductos.Text = "Búsqueda limpia";
+        }
+
+
+        private void TablaProductos_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ProductoDTO? producto = TablaProductos.SelectedItem as ProductoDTO;
+
+            if (producto == null){
+                return;
+            }
+
+            ProductoDetalleView detalleView = new ProductoDetalleView(producto);
+
+            detalleView.ShowDialog();
         }
     }
 

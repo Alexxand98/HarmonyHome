@@ -117,7 +117,8 @@
                 <DataGrid x:Name="TablaProductos"
                           Grid.Row="1"
                           AutoGenerateColumns="False"
-                          IsReadOnly="True">
+                          IsReadOnly="True"
+                          MouseDoubleClick="TablaProductos_DoubleClick">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Referencia"

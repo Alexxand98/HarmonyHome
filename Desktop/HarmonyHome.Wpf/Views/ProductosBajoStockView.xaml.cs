@@ -1,16 +1,8 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -35,7 +27,7 @@ namespace HarmonyHome.Wpf.Views
             await CargarProductosBajoStock();
         }
 
-        private async void BtnCargar_Click(object sender, RoutedEventArgs e)
+        private async void BtnActualizar_Click(object sender, RoutedEventArgs e)
         {
             await CargarProductosBajoStock();
         }
@@ -43,13 +35,31 @@ namespace HarmonyHome.Wpf.Views
         private async Task CargarProductosBajoStock()
         {
             TxtMensaje.Text = "Cargando productos bajo stock...";
+            BtnActualizar.IsEnabled = false;
 
-            List<ProductoBajoStockDTO> productos = await _stockService.GetProductosBajoStockGeneralAsync();
+            try
+            {
+                List<ProductoBajoStockDTO> productos = await _stockService.GetProductosBajoStockGeneralAsync();
 
-            TablaProductosBajoStock.ItemsSource = productos;
+                TablaProductosBajoStock.ItemsSource = productos;
 
-            TxtResumen.Text = "Productos encontrados: " + productos.Count;
-            TxtMensaje.Text = "Consulta realizada correctamente.";
+                TxtResumen.Text = "Productos encontrados: " + productos.Count;
+
+                if (productos.Count == 0)
+                {
+                    TxtMensaje.Text = "No hay productos bajo stock.";
+                }
+                else
+                {
+                    TxtMensaje.Text = "Consulta realizada correctamente.";
+                }
+
+            }
+            finally
+            {
+
+                BtnActualizar.IsEnabled = true;
+            }
         }
     }
 }

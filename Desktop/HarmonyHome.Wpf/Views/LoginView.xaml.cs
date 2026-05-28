@@ -74,8 +74,6 @@ namespace HarmonyHome.Wpf.Views
             }
         }
 
-
-
         private void BtnSalir_Click(object sender, RoutedEventArgs e)
         {
             Close();

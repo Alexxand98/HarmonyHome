@@ -1,17 +1,10 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -31,34 +24,60 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _ordenService = new OrdenRecogidaService();
+
+            Loaded += OrdenesRecogidaView_Loaded;
         }
 
-        private async void BtnCargarOrdenes_Click(object sender, RoutedEventArgs e)
+        private async void OrdenesRecogidaView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await CargarOrdenes();
+        }
+
+        private async void BtnActualizarOrdenes_Click(object sender, RoutedEventArgs e)
         {
             await CargarOrdenes();
         }
 
         private async Task CargarOrdenes()
         {
-            TxtMensaje.Text = "Cargando ordenes...";
+            TxtMensaje.Text = "Cargando órdenes...";
+            BtnActualizarOrdenes.IsEnabled = false;
 
-            _ordenes = await _ordenService.GetOrdenesAsync();
+            try
+            {
+                _ordenes = await _ordenService.GetOrdenesAsync();
 
-            TablaOrdenes.ItemsSource = _ordenes;
+                _ordenSeleccionada = null;
 
-            TablaLineas.ItemsSource = null;
+                TablaOrdenes.ItemsSource = _ordenes;
+                TablaLineas.ItemsSource = null;
 
-            TxtMensaje.Text = "Ordenes cargadas: " + _ordenes.Count;
+                TxtBuscarOrden.Text = "";
+
+                if (_ordenes.Count == 0)
+                {
+                    TxtMensaje.Text = "No se encontraron órdenes de recogida.";
+                }
+                else
+                {
+                    TxtMensaje.Text = "Órdenes cargadas: " + _ordenes.Count;
+                }
+
+            }
+            finally
+            {
+
+                BtnActualizarOrdenes.IsEnabled = true;
+            }
         }
 
         private void TablaOrdenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _ordenSeleccionada = TablaOrdenes.SelectedItem as OrdenRecogidaDTO;
 
-            if (_ordenSeleccionada == null){
-
+            if (_ordenSeleccionada == null)
+            {
                 TablaLineas.ItemsSource = null;
-
                 return;
             }
 
@@ -67,15 +86,15 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnAsignar_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-
-                TxtMensaje.Text = "Selecciona una orden";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una orden.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "Pendiente"){
-
-                TxtMensaje.Text = "Solo se puede asignar una orden pendiente";
+            if (_ordenSeleccionada.EstadoNombre != "Pendiente")
+            {
+                TxtMensaje.Text = "Solo se puede asignar una orden pendiente.";
                 return;
             }
 
@@ -88,15 +107,15 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnPreparacion_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-
-                TxtMensaje.Text = "Selecciona una orden";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una orden.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "Asignada"){
-
-                TxtMensaje.Text = "Solo se puede pasar a preparación una orden asignada";
+            if (_ordenSeleccionada.EstadoNombre != "Asignada")
+            {
+                TxtMensaje.Text = "Solo se puede pasar a preparación una orden asignada.";
                 return;
             }
 
@@ -109,15 +128,15 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnFinalizar_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-
-                TxtMensaje.Text = "Selecciona una orden";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una orden.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion") {
-
-                TxtMensaje.Text = "Solo se puede finalizar una orden en preparación";
+            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion")
+            {
+                TxtMensaje.Text = "Solo se puede finalizar una orden en preparación.";
                 return;
             }
 
@@ -130,20 +149,23 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnVerPreparacion_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-                TxtMensaje.Text = "Selecciona una orden";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una orden.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion"){
-                TxtMensaje.Text = "Solo se puede ver la preparación de una orden en preparación";
+            if (_ordenSeleccionada.EstadoNombre != "EnPreparacion")
+            {
+                TxtMensaje.Text = "Solo se puede ver la preparación de una orden en preparación.";
                 return;
             }
 
             PreparacionRecogidaDTO? preparacion = await _ordenService.GetPreparacionAsync(_ordenSeleccionada.Id);
 
-            if (preparacion == null){
-                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
+            if (preparacion == null)
+            {
+                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada.";
                 return;
             }
 
@@ -152,17 +174,17 @@ namespace HarmonyHome.Wpf.Views
             view.ShowDialog();
         }
 
-
         private async void BtnCancelarOrden_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-                TxtMensaje.Text = "Selecciona una orden";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una orden.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "Asignada" && _ordenSeleccionada.EstadoNombre != "EnPreparacion") {
-
-                TxtMensaje.Text = "Solo se pueden cancelar órdenes asignadas o en preparación";
+            if (_ordenSeleccionada.EstadoNombre != "Asignada" && _ordenSeleccionada.EstadoNombre != "EnPreparacion")
+            {
+                TxtMensaje.Text = "Solo se pueden cancelar órdenes asignadas o en preparación.";
                 return;
             }
 
@@ -170,7 +192,8 @@ namespace HarmonyHome.Wpf.Views
 
             bool? resultado = cancelarView.ShowDialog();
 
-            if (resultado != true)  {
+            if (resultado != true)
+            {
                 return;
             }
 
@@ -185,21 +208,27 @@ namespace HarmonyHome.Wpf.Views
         {
             string texto = TxtBuscarOrden.Text.Trim().ToLower();
 
-            if (string.IsNullOrWhiteSpace(texto)) {
-
+            if (string.IsNullOrWhiteSpace(texto))
+            {
                 TablaOrdenes.ItemsSource = _ordenes;
+                TablaLineas.ItemsSource = null;
+                _ordenSeleccionada = null;
 
-                TxtMensaje.Text = "Ordenes cargadas: " + _ordenes.Count;
+                TxtMensaje.Text = "Órdenes cargadas: " + _ordenes.Count;
 
                 return;
             }
 
-            List<OrdenRecogidaDTO> ordenesFiltradas = _ordenes.Where(o => o.Id.ToString().Contains(texto) ||
+            List<OrdenRecogidaDTO> ordenesFiltradas = _ordenes.Where(o =>
+                o.Id.ToString().Contains(texto) ||
+                o.PedidoVentaId.ToString().Contains(texto) ||
                 (o.EstadoNombre != null && o.EstadoNombre.ToLower().Contains(texto)) ||
                 (o.ClienteNombreCompleto != null && o.ClienteNombreCompleto.ToLower().Contains(texto)) ||
                 (o.AsignadoTexto != null && o.AsignadoTexto.ToLower().Contains(texto))).ToList();
 
             TablaOrdenes.ItemsSource = ordenesFiltradas;
+            TablaLineas.ItemsSource = null;
+            _ordenSeleccionada = null;
 
             TxtMensaje.Text = "Resultados encontrados: " + ordenesFiltradas.Count;
         }
@@ -209,8 +238,10 @@ namespace HarmonyHome.Wpf.Views
             TxtBuscarOrden.Text = "";
 
             TablaOrdenes.ItemsSource = _ordenes;
+            TablaLineas.ItemsSource = null;
+            _ordenSeleccionada = null;
 
-            TxtMensaje.Text = "Búsqueda limpia";
+            TxtMensaje.Text = "Búsqueda limpia.";
         }
     }
 }

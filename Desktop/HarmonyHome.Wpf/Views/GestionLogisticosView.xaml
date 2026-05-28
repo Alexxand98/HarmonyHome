@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
         Title="Gestión de logísticos"
-        Height="700"
+        Height="750"
         Width="1150"
-        MinHeight="620"
+        MinHeight="690"
         MinWidth="1000"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource ColorFondoApp}">
@@ -76,8 +76,8 @@
 
                         <Button x:Name="BtnCargarLogisticos"
                                 Grid.Column="0"
-                                Content="Cargar logísticos"
-                                Width="150"
+                                Content="Actualizar"
+                                Width="110"
                                 Click="BtnCargarLogisticos_Click"/>
 
                         <StackPanel Grid.Column="2"
@@ -143,85 +143,90 @@
             <Border Grid.Column="1"
                     Style="{StaticResource CardPanel}">
 
-                <StackPanel>
-                    <TextBlock Text="Datos del logístico"
-                               FontSize="18"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource ColorTextoPrincipal}"
-                               Margin="0,0,0,14"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
 
-                    <TextBlock Text="Usuario"
-                               Foreground="{StaticResource ColorTextoSecundario}"/>
-                    <TextBox x:Name="TxtUserName"
-                             Margin="0,4,0,8"/>
+                        <TextBlock Text="Datos del logístico"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource ColorTextoPrincipal}"
+                                   Margin="0,0,0,14"/>
 
-                    <TextBlock Text="Email"
-                               Foreground="{StaticResource ColorTextoSecundario}"/>
-                    <TextBox x:Name="TxtEmail"
-                             Margin="0,4,0,8"/>
+                        <TextBlock Text="Usuario"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtUserName"
+                                 Margin="0,4,0,8"/>
 
-                    <TextBlock Text="Nombre completo"
-                               Foreground="{StaticResource ColorTextoSecundario}"/>
-                    <TextBox x:Name="TxtNombreCompleto"
-                             Margin="0,4,0,8"/>
+                        <TextBlock Text="Email"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtEmail"
+                                 Margin="0,4,0,8"/>
 
-                    <TextBlock Text="Contraseña"
-                               Foreground="{StaticResource ColorTextoSecundario}"/>
-                    <PasswordBox x:Name="TxtPassword"
-                                 Margin="0,4,0,10"/>
+                        <TextBlock Text="Nombre completo"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtNombreCompleto"
+                                 Margin="0,4,0,8"/>
 
-                    <CheckBox x:Name="ChkActivo"
-                              Content="Activo"
-                              IsEnabled="False"
-                              Margin="0,4,0,16"/>
+                        <TextBlock Text="Contraseña"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <PasswordBox x:Name="TxtPassword"
+                                     Margin="0,4,0,10"/>
 
-                    <TextBlock Text="Acciones"
-                               FontSize="14"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource ColorTextoPrincipal}"
-                               Margin="0,8,0,8"/>
+                        <CheckBox x:Name="ChkActivo"
+                                  Content="Usuario activo"
+                                  IsEnabled="False"
+                                  Margin="0,4,0,16"/>
 
-                    <WrapPanel Margin="0,0,0,12">
-                        <Button x:Name="BtnNuevoLogistico"
-                                Content="Nuevo"
-                                Width="85"
-                                Click="BtnNuevoLogistico_Click"/>
+                        <TextBlock Text="Acciones"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource ColorTextoPrincipal}"
+                                   Margin="0,8,0,8"/>
 
-                        <Button x:Name="BtnGuardarLogistico"
-                                Content="Guardar"
-                                Width="85"
-                                Style="{StaticResource BotonOperacion}"
-                                Click="BtnGuardarLogistico_Click"/>
+                        <WrapPanel Margin="0,0,0,12">
+                            <Button x:Name="BtnNuevoLogistico"
+                                    Content="Nuevo"
+                                    Width="85"
+                                    Click="BtnNuevoLogistico_Click"/>
 
-                        <Button x:Name="BtnEliminarLogistico"
-                                Content="Eliminar"
-                                Width="85"
-                                Style="{StaticResource BotonPeligro}"
-                                Click="BtnEliminarLogistico_Click"/>
-                    </WrapPanel>
+                            <Button x:Name="BtnGuardarLogistico"
+                                    Content="Guardar"
+                                    Width="85"
+                                    Style="{StaticResource BotonOperacion}"
+                                    Click="BtnGuardarLogistico_Click"/>
 
-                    <TextBlock Text="Estado del usuario"
-                               FontSize="14"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource ColorTextoPrincipal}"
-                               Margin="0,4,0,8"/>
+                            <Button x:Name="BtnEliminarLogistico"
+                                    Content="Eliminar"
+                                    Width="85"
+                                    Style="{StaticResource BotonPeligro}"
+                                    Click="BtnEliminarLogistico_Click"/>
+                        </WrapPanel>
 
-                    <WrapPanel Margin="0,0,0,10">
-                        <Button x:Name="BtnActivarLogistico"
-                                Content="Activar"
-                                Width="85"
-                                Click="BtnActivarLogistico_Click"/>
+                        <TextBlock Text="Estado del usuario"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource ColorTextoPrincipal}"
+                                   Margin="0,4,0,8"/>
 
-                        <Button x:Name="BtnDesactivarLogistico"
-                                Content="Desactivar"
-                                Width="100"
-                                Click="BtnDesactivarLogistico_Click"/>
-                    </WrapPanel>
+                        <WrapPanel Margin="0,0,0,10">
+                            <Button x:Name="BtnActivarLogistico"
+                                    Content="Activar"
+                                    Width="85"
+                                    Click="BtnActivarLogistico_Click"/>
 
-                    <TextBlock x:Name="TxtMensajeGestionLogisticos"
-                               Text=""
-                               Style="{StaticResource TextoMensaje}"/>
-                </StackPanel>
+                            <Button x:Name="BtnDesactivarLogistico"
+                                    Content="Desactivar"
+                                    Width="100"
+                                    Click="BtnDesactivarLogistico_Click"/>
+                        </WrapPanel>
+
+                        <TextBlock x:Name="TxtMensajeGestionLogisticos"
+                                   Text=""
+                                   TextWrapping="Wrap"
+                                   Style="{StaticResource TextoMensaje}"/>
+
+                    </StackPanel>
+                </ScrollViewer>
             </Border>
         </Grid>
     </Grid>

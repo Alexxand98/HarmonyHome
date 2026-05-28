@@ -60,12 +60,12 @@
                            Foreground="{StaticResource ColorTextoPrincipal}"
                            Margin="0,0,0,12"/>
 
-                <Button x:Name="BtnCargarMovimientos"
+                <Button x:Name="BtnActualizarMovimientos"
                         Grid.Row="1"
-                        Content="Cargar movimientos"
-                        Width="170"
+                        Content="Actualizar"
+                        Width="110"
                         HorizontalAlignment="Left"
-                        Click="BtnCargarMovimientos_Click"/>
+                        Click="BtnActualizarMovimientos_Click"/>
             </Grid>
         </Border>
 

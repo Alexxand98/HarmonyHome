@@ -1,17 +1,9 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -29,6 +21,13 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _stockService = new StockService();
+
+            Loaded += StockView_Loaded;
+        }
+
+        private async void StockView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await CargarStock("todo");
         }
 
         private async void BtnCargarTodo_Click(object sender, RoutedEventArgs e)
@@ -50,21 +49,45 @@ namespace HarmonyHome.Wpf.Views
         {
             TxtMensajeStock.Text = "Cargando stock...";
 
-            List<StockUbicacionDTO> stock;
+            BloquearBotonesCarga(false);
 
-            if (tipo == "tienda") {
-                stock = await _stockService.GetStockTiendaAsync();
-            }else if (tipo == "almacen"){
-                stock = await _stockService.GetStockAlmacenAsync();
-            }  else{
-                stock = await _stockService.GetStockAsync();
+            try
+            {
+                List<StockUbicacionDTO> stock;
+
+                if (tipo == "tienda")
+                {
+                    stock = await _stockService.GetStockTiendaAsync();
+                }
+                else if (tipo == "almacen")
+                {
+                    stock = await _stockService.GetStockAlmacenAsync();
+                }
+                else
+                {
+                    stock = await _stockService.GetStockAsync();
+                }
+
+                _stock = stock;
+
+                TablaStock.ItemsSource = _stock;
+                TxtBuscarStock.Text = "";
+
+                if (_stock.Count == 0)
+                {
+                    TxtMensajeStock.Text = "No se encontraron registros de stock.";
+                }
+                else
+                {
+                    TxtMensajeStock.Text = "Registros cargados: " + _stock.Count;
+                }
+
             }
+            finally
+            {
 
-            _stock = stock;
-
-            TablaStock.ItemsSource = _stock;
-
-            TxtMensajeStock.Text = "Registros cargados: " + stock.Count;
+                BloquearBotonesCarga(true);
+            }
         }
 
         private async void BtnAltaStock_Click(object sender, RoutedEventArgs e)
@@ -89,16 +112,19 @@ namespace HarmonyHome.Wpf.Views
         {
             string texto = TxtBuscarStock.Text.Trim().ToLower();
 
-            if (string.IsNullOrWhiteSpace(texto)) {
-
+            if (string.IsNullOrWhiteSpace(texto))
+            {
                 TablaStock.ItemsSource = _stock;
-
                 TxtMensajeStock.Text = "Registros cargados: " + _stock.Count;
-
                 return;
             }
 
-            List<StockUbicacionDTO> stockFiltrado = _stock.Where(s =>(s.ProductoReferencia != null && s.ProductoReferencia.ToLower().Contains(texto)) || (s.ProductoNombre != null && s.ProductoNombre.ToLower().Contains(texto))).ToList();
+            List<StockUbicacionDTO> stockFiltrado = _stock.Where(s =>
+                (s.ProductoReferencia != null && s.ProductoReferencia.ToLower().Contains(texto)) ||
+                (s.ProductoNombre != null && s.ProductoNombre.ToLower().Contains(texto)) ||
+                (s.UbicacionCodigo != null && s.UbicacionCodigo.ToLower().Contains(texto)) ||
+                (s.UbicacionNombre != null && s.UbicacionNombre.ToLower().Contains(texto)) ||
+                (s.TipoUbicacionNombre != null && s.TipoUbicacionNombre.ToLower().Contains(texto))).ToList();
 
             TablaStock.ItemsSource = stockFiltrado;
 
@@ -111,7 +137,14 @@ namespace HarmonyHome.Wpf.Views
 
             TablaStock.ItemsSource = _stock;
 
-            TxtMensajeStock.Text = "Búsqueda limpia";
+            TxtMensajeStock.Text = "Búsqueda limpia.";
+        }
+
+        private void BloquearBotonesCarga(bool estado)
+        {
+            BtnCargarTodo.IsEnabled = estado;
+            BtnCargarTienda.IsEnabled = estado;
+            BtnCargarAlmacen.IsEnabled = estado;
         }
     }
 }

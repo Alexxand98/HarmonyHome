@@ -1,16 +1,8 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -26,9 +18,16 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _movimientoService = new MovimientoStockService();
+
+            Loaded += MovimientosStockView_Loaded;
         }
 
-        private async void BtnCargarMovimientos_Click(object sender, RoutedEventArgs e)
+        private async void MovimientosStockView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await CargarMovimientos();
+        }
+
+        private async void BtnActualizarMovimientos_Click(object sender, RoutedEventArgs e)
         {
             await CargarMovimientos();
         }
@@ -36,12 +35,25 @@ namespace HarmonyHome.Wpf.Views
         private async Task CargarMovimientos()
         {
             TxtMensajeMovimientos.Text = "Cargando movimientos...";
+            BtnActualizarMovimientos.IsEnabled = false;
 
-            List<MovimientoStockDTO> movimientos = await _movimientoService.GetMovimientosAsync();
+            try{
+                List<MovimientoStockDTO> movimientos = await _movimientoService.GetMovimientosAsync();
 
-            TablaMovimientos.ItemsSource = movimientos;
+                TablaMovimientos.ItemsSource = movimientos;
 
-            TxtMensajeMovimientos.Text = "Movimientos cargados: " + movimientos.Count;
+                if (movimientos.Count == 0){
+                    TxtMensajeMovimientos.Text = "No se encontraron movimientos.";
+                }else{
+                    TxtMensajeMovimientos.Text = "Movimientos cargados: " + movimientos.Count;
+                }
+
+            }
+            finally
+            {
+
+                BtnActualizarMovimientos.IsEnabled = true;
+            }
         }
     }
 }

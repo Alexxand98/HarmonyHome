@@ -1,16 +1,9 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -28,9 +21,7 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _productoService = new ProductoService();
-
             _ubicacionService = new UbicacionService();
-
             _stockService = new StockService();
 
             Loaded += AltaStockView_Loaded;
@@ -54,48 +45,68 @@ namespace HarmonyHome.Wpf.Views
             CmbProducto.ItemsSource = productos;
             CmbUbicacion.ItemsSource = ubicaciones;
 
+            LimpiarFormulario();
+
             TxtMensaje.Text = "Datos cargados.";
         }
 
         private async void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidarFormulario())
-            {
+            if (!ValidarFormulario()){
                 return;
             }
 
-            CreateStockUbicacionDTO stock = new CreateStockUbicacionDTO();
+            BtnGuardar.IsEnabled = false;
+            TxtMensaje.Text = "Guardando stock...";
 
-            stock.ProductoId = (int)CmbProducto.SelectedValue;
-            stock.UbicacionId = (int)CmbUbicacion.SelectedValue;
-            stock.Cantidad = int.Parse(TxtCantidad.Text);
+            try{
+                CreateStockUbicacionDTO stock = new CreateStockUbicacionDTO();
 
-            string mensaje = await _stockService.CrearStockAsync(stock);
+                stock.ProductoId = (int)CmbProducto.SelectedValue;
+                stock.UbicacionId = (int)CmbUbicacion.SelectedValue;
+                stock.Cantidad = int.Parse(TxtCantidad.Text);
 
-            TxtMensaje.Text = mensaje;
+                string mensaje = await _stockService.CrearStockAsync(stock);
+
+                LimpiarFormulario();
+
+                TxtMensaje.Text = mensaje;
+
+            }finally{
+
+                BtnGuardar.IsEnabled = true;
+            }
         }
 
         private bool ValidarFormulario()
         {
-            if (CmbProducto.SelectedValue == null)
-            {
-                TxtMensaje.Text = "Selecciona un producto";
+            if (CmbProducto.SelectedValue == null){
+                TxtMensaje.Text = "Selecciona un producto.";
                 return false;
             }
 
-            if (CmbUbicacion.SelectedValue == null)
-            {
-                TxtMensaje.Text = "Selecciona una ubicación";
+            if (CmbUbicacion.SelectedValue == null){
+                TxtMensaje.Text = "Selecciona una ubicación.";
                 return false;
             }
 
-            if (!int.TryParse(TxtCantidad.Text, out int cantidad) || cantidad <= 0)
-            {
-                TxtMensaje.Text = "La cantidad debe ser mayor que cero";
+            if (!int.TryParse(TxtCantidad.Text, out int cantidad) || cantidad <= 0){
+                TxtMensaje.Text = "La cantidad debe ser mayor que cero.";
                 return false;
             }
 
             return true;
+        }
+
+        private void LimpiarFormulario()
+        {
+            CmbProducto.SelectedIndex = -1;
+            CmbUbicacion.SelectedIndex = -1;
+
+            CmbProducto.Text = "Seleccione un producto";
+            CmbUbicacion.Text = "Seleccione una ubicación";
+
+            TxtCantidad.Text = "";
         }
     }
 }

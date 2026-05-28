@@ -76,8 +76,8 @@
 
                         <Button x:Name="BtnCargarProductosGestion"
                                 Grid.Column="0"
-                                Content="Cargar productos"
-                                Width="150"
+                                Content="Actualizar"
+                                Width="110"
                                 Click="BtnCargarProductosGestion_Click"/>
 
                         <StackPanel Grid.Column="2"
@@ -149,8 +149,7 @@
             </Border>
 
             <Border Grid.Column="1"
-                    Style="{StaticResource CardPanel}"
-                    Margin="0">
+                    Style="{StaticResource CardPanel}">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
@@ -163,19 +162,23 @@
 
                         <TextBlock Text="Referencia"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
-                        <TextBox x:Name="TxtReferencia" Margin="0,4,0,8"/>
+                        <TextBox x:Name="TxtReferencia"
+                                 Margin="0,4,0,8"/>
 
                         <TextBlock Text="Nombre"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
-                        <TextBox x:Name="TxtNombre" Margin="0,4,0,8"/>
+                        <TextBox x:Name="TxtNombre"
+                                 Margin="0,4,0,8"/>
 
                         <TextBlock Text="Descripción"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
-                        <TextBox x:Name="TxtDescripcion" Margin="0,4,0,8"/>
+                        <TextBox x:Name="TxtDescripcion"
+                                 Margin="0,4,0,8"/>
 
                         <TextBlock Text="Categoría"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
-                        <TextBox x:Name="TxtCategoria" Margin="0,4,0,8"/>
+                        <TextBox x:Name="TxtCategoria"
+                                 Margin="0,4,0,8"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -187,22 +190,26 @@
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Precio coste"
                                            Foreground="{StaticResource ColorTextoSecundario}"/>
-                                <TextBox x:Name="TxtPrecioCoste" Margin="0,4,0,8"/>
+                                <TextBox x:Name="TxtPrecioCoste"
+                                         Margin="0,4,0,8"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Precio venta"
                                            Foreground="{StaticResource ColorTextoSecundario}"/>
-                                <TextBox x:Name="TxtPrecioVenta" Margin="0,4,0,8"/>
+                                <TextBox x:Name="TxtPrecioVenta"
+                                         Margin="0,4,0,8"/>
                             </StackPanel>
                         </Grid>
 
                         <TextBlock Text="Stock mínimo"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
-                        <TextBox x:Name="TxtStockMinimo" Margin="0,4,0,8"/>
+                        <TextBox x:Name="TxtStockMinimo"
+                                 Margin="0,4,0,8"/>
 
                         <TextBlock Text="Tipo de trazabilidad"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
+
                         <ComboBox x:Name="CmbTipoTrazabilidad"
                                   DisplayMemberPath="Nombre"
                                   SelectedValuePath="Id"
@@ -213,16 +220,18 @@
                                   Margin="0,4,0,6"/>
 
                         <CheckBox x:Name="ChkActivo"
-                                  Content="Activo"
+                                  Content="Producto activo"
                                   IsEnabled="False"
                                   Margin="0,0,0,10"/>
 
                         <TextBlock Text="Imagen URL"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
-                        <TextBox x:Name="TxtImagenUrl" Margin="0,4,0,8"/>
+                        <TextBox x:Name="TxtImagenUrl"
+                                 Margin="0,4,0,8"/>
 
                         <TextBlock Text="Observaciones"
                                    Foreground="{StaticResource ColorTextoSecundario}"/>
+
                         <TextBox x:Name="TxtObservaciones"
                                  Height="70"
                                  TextWrapping="Wrap"

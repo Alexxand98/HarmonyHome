@@ -1,7 +1,7 @@
 ﻿<Window x:Class="HarmonyHome.Wpf.Views.ProductosBajoStockView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Productos bajo stock"
+        Title="Productos stock bajo"
         Height="650"
         Width="1150"
         MinHeight="580"
@@ -50,10 +50,10 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="BtnCargar"
-                        Content="Cargar productos"
-                        Width="150"
-                        Click="BtnCargar_Click"/>
+                <Button x:Name="BtnActualizar"
+                        Content="Actualizar"
+                        Width="110"
+                        Click="BtnActualizar_Click"/>
 
                 <TextBlock x:Name="TxtResumen"
                            Grid.Column="1"

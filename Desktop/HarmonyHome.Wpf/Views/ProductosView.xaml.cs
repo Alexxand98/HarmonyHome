@@ -1,9 +1,7 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
 using System.Collections.Generic;
-
 using System.Windows;
-
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -18,38 +16,52 @@ namespace HarmonyHome.Wpf.Views
 
         public ProductosView()
         {
-
             InitializeComponent();
 
-
             _productoService = new ProductoService();
+
+            Loaded += ProductosView_Loaded;
         }
 
-        private async void BtnCargarProductos_Click(object sender, RoutedEventArgs e)
+        private async void ProductosView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await CargarProductos();
+        }
+
+        private async void BtnActualizarProductos_Click(object sender, RoutedEventArgs e)
+        {
+            await CargarProductos();
+        }
+
+        private async Task CargarProductos()
         {
             TxtMensajeProductos.Text = "Cargando productos...";
 
-            BtnCargarProductos.IsEnabled = false;
+            BtnActualizarProductos.IsEnabled = false;
 
-            try{
+            try
+            {
                 _productos = await _productoService.GetProductosAsync();
 
                 TablaProductos.ItemsSource = _productos;
 
-                if (_productos.Count == 0){
+                if (_productos.Count == 0)
+                {
 
                     TxtMensajeProductos.Text = "No se encontraron productos";
 
-                }else{
+                }
+                else
+                {
 
                     TxtMensajeProductos.Text = "Productos cargados: " + _productos.Count;
-
                 }
 
-            }finally {
+            }
+            finally
+            {
 
-                BtnCargarProductos.IsEnabled = true;
-
+                BtnActualizarProductos.IsEnabled = true;
             }
         }
 
@@ -57,7 +69,8 @@ namespace HarmonyHome.Wpf.Views
         {
             string texto = TxtBuscarProducto.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(texto)) {
+            if (string.IsNullOrWhiteSpace(texto))
+            {
 
                 TablaProductos.ItemsSource = _productos;
 
@@ -68,9 +81,7 @@ namespace HarmonyHome.Wpf.Views
 
             List<ProductoDTO> productosFiltrados = await _productoService.BuscarProductosAsync(texto);
 
-
             TablaProductos.ItemsSource = productosFiltrados;
-
 
             TxtMensajeProductos.Text = "Resultados encontrados: " + productosFiltrados.Count;
         }
@@ -84,12 +95,12 @@ namespace HarmonyHome.Wpf.Views
             TxtMensajeProductos.Text = "Búsqueda limpia";
         }
 
-
         private void TablaProductos_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             ProductoDTO? producto = TablaProductos.SelectedItem as ProductoDTO;
 
-            if (producto == null){
+            if (producto == null)
+            {
                 return;
             }
 
@@ -98,7 +109,4 @@ namespace HarmonyHome.Wpf.Views
             detalleView.ShowDialog();
         }
     }
-
-
 }
- 

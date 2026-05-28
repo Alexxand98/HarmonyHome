@@ -1,16 +1,10 @@
 ﻿using HarmonyHome.Wpf.Models.DTOs;
 using HarmonyHome.Wpf.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HarmonyHome.Wpf.Views
 {
@@ -30,9 +24,16 @@ namespace HarmonyHome.Wpf.Views
             InitializeComponent();
 
             _ordenService = new OrdenReposicionService();
+
+            Loaded += OrdenesReposicionView_Loaded;
         }
 
-        private async void BtnCargarOrdenes_Click(object sender, RoutedEventArgs e)
+        private async void OrdenesReposicionView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await CargarOrdenes();
+        }
+
+        private async void BtnActualizarOrdenes_Click(object sender, RoutedEventArgs e)
         {
             await CargarOrdenes();
         }
@@ -40,22 +41,42 @@ namespace HarmonyHome.Wpf.Views
         private async Task CargarOrdenes()
         {
             TxtMensaje.Text = "Cargando reposiciones...";
+            BtnActualizarOrdenes.IsEnabled = false;
 
-            _ordenes = await _ordenService.GetOrdenesAsync();
+            try
+            {
+                _ordenes = await _ordenService.GetOrdenesAsync();
 
-            TablaOrdenes.ItemsSource = _ordenes;
+                _ordenSeleccionada = null;
 
-            TablaLineas.ItemsSource = null;
+                TablaOrdenes.ItemsSource = _ordenes;
+                TablaLineas.ItemsSource = null;
 
-            TxtMensaje.Text = "Reposiciones cargadas: " + _ordenes.Count;
+                TxtBuscarOrden.Text = "";
+
+                if (_ordenes.Count == 0)
+                {
+                    TxtMensaje.Text = "No se encontraron órdenes de reposición.";
+                }
+                else
+                {
+                    TxtMensaje.Text = "Reposiciones cargadas: " + _ordenes.Count;
+                }
+
+            }
+            finally
+            {
+
+                BtnActualizarOrdenes.IsEnabled = true;
+            }
         }
 
         private void TablaOrdenes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _ordenSeleccionada = TablaOrdenes.SelectedItem as OrdenReposicionDTO;
 
-            if (_ordenSeleccionada == null){
-
+            if (_ordenSeleccionada == null)
+            {
                 TablaLineas.ItemsSource = null;
                 return;
             }
@@ -65,9 +86,9 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnAsignar_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-
-                TxtMensaje.Text = "Selecciona una reposición";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una reposición.";
                 return;
             }
 
@@ -80,15 +101,15 @@ namespace HarmonyHome.Wpf.Views
 
         private async void BtnFinalizar_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-
-                TxtMensaje.Text = "Selecciona una reposición";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una reposición.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "Asignada"){
-
-                TxtMensaje.Text = "Solo se puede finalizar una reposición asignada";
+            if (_ordenSeleccionada.EstadoNombre != "Asignada")
+            {
+                TxtMensaje.Text = "Solo se puede finalizar una reposición asignada.";
                 return;
             }
 
@@ -99,26 +120,25 @@ namespace HarmonyHome.Wpf.Views
             TxtMensaje.Text = mensaje;
         }
 
-
-
         private async void BtnVerPreparacion_Click(object sender, RoutedEventArgs e)
         {
             if (_ordenSeleccionada == null)
             {
-                TxtMensaje.Text = "Selecciona una reposición";
+                TxtMensaje.Text = "Selecciona una reposición.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "Asignada") {
-
-                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
+            if (_ordenSeleccionada.EstadoNombre != "Asignada")
+            {
+                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada.";
                 return;
             }
 
             PreparacionReposicionDTO? preparacion = await _ordenService.GetPreparacionAsync(_ordenSeleccionada.Id);
 
-            if (preparacion == null){
-                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada";
+            if (preparacion == null)
+            {
+                TxtMensaje.Text = "La orden no está disponible para preparación o ya está finalizada.";
                 return;
             }
 
@@ -127,18 +147,17 @@ namespace HarmonyHome.Wpf.Views
             view.ShowDialog();
         }
 
-
         private async void BtnCancelarOrden_Click(object sender, RoutedEventArgs e)
         {
-            if (_ordenSeleccionada == null){
-
-                TxtMensaje.Text = "Selecciona una reposición";
+            if (_ordenSeleccionada == null)
+            {
+                TxtMensaje.Text = "Selecciona una reposición.";
                 return;
             }
 
-            if (_ordenSeleccionada.EstadoNombre != "Asignada" && _ordenSeleccionada.EstadoNombre != "EnPreparacion"){
-
-                TxtMensaje.Text = "Solo se pueden cancelar reposiciones asignadas o en preparación";
+            if (_ordenSeleccionada.EstadoNombre != "Asignada" && _ordenSeleccionada.EstadoNombre != "EnPreparacion")
+            {
+                TxtMensaje.Text = "Solo se pueden cancelar reposiciones asignadas o en preparación.";
                 return;
             }
 
@@ -146,7 +165,8 @@ namespace HarmonyHome.Wpf.Views
 
             bool? resultado = cancelarView.ShowDialog();
 
-            if (resultado != true) {
+            if (resultado != true)
+            {
                 return;
             }
 
@@ -164,7 +184,11 @@ namespace HarmonyHome.Wpf.Views
             if (string.IsNullOrWhiteSpace(texto))
             {
                 TablaOrdenes.ItemsSource = _ordenes;
+                TablaLineas.ItemsSource = null;
+                _ordenSeleccionada = null;
+
                 TxtMensaje.Text = "Reposiciones cargadas: " + _ordenes.Count;
+
                 return;
             }
 
@@ -177,6 +201,8 @@ namespace HarmonyHome.Wpf.Views
                 .ToList();
 
             TablaOrdenes.ItemsSource = ordenesFiltradas;
+            TablaLineas.ItemsSource = null;
+            _ordenSeleccionada = null;
 
             TxtMensaje.Text = "Resultados encontrados: " + ordenesFiltradas.Count;
         }
@@ -186,8 +212,10 @@ namespace HarmonyHome.Wpf.Views
             TxtBuscarOrden.Text = "";
 
             TablaOrdenes.ItemsSource = _ordenes;
+            TablaLineas.ItemsSource = null;
+            _ordenSeleccionada = null;
 
-            TxtMensaje.Text = "Búsqueda limpia";
+            TxtMensaje.Text = "Búsqueda limpia.";
         }
     }
 }

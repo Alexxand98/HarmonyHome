@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
         Title="Añadir stock"
-        Height="520"
-        Width="700"
+        Height="500"
+        Width="620"
         MinHeight="480"
         MinWidth="620"
         WindowStartupLocation="CenterScreen"
@@ -18,7 +18,6 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -61,27 +60,40 @@
                            Foreground="{StaticResource ColorTextoPrincipal}"
                            Margin="0,0,0,14"/>
 
-                <StackPanel Grid.Row="1">
+                <StackPanel Grid.Row="1"
+                            Margin="0,0,0,10">
+
                     <TextBlock Text="Producto"
                                Foreground="{StaticResource ColorTextoSecundario}"/>
+
                     <ComboBox x:Name="CmbProducto"
                               DisplayMemberPath="Nombre"
                               SelectedValuePath="Id"
-                              Margin="0,4,0,10"/>
+                              Text="Seleccione un producto"
+                              IsEditable="True"
+                              IsReadOnly="True"
+                              Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="2">
+                <StackPanel Grid.Row="2"
+                            Margin="0,0,0,10">
+
                     <TextBlock Text="Ubicación"
                                Foreground="{StaticResource ColorTextoSecundario}"/>
+
                     <ComboBox x:Name="CmbUbicacion"
                               DisplayMemberPath="Nombre"
                               SelectedValuePath="Id"
-                              Margin="0,4,0,10"/>
+                              Text="Seleccione una ubicación"
+                              IsEditable="True"
+                              IsReadOnly="True"
+                              Margin="0,4,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3">
                     <TextBlock Text="Cantidad"
                                Foreground="{StaticResource ColorTextoSecundario}"/>
+
                     <TextBox x:Name="TxtCantidad"
                              Margin="0,4,0,16"/>
 
@@ -91,13 +103,14 @@
                             Style="{StaticResource BotonOperacion}"
                             HorizontalAlignment="Left"
                             Click="BtnGuardar_Click"/>
+
+                    <TextBlock x:Name="TxtMensaje"
+                               Text=""
+                               Foreground="{StaticResource ColorTextoSecundario}"
+                               TextWrapping="Wrap"
+                               Margin="0,10,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
-
-        <TextBlock x:Name="TxtMensaje"
-                   Grid.Row="2"
-                   Text=""
-                   Style="{StaticResource TextoMensaje}"/>
     </Grid>
 </Window>

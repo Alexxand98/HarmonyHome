@@ -67,11 +67,11 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="BtnCargarUbicaciones"
-                            Grid.Column="0"
-                            Content="Cargar ubicaciones"
-                            Width="160"
-                            Click="BtnCargarUbicaciones_Click"/>
+                    <Button x:Name="BtnActualizarUbicaciones"
+                                Grid.Column="0"
+                                Content="Actualizar"
+                                Width="110"
+                                Click="BtnActualizarUbicaciones_Click"/>
 
                     <StackPanel Grid.Column="2"
                                 Orientation="Horizontal"

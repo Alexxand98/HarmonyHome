@@ -71,8 +71,8 @@
                                VerticalAlignment="Center">
 
                         <Button x:Name="BtnCargarTodo"
-                                Content="Todo"
-                                Width="95"
+                                Content="Actualizar"
+                                Width="105"
                                 Click="BtnCargarTodo_Click"/>
 
                         <Button x:Name="BtnCargarTienda"
@@ -113,9 +113,9 @@
                                  Margin="0,0,8,0"/>
 
                         <Button x:Name="BtnBuscarStock"
-                                    Content="Buscar"
-                                    Width="85"
-                                    Click="BtnBuscarStock_Click"/>
+                                Content="Buscar"
+                                Width="85"
+                                Click="BtnBuscarStock_Click"/>
 
                         <Button x:Name="BtnLimpiarBusquedaStock"
                                 Content="Limpiar"

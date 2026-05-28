@@ -63,12 +63,12 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="BtnCargarProductos"
-                            Grid.Column="0"
-                            Content="Cargar productos"
-                            Width="145"
-                            Click="BtnCargarProductos_Click"/>
-
+                    <Button x:Name="BtnActualizarProductos"
+                                Grid.Column="0"
+                                Content="Actualizar"
+                                Width="110"
+                                Click="BtnActualizarProductos_Click"/>
+                    
                     <StackPanel Grid.Column="2"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center"

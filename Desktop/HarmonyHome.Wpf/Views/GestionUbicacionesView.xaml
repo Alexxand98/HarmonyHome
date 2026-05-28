@@ -76,8 +76,8 @@
 
                         <Button x:Name="BtnCargarUbicaciones"
                                 Grid.Column="0"
-                                Content="Cargar ubicaciones"
-                                Width="160"
+                                Content="Actualizar"
+                                Width="110"
                                 Click="BtnCargarUbicaciones_Click"/>
 
                         <StackPanel Grid.Column="2"
@@ -148,11 +148,13 @@
 
                     <TextBlock Text="Código"
                                Foreground="{StaticResource ColorTextoSecundario}"/>
-                    <TextBox x:Name="TxtCodigo" Margin="0,4,0,8"/>
+                    <TextBox x:Name="TxtCodigo"
+                             Margin="0,4,0,8"/>
 
                     <TextBlock Text="Nombre"
                                Foreground="{StaticResource ColorTextoSecundario}"/>
-                    <TextBox x:Name="TxtNombre" Margin="0,4,0,8"/>
+                    <TextBox x:Name="TxtNombre"
+                             Margin="0,4,0,8"/>
 
                     <TextBlock Text="Tipo ubicación"
                                Foreground="{StaticResource ColorTextoSecundario}"/>
@@ -162,7 +164,8 @@
                               Margin="0,4,0,10"/>
 
                     <CheckBox x:Name="ChkActiva"
-                              Content="Activa"
+                              Content="Ubicación activa"
+                              IsEnabled="False"
                               Margin="0,4,0,16"/>
 
                     <WrapPanel Margin="0,4,0,10">

@@ -26,5 +26,9 @@ namespace HarmonyHome.Api.Repository.IRepository
 
         Task<MovimientoStockDTO?> MoverStock(MoveStockDTO moveStockDTO, string usuarioId);
 
+        Task<List<ProductoBajoStockDTO>> GetProductosBajoStockTienda();
+
+        Task<List<ProductoBajoStockDTO>> GetProductosBajoStockGeneral();
+
     }
 }

@@ -235,5 +235,31 @@ namespace HarmonyHome.Api.Controllers
 
             return StatusCode(StatusCodes.Status201Created, _responseApi);
         }
+
+        [HttpGet("bajo-minimo/tienda")]
+        [Authorize(Roles = "Vendedor,EncargadoTienda,Administrador")]
+        public async Task<IActionResult> GetProductosBajoStockTienda()
+        {
+            var productos = await _stockRepository.GetProductosBajoStockTienda();
+
+            _responseApi.StatusCode = HttpStatusCode.OK;
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = productos;
+
+            return Ok(_responseApi);
+        }
+
+        [HttpGet("bajo-minimo/general")]
+        [Authorize(Roles = "Logistico,SupervisorLogistico,Administrador")]
+        public async Task<IActionResult> GetProductosBajoStockGeneral()
+        {
+            var productos = await _stockRepository.GetProductosBajoStockGeneral();
+
+            _responseApi.StatusCode = HttpStatusCode.OK;
+            _responseApi.IsSuccess = true;
+            _responseApi.Result = productos;
+
+            return Ok(_responseApi);
+        }
     }
 }

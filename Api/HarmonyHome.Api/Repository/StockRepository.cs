@@ -270,5 +270,112 @@ namespace HarmonyHome.Api.Repository
                 return null;
             }
         }
+
+
+        public async Task<List<ProductoBajoStockDTO>> GetProductosBajoStockTienda()
+        {
+            var productos = await _context.Productos
+                .Where(p => p.Activo && p.Habilitado)
+                .ToListAsync();
+
+            var resultado = new List<ProductoBajoStockDTO>();
+
+            foreach (var producto in productos)
+            {
+                var stockTienda = await _context.StockUbicaciones
+                    .Include(s => s.Ubicacion)
+                    .Where(s =>
+                        s.ProductoId == producto.Id &&
+                        s.Ubicacion != null &&
+                        s.Ubicacion.TipoUbicacion == TipoUbicacion.Tienda)
+                    .SumAsync(s => s.Cantidad);
+
+                var stockAlmacen = await _context.StockUbicaciones
+                    .Include(s => s.Ubicacion)
+                    .Where(s =>
+                        s.ProductoId == producto.Id &&
+                        s.Ubicacion != null &&
+                        s.Ubicacion.TipoUbicacion == TipoUbicacion.Almacen)
+                    .SumAsync(s => s.Cantidad);
+
+                var stockTotal = stockTienda + stockAlmacen;
+
+                if (stockTienda <= producto.StockMinimo)
+                {
+                    resultado.Add(new ProductoBajoStockDTO
+                    {
+                        ProductoId = producto.Id,
+                        Referencia = producto.Referencia,
+                        Nombre = producto.Nombre,
+                        Categoria = producto.Categoria,
+                        ImagenUrl = producto.ImagenUrl ?? string.Empty,
+                        StockMinimo = producto.StockMinimo,
+                        StockTienda = stockTienda,
+                        StockAlmacen = stockAlmacen,
+                        StockTotal = stockTotal,
+                        StockEvaluado = stockTienda,
+                        TipoEvaluacion = "Tienda"
+                    });
+                }
+            }
+
+            return resultado;
+        }
+
+        public async Task<List<ProductoBajoStockDTO>> GetProductosBajoStockGeneral()
+        {
+            var productos = await _context.Productos
+                .Where(p => p.Activo)
+                .ToListAsync();
+
+            var resultado = new List<ProductoBajoStockDTO>();
+
+            foreach (var producto in productos)
+            {
+                var stockTienda = await _context.StockUbicaciones
+                    .Include(s => s.Ubicacion)
+                    .Where(s =>
+                        s.ProductoId == producto.Id &&
+                        s.Ubicacion != null &&
+                        s.Ubicacion.TipoUbicacion == TipoUbicacion.Tienda)
+                    .SumAsync(s => s.Cantidad);
+
+                var stockAlmacen = await _context.StockUbicaciones
+                    .Include(s => s.Ubicacion)
+                    .Where(s =>
+                        s.ProductoId == producto.Id &&
+                        s.Ubicacion != null &&
+                        s.Ubicacion.TipoUbicacion == TipoUbicacion.Almacen)
+                    .SumAsync(s => s.Cantidad);
+
+                var stockTotal = await _context.StockUbicaciones
+                    .Include(s => s.Ubicacion)
+                    .Where(s =>
+                        s.ProductoId == producto.Id &&
+                        s.Ubicacion != null &&
+                        s.Ubicacion.Activa)
+                    .SumAsync(s => s.Cantidad);
+
+                if (stockTotal <= producto.StockMinimo)
+                {
+                    resultado.Add(new ProductoBajoStockDTO
+                    {
+                        ProductoId = producto.Id,
+                        Referencia = producto.Referencia,
+                        Nombre = producto.Nombre,
+                        Categoria = producto.Categoria,
+                        ImagenUrl = producto.ImagenUrl ?? string.Empty,
+                        StockMinimo = producto.StockMinimo,
+                        StockTienda = stockTienda,
+                        StockAlmacen = stockAlmacen,
+                        StockTotal = stockTotal,
+                        StockEvaluado = stockTotal,
+                        TipoEvaluacion = "General"
+                    });
+                }
+            }
+
+            return resultado;
+        }
     }
 }

@@ -67,6 +67,11 @@
                             Margin="0,0,0,20"
                             Click="BtnMovimientos_Click"/>
 
+                    <Button x:Name="BtnProductosBajoStock"
+                            Content="Productos bajo stock"
+                            Style="{StaticResource BotonMenu}"
+                            Click="BtnProductosBajoStock_Click"/>
+
                     <TextBlock Text="OPERACIONES"
                                FontSize="11"
                                FontWeight="Bold"

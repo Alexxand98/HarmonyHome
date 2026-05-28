@@ -242,5 +242,12 @@ namespace HarmonyHome.Wpf
         }
             };
         }
+
+        private void BtnProductosBajoStock_Click(object sender, RoutedEventArgs e)
+        {
+            ProductosBajoStockView productosBajoStockView = new ProductosBajoStockView();
+
+            productosBajoStockView.ShowDialog();
+        }
     }
 }

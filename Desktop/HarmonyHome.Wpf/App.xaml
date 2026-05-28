@@ -3,7 +3,142 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:HarmonyHome.Wpf"
              StartupUri="Views/LoginView.xaml">
+
     <Application.Resources>
-         
+
+        <!-- paleta de colores -->
+        <SolidColorBrush x:Key="ColorFondoApp" Color="#F6F8F4"/>
+        <SolidColorBrush x:Key="ColorPanel" Color="#FFFFFF"/>
+
+        <SolidColorBrush x:Key="ColorPrincipal" Color="#7BAE7F"/>
+        <SolidColorBrush x:Key="ColorPrincipalHover" Color="#6A9E6E"/>
+
+        <SolidColorBrush x:Key="ColorVerdeClaro" Color="#BEFAC4"/>
+        <SolidColorBrush x:Key="ColorVerdeMuyClaro" Color="#ECFCEC"/>
+        <SolidColorBrush x:Key="ColorVerdePanel" Color="#DDF6DF"/>
+
+        <SolidColorBrush x:Key="ColorSecundario" Color="#A3A3A3"/>
+        <SolidColorBrush x:Key="ColorBorde" Color="#D8DED2"/>
+
+        <SolidColorBrush x:Key="ColorTextoPrincipal" Color="#2F3A2F"/>
+        <SolidColorBrush x:Key="ColorTextoSecundario" Color="#6B756B"/>
+
+        <SolidColorBrush x:Key="ColorPeligro" Color="#C96B6B"/>
+        <SolidColorBrush x:Key="ColorPeligroHover" Color="#B85C5C"/>
+
+        <!-- tutulos -->
+        <Style x:Key="TituloVentana" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoPrincipal}"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+
+        <!-- subtitulos -->
+        <Style x:Key="SubtituloVentana" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoSecundario}"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <!-- tarjetas -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource ColorPanel}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBorde}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <!-- botones  generales -->
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="{StaticResource ColorPrincipal}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorPrincipal}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- boton menu lateral -->
+        <Style x:Key="BotonMenu" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoPrincipal}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <!-- botones secundarios  -->
+        <Style x:Key="BotonSecundario" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource ColorSecundario}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorSecundario}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- botones advenrtencia -->
+        <Style x:Key="BotonPeligro" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource ColorPeligro}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorPeligro}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- texbox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBorde}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- password -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBorde}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- combobox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBorde}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- datagrid -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBorde}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowHeight" Value="32"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9FAFB"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+        </Style>
+
+        <!-- mensajes -->
+        <Style x:Key="TextoMensaje" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoSecundario}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+
     </Application.Resources>
 </Application>

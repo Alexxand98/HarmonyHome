@@ -101,6 +101,20 @@ namespace HarmonyHome.Wpf.Services
 
             return new List<StockUbicacionDTO>();
         }
+
+
+        public async Task<List<ProductoBajoStockDTO>> GetProductosBajoStockGeneralAsync()
+        {
+            ResponseApi<List<ProductoBajoStockDTO>>? response =
+                await _apiService.GetAsync<ResponseApi<List<ProductoBajoStockDTO>>>("api/Stock/bajo-minimo/general");
+
+            if (response != null && response.IsSuccess && response.Result != null)
+            {
+                return response.Result;
+            }
+
+            return new List<ProductoBajoStockDTO>();
+        }
     }
 
 

@@ -5,46 +5,99 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="AltaStockView" Height="450" Width="800" 
-        WindowStartupLocation="CenterScreen">
+        Title="Añadir stock"
+        Height="520"
+        Width="700"
+        MinHeight="480"
+        MinWidth="620"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource ColorFondoApp}">
 
-    <Grid Margin="20">
-        <StackPanel>
+    <Grid Margin="22"
+          Background="{StaticResource ColorFondoApp}">
 
-            <TextBlock Text="Añadir stock"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Margin="0,0,0,20"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Producto"/>
-            <ComboBox x:Name="CmbProducto"
-                      DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,10"/>
+        <Border Grid.Row="0"
+                Background="{StaticResource ColorVerdePanel}"
+                BorderBrush="{StaticResource ColorBorde}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,0,0,14">
 
-            <TextBlock Text="Ubicación"/>
-            <ComboBox x:Name="CmbUbicacion"
-                      DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,10"/>
+            <StackPanel>
+                <TextBlock Text="Añadir stock"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"/>
 
-            <TextBlock Text="Cantidad"/>
-            <TextBox x:Name="TxtCantidad"
-                     Margin="0,0,0,15"/>
+                <TextBlock Text="Registra una entrada de stock para un producto en una ubicación de almacén."
+                           FontSize="14"
+                           Foreground="{StaticResource ColorTextoSecundario}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
 
-            <Button x:Name="BtnGuardar"
-                    Content="Guardar stock"
-                    Width="120"
-                    Height="35"
-                    HorizontalAlignment="Left"
-                    Click="BtnGuardar_Click"/>
+        <Border Grid.Row="1"
+                Style="{StaticResource CardPanel}">
 
-            <TextBlock x:Name="TxtMensaje"
-                       Text=""
-                       Foreground="Gray"
-                       TextWrapping="Wrap"
-                       Margin="0,15,0,0"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        </StackPanel>
+                <TextBlock Grid.Row="0"
+                           Text="Datos del stock"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"
+                           Margin="0,0,0,14"/>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Producto"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <ComboBox x:Name="CmbProducto"
+                              DisplayMemberPath="Nombre"
+                              SelectedValuePath="Id"
+                              Margin="0,4,0,10"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="Ubicación"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <ComboBox x:Name="CmbUbicacion"
+                              DisplayMemberPath="Nombre"
+                              SelectedValuePath="Id"
+                              Margin="0,4,0,10"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
+                    <TextBlock Text="Cantidad"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <TextBox x:Name="TxtCantidad"
+                             Margin="0,4,0,16"/>
+
+                    <Button x:Name="BtnGuardar"
+                            Content="Guardar stock"
+                            Width="130"
+                            Style="{StaticResource BotonOperacion}"
+                            HorizontalAlignment="Left"
+                            Click="BtnGuardar_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TextBlock x:Name="TxtMensaje"
+                   Grid.Row="2"
+                   Text=""
+                   Style="{StaticResource TextoMensaje}"/>
     </Grid>
 </Window>

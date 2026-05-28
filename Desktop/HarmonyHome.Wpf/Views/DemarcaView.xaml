@@ -5,54 +5,123 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="DemarcaView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="Registrar demarca"
+        Height="580"
+        Width="760"
+        MinHeight="520"
+        MinWidth="700"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource ColorFondoApp}">
 
+    <Grid Margin="22"
+          Background="{StaticResource ColorFondoApp}">
 
-    <Grid Margin="20">
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Registrar demarca"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Margin="0,0,0,20"/>
+        <Border Grid.Row="0"
+                Background="{StaticResource ColorVerdePanel}"
+                BorderBrush="{StaticResource ColorBorde}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,0,0,14">
 
-            <TextBlock Text="Producto"/>
-            <ComboBox x:Name="CmbProducto"
-                      DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,10"/>
+            <StackPanel>
+                <TextBlock Text="Registrar demarca"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"/>
 
-            <TextBlock Text="Ubicación"/>
-            <ComboBox x:Name="CmbUbicacion"
-                      DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,10"/>
+                <TextBlock Text="Retira stock no vendible o defectuoso indicando producto, ubicación, cantidad y motivo."
+                           FontSize="14"
+                           Foreground="{StaticResource ColorTextoSecundario}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
 
-            <TextBlock Text="Cantidad"/>
-            <TextBox x:Name="TxtCantidad"
-                     Margin="0,0,0,10"/>
+        <Border Grid.Row="1"
+                Style="{StaticResource CardPanel}">
 
-            <TextBlock Text="Motivo"/>
-            <TextBox x:Name="TxtMotivo"
-                     Height="70"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     Margin="0,0,0,15"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
 
-            <Button x:Name="BtnRegistrar"
-                    Content="Registrar demarca"
-                    Width="140"
-                    Height="35"
-                    HorizontalAlignment="Left"
-                    Click="BtnRegistrar_Click"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock x:Name="TxtMensaje"
-                       Text=""
-                       Foreground="Gray"
-                       TextWrapping="Wrap"
-                       Margin="0,15,0,0"/>
+                <TextBlock Grid.Row="0"
+                           Grid.ColumnSpan="3"
+                           Text="Datos de la demarca"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"
+                           Margin="0,0,0,14"/>
 
-        </StackPanel>
+                <StackPanel Grid.Row="1"
+                            Grid.Column="0">
+                    <TextBlock Text="Producto"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <ComboBox x:Name="CmbProducto"
+                              DisplayMemberPath="Nombre"
+                              SelectedValuePath="Id"
+                              Margin="0,4,0,10"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            Grid.Column="2">
+                    <TextBlock Text="Ubicación"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <ComboBox x:Name="CmbUbicacion"
+                              DisplayMemberPath="Nombre"
+                              SelectedValuePath="Id"
+                              Margin="0,4,0,10"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2"
+                            Grid.Column="0">
+                    <TextBlock Text="Cantidad"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <TextBox x:Name="TxtCantidad"
+                             Margin="0,4,0,10"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3"
+                            Grid.ColumnSpan="3">
+                    <TextBlock Text="Motivo"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <TextBox x:Name="TxtMotivo"
+                             Height="90"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Margin="0,4,0,16"/>
+                </StackPanel>
+
+                <Button x:Name="BtnRegistrar"
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Content="Registrar demarca"
+                        Width="150"
+                        Style="{StaticResource BotonOperacion}"
+                        HorizontalAlignment="Left"
+                        Click="BtnRegistrar_Click"/>
+            </Grid>
+        </Border>
+
+        <TextBlock x:Name="TxtMensaje"
+                   Grid.Row="2"
+                   Text=""
+                   Style="{StaticResource TextoMensaje}"/>
     </Grid>
 </Window>

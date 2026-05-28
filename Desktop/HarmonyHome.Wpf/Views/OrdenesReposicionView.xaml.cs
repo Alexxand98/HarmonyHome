@@ -37,19 +37,6 @@ namespace HarmonyHome.Wpf.Views
             await CargarOrdenes();
         }
 
-        private async void BtnCargarPendientes_Click(object sender, RoutedEventArgs e)
-        {
-            TxtMensaje.Text = "Cargando reposiciones pendientes...";
-
-            _ordenes = await _ordenService.GetPendientesAsync();
-
-            TablaOrdenes.ItemsSource = _ordenes;
-
-            TablaLineas.ItemsSource = null;
-
-            TxtMensaje.Text = "Reposiciones pendientes cargadas: " + _ordenes.Count;
-        }
-
         private async Task CargarOrdenes()
         {
             TxtMensaje.Text = "Cargando reposiciones...";

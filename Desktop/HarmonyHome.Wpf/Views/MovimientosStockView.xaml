@@ -60,12 +60,20 @@
                            Foreground="{StaticResource ColorTextoPrincipal}"
                            Margin="0,0,0,12"/>
 
-                <Button x:Name="BtnActualizarMovimientos"
-                        Grid.Row="1"
-                        Content="Actualizar"
-                        Width="110"
-                        HorizontalAlignment="Left"
-                        Click="BtnActualizarMovimientos_Click"/>
+                <WrapPanel Grid.Row="1"
+                           HorizontalAlignment="Left">
+
+                    <Button x:Name="BtnActualizarMovimientos"
+                            Content="Actualizar"
+                            Width="110"
+                            Click="BtnActualizarMovimientos_Click"/>
+
+                    <Button x:Name="BtnExportarMovimientos"
+                            Content="Exportar reporte"
+                            Width="140"
+                            Style="{StaticResource BotonOperacion}"
+                            Click="BtnExportarMovimientos_Click"/>
+                </WrapPanel>
             </Grid>
         </Border>
 

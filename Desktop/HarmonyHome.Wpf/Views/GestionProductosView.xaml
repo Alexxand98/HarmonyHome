@@ -5,165 +5,256 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="Gestion Productos" Height="500" Width="1000"
-        WindowStartupLocation="CenterScreen">
-    
-    
-   <Grid Margin="15">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+        Title="Gestión de productos"
+        Height="720"
+        Width="1200"
+        MinHeight="650"
+        MinWidth="1050"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource ColorFondoApp}">
 
+    <Grid Margin="22"
+          Background="{StaticResource ColorFondoApp}">
 
-       
-       
-       <Grid Grid.Column="0" Margin="0,0,15,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Gestión de productos"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Margin="0,0,0,10"/>
+        <Border Grid.Row="0"
+                Background="{StaticResource ColorVerdePanel}"
+                BorderBrush="{StaticResource ColorBorde}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,0,0,14">
 
-            <WrapPanel Grid.Row="1" Margin="0,0,0,10">
-
-                <Button x:Name="BtnCargarProductosGestion"
-                        Content="Cargar productos"
-                        Width="140"
-                        Height="32"
-                        Margin="0,0,8,0"
-                        Click="BtnCargarProductosGestion_Click"/>
-
-                <TextBox x:Name="TxtBuscarProducto"
-                         Width="220"
-                         Height="32"
-                         Margin="0,0,8,0"/>
-
-                <Button x:Name="BtnBuscarProducto"
-                        Content="Buscar"
-                        Width="80"
-                        Height="32"
-                        Margin="0,0,8,0"
-                        Click="BtnBuscarProducto_Click"/>
-
-                <Button x:Name="BtnLimpiarBusquedaProducto"
-                        Content="Limpiar"
-                        Width="80"
-                        Height="32"
-                        Click="BtnLimpiarBusquedaProducto_Click"/>
-
-            </WrapPanel>
-
-            <DataGrid x:Name="TablaProductosGestion"
-                      Grid.Row="2"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single"
-                      SelectionChanged="TablaProductosGestion_SelectionChanged">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Referencia" Binding="{Binding Referencia}" Width="120"/>
-                    <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="160"/>
-                    <DataGridTextColumn Header="Categoría" Binding="{Binding Categoria}" Width="120"/>
-                    <DataGridTextColumn Header="Trazabilidad" Binding="{Binding TipoTrazabilidadNombre}" Width="120"/>
-                    <DataGridTextColumn Header="Precio" Binding="{Binding PrecioVenta}" Width="80"/>
-                    <DataGridCheckBoxColumn Header="Habilitado" Binding="{Binding Habilitado}" Width="90"/>
-                    <DataGridCheckBoxColumn Header="Activo" Binding="{Binding Activo}" Width="70"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-
-
-       
-       <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-
-                <TextBlock Text="Datos del producto"
-                           FontSize="20"
+                <TextBlock Text="Gestión de productos"
+                           FontSize="26"
                            FontWeight="Bold"
-                           Margin="0,0,0,15"/>
+                           Foreground="{StaticResource ColorTextoPrincipal}"/>
 
-                <TextBlock Text="Referencia"/>
-                <TextBox x:Name="TxtReferencia" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Nombre"/>
-                <TextBox x:Name="TxtNombre" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Descripción"/>
-                <TextBox x:Name="TxtDescripcion" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Categoría"/>
-                <TextBox x:Name="TxtCategoria" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Precio coste"/>
-                <TextBox x:Name="TxtPrecioCoste" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Precio venta"/>
-                <TextBox x:Name="TxtPrecioVenta" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Stock mínimo"/>
-                <TextBox x:Name="TxtStockMinimo" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Tipo de trazabilidad"/>
-                <ComboBox x:Name="CmbTipoTrazabilidad"
-                          DisplayMemberPath="Nombre"
-                          SelectedValuePath="Id"
-                          Margin="0,0,0,8"/>
-
-                <CheckBox x:Name="ChkHabilitado"
-                          Content="Habilitado para tienda"
-                          Margin="0,5,0,5"/>
-
-                <CheckBox x:Name="ChkActivo"
-                          Content="Activo"
-                          IsEnabled="False"
-                          Margin="0,0,0,10"/>
-
-                <TextBlock Text="Imagen URL"/>
-                <TextBox x:Name="TxtImagenUrl" Margin="0,0,0,8"/>
-
-                <TextBlock Text="Observaciones"/>
-                <TextBox x:Name="TxtObservaciones"
-                         Height="60"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         Margin="0,0,0,12"/>
-
-                <WrapPanel Margin="0,5,0,10">
-                    <Button x:Name="BtnNuevoProducto"
-                            Content="Nuevo"
-                            Width="80"
-                            Height="30"
-                            Margin="0,0,5,5"
-                            Click="BtnNuevoProducto_Click"/>
-
-                    <Button x:Name="BtnGuardarProducto"
-                            Content="Guardar"
-                            Width="80"
-                            Height="30"
-                            Margin="0,0,5,5"
-                            Click="BtnGuardarProducto_Click"/>
-
-                    <Button x:Name="BtnEliminarProducto"
-                            Content="Eliminar"
-                            Width="80"
-                            Height="30"
-                            Margin="0,0,5,5"
-                            Click="BtnEliminarProducto_Click"/>
-                </WrapPanel>
-
-                <TextBlock x:Name="TxtMensajeGestionProductos"
-                           Text=""
-                           Foreground="Gray"
-                           TextWrapping="Wrap"
-                           Margin="0,10,0,0"/>
-
+                <TextBlock Text="Administra productos, precios, trazabilidad, estado e información visible para tienda."
+                           FontSize="14"
+                           Foreground="{StaticResource ColorTextoSecundario}"
+                           Margin="0,4,0,0"/>
             </StackPanel>
-        </ScrollViewer>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Style="{StaticResource CardPanel}"
+                    Margin="0,0,14,0">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Listado de productos"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource ColorTextoPrincipal}"
+                               Margin="0,0,0,12"/>
+
+                    <Grid Grid.Row="1"
+                          Margin="0,0,0,12">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="BtnCargarProductosGestion"
+                                Grid.Column="0"
+                                Content="Cargar productos"
+                                Width="150"
+                                Click="BtnCargarProductosGestion_Click"/>
+
+                        <StackPanel Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right">
+
+                            <TextBlock Text="Buscar"
+                                       FontSize="13"
+                                       Foreground="{StaticResource ColorTextoSecundario}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
+
+                            <TextBox x:Name="TxtBuscarProducto"
+                                     Width="230"
+                                     Margin="0,0,8,0"/>
+
+                            <Button x:Name="BtnBuscarProducto"
+                                    Content="Buscar"
+                                    Width="85"
+                                    Click="BtnBuscarProducto_Click"/>
+
+                            <Button x:Name="BtnLimpiarBusquedaProducto"
+                                    Content="Limpiar"
+                                    Width="85"
+                                    Style="{StaticResource BotonPeligro}"
+                                    Click="BtnLimpiarBusquedaProducto_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid x:Name="TablaProductosGestion"
+                              Grid.Row="2"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              SelectionChanged="TablaProductosGestion_SelectionChanged">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Referencia"
+                                                Binding="{Binding Referencia}"
+                                                Width="130"/>
+
+                            <DataGridTextColumn Header="Nombre"
+                                                Binding="{Binding Nombre}"
+                                                Width="*"/>
+
+                            <DataGridTextColumn Header="Categoría"
+                                                Binding="{Binding Categoria}"
+                                                Width="130"/>
+
+                            <DataGridTextColumn Header="Trazabilidad"
+                                                Binding="{Binding TipoTrazabilidadNombre}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Precio"
+                                                Binding="{Binding PrecioVenta}"
+                                                Width="90"/>
+
+                            <DataGridCheckBoxColumn Header="Habilitado"
+                                                    Binding="{Binding Habilitado}"
+                                                    Width="105"/>
+
+                            <DataGridCheckBoxColumn Header="Activo"
+                                                    Binding="{Binding Activo}"
+                                                    Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Style="{StaticResource CardPanel}"
+                    Margin="0">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+
+                        <TextBlock Text="Datos del producto"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource ColorTextoPrincipal}"
+                                   Margin="0,0,0,14"/>
+
+                        <TextBlock Text="Referencia"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtReferencia" Margin="0,4,0,8"/>
+
+                        <TextBlock Text="Nombre"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtNombre" Margin="0,4,0,8"/>
+
+                        <TextBlock Text="Descripción"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtDescripcion" Margin="0,4,0,8"/>
+
+                        <TextBlock Text="Categoría"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtCategoria" Margin="0,4,0,8"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Precio coste"
+                                           Foreground="{StaticResource ColorTextoSecundario}"/>
+                                <TextBox x:Name="TxtPrecioCoste" Margin="0,4,0,8"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Precio venta"
+                                           Foreground="{StaticResource ColorTextoSecundario}"/>
+                                <TextBox x:Name="TxtPrecioVenta" Margin="0,4,0,8"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Stock mínimo"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtStockMinimo" Margin="0,4,0,8"/>
+
+                        <TextBlock Text="Tipo de trazabilidad"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <ComboBox x:Name="CmbTipoTrazabilidad"
+                                  DisplayMemberPath="Nombre"
+                                  SelectedValuePath="Id"
+                                  Margin="0,4,0,10"/>
+
+                        <CheckBox x:Name="ChkHabilitado"
+                                  Content="Habilitado para tienda"
+                                  Margin="0,4,0,6"/>
+
+                        <CheckBox x:Name="ChkActivo"
+                                  Content="Activo"
+                                  IsEnabled="False"
+                                  Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Imagen URL"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtImagenUrl" Margin="0,4,0,8"/>
+
+                        <TextBlock Text="Observaciones"
+                                   Foreground="{StaticResource ColorTextoSecundario}"/>
+                        <TextBox x:Name="TxtObservaciones"
+                                 Height="70"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 Margin="0,4,0,14"/>
+
+                        <WrapPanel Margin="0,4,0,10">
+                            <Button x:Name="BtnNuevoProducto"
+                                    Content="Nuevo"
+                                    Width="85"
+                                    Click="BtnNuevoProducto_Click"/>
+
+                            <Button x:Name="BtnGuardarProducto"
+                                    Content="Guardar"
+                                    Width="85"
+                                    Style="{StaticResource BotonOperacion}"
+                                    Click="BtnGuardarProducto_Click"/>
+
+                            <Button x:Name="BtnEliminarProducto"
+                                    Content="Eliminar"
+                                    Width="85"
+                                    Style="{StaticResource BotonPeligro}"
+                                    Click="BtnEliminarProducto_Click"/>
+                        </WrapPanel>
+
+                        <TextBlock x:Name="TxtMensajeGestionProductos"
+                                   Text=""
+                                   Style="{StaticResource TextoMensaje}"/>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

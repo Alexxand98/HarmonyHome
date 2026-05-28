@@ -5,124 +5,190 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="GestionUbicacionesView"
-        Height="500"
-        Width="1050"
-        WindowStartupLocation="CenterScreen">
+        Title="Gestión de ubicaciones"
+        Height="700"
+        Width="1150"
+        MinHeight="620"
+        MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource ColorFondoApp}">
 
-    <Grid Margin="15">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Margin="22"
+          Background="{StaticResource ColorFondoApp}">
 
-        <Grid Grid.Column="0" Margin="0,0,15,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Gestion de ubicaciones"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Margin="0,0,0,10"/>
+        <Border Grid.Row="0"
+                Background="{StaticResource ColorVerdePanel}"
+                BorderBrush="{StaticResource ColorBorde}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,0,0,14">
 
-            <WrapPanel Grid.Row="1" Margin="0,0,0,10">
-                <Button x:Name="BtnCargarUbicaciones"
-                        Content="Cargar ubicaciones"
-                        Width="150"
-                        Height="32"
-                        Margin="0,0,8,0"
-                        Click="BtnCargarUbicaciones_Click"/>
+            <StackPanel>
+                <TextBlock Text="Gestión de ubicaciones"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"/>
 
-                <TextBox x:Name="TxtBuscarUbicacion"
-                         Width="220"
-                         Height="32"
-                         Margin="0,0,8,0"/>
+                <TextBlock Text="Administra zonas, posiciones y ubicaciones utilizadas por el módulo logístico."
+                           FontSize="14"
+                           Foreground="{StaticResource ColorTextoSecundario}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
 
-                <Button x:Name="BtnBuscarUbicacion"
-                        Content="Buscar"
-                        Width="80"
-                        Height="32"
-                        Margin="0,0,8,0"
-                        Click="BtnBuscarUbicacion_Click"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
 
-                <Button x:Name="BtnLimpiarBusquedaUbicacion"
-                        Content="Limpiar"
-                        Width="80"
-                        Height="32"
-                        Click="BtnLimpiarBusquedaUbicacion_Click"/>
-            </WrapPanel>
+            <Border Grid.Column="0"
+                    Style="{StaticResource CardPanel}"
+                    Margin="0,0,14,0">
 
-            <DataGrid x:Name="TablaUbicaciones"
-                      Grid.Row="2"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single"
-                      SelectionChanged="TablaUbicaciones_SelectionChanged">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="120"/>
-                    <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="220"/>
-                    <DataGridTextColumn Header="Tipo" Binding="{Binding TipoUbicacionNombre}" Width="120"/>
-                    <DataGridCheckBoxColumn Header="Activa" Binding="{Binding Activa}" Width="80"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <TextBlock Text="Listado de ubicaciones"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource ColorTextoPrincipal}"
+                               Margin="0,0,0,12"/>
+
+                    <Grid Grid.Row="1"
+                          Margin="0,0,0,12">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="BtnCargarUbicaciones"
+                                Grid.Column="0"
+                                Content="Cargar ubicaciones"
+                                Width="160"
+                                Click="BtnCargarUbicaciones_Click"/>
+
+                        <StackPanel Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right">
+
+                            <TextBlock Text="Buscar"
+                                       FontSize="13"
+                                       Foreground="{StaticResource ColorTextoSecundario}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
+
+                            <TextBox x:Name="TxtBuscarUbicacion"
+                                     Width="230"
+                                     Margin="0,0,8,0"/>
+
+                            <Button x:Name="BtnBuscarUbicacion"
+                                    Content="Buscar"
+                                    Width="85"
+                                    Click="BtnBuscarUbicacion_Click"/>
+
+                            <Button x:Name="BtnLimpiarBusquedaUbicacion"
+                                    Content="Limpiar"
+                                    Width="85"
+                                    Style="{StaticResource BotonPeligro}"
+                                    Click="BtnLimpiarBusquedaUbicacion_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid x:Name="TablaUbicaciones"
+                              Grid.Row="2"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              SelectionChanged="TablaUbicaciones_SelectionChanged">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Código"
+                                                Binding="{Binding Codigo}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Nombre"
+                                                Binding="{Binding Nombre}"
+                                                Width="*"/>
+
+                            <DataGridTextColumn Header="Tipo"
+                                                Binding="{Binding TipoUbicacionNombre}"
+                                                Width="160"/>
+
+                            <DataGridCheckBoxColumn Header="Activa"
+                                                    Binding="{Binding Activa}"
+                                                    Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Style="{StaticResource CardPanel}">
+
+                <StackPanel>
+                    <TextBlock Text="Datos de la ubicación"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource ColorTextoPrincipal}"
+                               Margin="0,0,0,14"/>
+
+                    <TextBlock Text="Código"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <TextBox x:Name="TxtCodigo" Margin="0,4,0,8"/>
+
+                    <TextBlock Text="Nombre"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <TextBox x:Name="TxtNombre" Margin="0,4,0,8"/>
+
+                    <TextBlock Text="Tipo ubicación"
+                               Foreground="{StaticResource ColorTextoSecundario}"/>
+                    <ComboBox x:Name="CmbTipoUbicacion"
+                              DisplayMemberPath="Nombre"
+                              SelectedValuePath="Id"
+                              Margin="0,4,0,10"/>
+
+                    <CheckBox x:Name="ChkActiva"
+                              Content="Activa"
+                              Margin="0,4,0,16"/>
+
+                    <WrapPanel Margin="0,4,0,10">
+                        <Button x:Name="BtnNuevaUbicacion"
+                                Content="Nueva"
+                                Width="85"
+                                Click="BtnNuevaUbicacion_Click"/>
+
+                        <Button x:Name="BtnGuardarUbicacion"
+                                Content="Guardar"
+                                Width="85"
+                                Style="{StaticResource BotonOperacion}"
+                                Click="BtnGuardarUbicacion_Click"/>
+
+                        <Button x:Name="BtnEliminarUbicacion"
+                                Content="Eliminar"
+                                Width="85"
+                                Style="{StaticResource BotonPeligro}"
+                                Click="BtnEliminarUbicacion_Click"/>
+                    </WrapPanel>
+
+                    <TextBlock x:Name="TxtMensajeGestionUbicaciones"
+                               Text=""
+                               Style="{StaticResource TextoMensaje}"/>
+                </StackPanel>
+            </Border>
         </Grid>
-
-        <StackPanel Grid.Column="1">
-
-            <TextBlock Text="Datos de la ubicacion"
-                       FontSize="20"
-                       FontWeight="Bold"
-                       Margin="0,0,0,15"/>
-
-            <TextBlock Text="Codigo"/>
-            <TextBox x:Name="TxtCodigo" Margin="0,0,0,8"/>
-
-            <TextBlock Text="Nombre"/>
-            <TextBox x:Name="TxtNombre" Margin="0,0,0,8"/>
-
-            <TextBlock Text="Tipo ubicacion"/>
-            <ComboBox x:Name="CmbTipoUbicacion"
-                      DisplayMemberPath="Nombre"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,8"/>
-
-            <CheckBox x:Name="ChkActiva"
-                      Content="Activa"
-                      Margin="0,5,0,15"/>
-
-            <WrapPanel Margin="0,5,0,10">
-                <Button x:Name="BtnNuevaUbicacion"
-                        Content="Nueva"
-                        Width="80"
-                        Height="30"
-                        Margin="0,0,5,5"
-                        Click="BtnNuevaUbicacion_Click"/>
-
-                <Button x:Name="BtnGuardarUbicacion"
-                        Content="Guardar"
-                        Width="80"
-                        Height="30"
-                        Margin="0,0,5,5"
-                        Click="BtnGuardarUbicacion_Click"/>
-
-                <Button x:Name="BtnEliminarUbicacion"
-                        Content="Eliminar"
-                        Width="80"
-                        Height="30"
-                        Margin="0,0,5,5"
-                        Click="BtnEliminarUbicacion_Click"/>
-            </WrapPanel>
-
-            <TextBlock x:Name="TxtMensajeGestionUbicaciones"
-                       Text=""
-                       Foreground="Gray"
-                       TextWrapping="Wrap"
-                       Margin="0,10,0,0"/>
-
-        </StackPanel>
     </Grid>
 </Window>

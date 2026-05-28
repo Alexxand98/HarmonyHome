@@ -129,7 +129,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Background="{StaticResource ColorPanel}"
+            <Border Background="{StaticResource ColorVerdePanel}"
                     CornerRadius="12"
                     Padding="18"
                     BorderBrush="{StaticResource ColorBorde}"
@@ -294,7 +294,7 @@
                         </DataGrid>
 
                         <Border Grid.Row="2"
-                                Background="{StaticResource ColorVerdeMuyClaro}"
+                                Background="{StaticResource ColorPanel}"
                                 BorderBrush="{StaticResource ColorBorde}"
                                 BorderThickness="1"
                                 CornerRadius="10"

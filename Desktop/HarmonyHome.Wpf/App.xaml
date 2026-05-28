@@ -6,40 +6,34 @@
 
     <Application.Resources>
 
-        <!-- paleta de colores -->
+        <!-- colores base -->
         <SolidColorBrush x:Key="ColorFondoApp" Color="#F6F8F4"/>
         <SolidColorBrush x:Key="ColorPanel" Color="#FFFFFF"/>
 
-        <SolidColorBrush x:Key="ColorPrincipal" Color="#7BAE7F"/>
-        <SolidColorBrush x:Key="ColorPrincipalHover" Color="#6A9E6E"/>
-
-        <SolidColorBrush x:Key="ColorVerdeClaro" Color="#BEFAC4"/>
-        <SolidColorBrush x:Key="ColorVerdeMuyClaro" Color="#ECFCEC"/>
+        <!-- color de cabecera y menú lateral -->
         <SolidColorBrush x:Key="ColorVerdePanel" Color="#DDF6DF"/>
 
-        <SolidColorBrush x:Key="ColorSecundario" Color="#A3A3A3"/>
-        <SolidColorBrush x:Key="ColorBorde" Color="#D8DED2"/>
-
+        <!-- texto y bordes -->
         <SolidColorBrush x:Key="ColorTextoPrincipal" Color="#2F3A2F"/>
         <SolidColorBrush x:Key="ColorTextoSecundario" Color="#6B756B"/>
+        <SolidColorBrush x:Key="ColorBorde" Color="#D8DED2"/>
 
-        <SolidColorBrush x:Key="ColorPeligro" Color="#C96B6B"/>
-        <SolidColorBrush x:Key="ColorPeligroHover" Color="#B85C5C"/>
+        <!-- color numérico del dashboard -->
+        <SolidColorBrush x:Key="ColorPrincipal" Color="#7BAE7F"/>
 
-        <!-- tutulos -->
-        <Style x:Key="TituloVentana" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="26"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource ColorTextoPrincipal}"/>
-            <Setter Property="Margin" Value="0,0,0,6"/>
-        </Style>
+        <!-- botón normal gris claro -->
+        <SolidColorBrush x:Key="ColorBotonNormal" Color="#F3F4F6"/>
+        <SolidColorBrush x:Key="ColorBotonNormalBorde" Color="#D1D5DB"/>
 
-        <!-- subtitulos -->
-        <Style x:Key="SubtituloVentana" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="{StaticResource ColorTextoSecundario}"/>
-            <Setter Property="Margin" Value="0,0,0,16"/>
-        </Style>
+        <!-- botón operación azul muy claro -->
+        <SolidColorBrush x:Key="ColorBotonOperacion" Color="#E3F0FF"/>
+        <SolidColorBrush x:Key="ColorBotonOperacionBorde" Color="#BFD7F3"/>
+        <SolidColorBrush x:Key="ColorTextoBotonOperacion" Color="#1F3A5F"/>
+
+        <!-- botón peligro rojo muy claro -->
+        <SolidColorBrush x:Key="ColorBotonPeligro" Color="#FBE1E1"/>
+        <SolidColorBrush x:Key="ColorBotonPeligroBorde" Color="#E8A6A6"/>
+        <SolidColorBrush x:Key="ColorTextoBotonPeligro" Color="#7A2E2E"/>
 
         <!-- tarjetas -->
         <Style x:Key="CardPanel" TargetType="Border">
@@ -51,7 +45,7 @@
             <Setter Property="Margin" Value="0,0,0,12"/>
         </Style>
 
-        <!-- botones  generales -->
+        <!-- botón normal -->
         <Style TargetType="Button">
             <Setter Property="Height" Value="34"/>
             <Setter Property="MinWidth" Value="90"/>
@@ -59,13 +53,27 @@
             <Setter Property="Margin" Value="0,0,8,0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Background" Value="{StaticResource ColorPrincipal}"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="{StaticResource ColorPrincipal}"/>
+            <Setter Property="Background" Value="{StaticResource ColorBotonNormal}"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoPrincipal}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBotonNormalBorde}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <!-- boton menu lateral -->
+        <!-- botón operación -->
+        <Style x:Key="BotonOperacion" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource ColorBotonOperacion}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBotonOperacionBorde}"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoBotonOperacion}"/>
+        </Style>
+
+        <!-- botón peligro -->
+        <Style x:Key="BotonPeligro" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource ColorBotonPeligro}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ColorBotonPeligroBorde}"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorTextoBotonPeligro}"/>
+        </Style>
+
+        <!-- botón menú lateral -->
         <Style x:Key="BotonMenu" TargetType="Button">
             <Setter Property="Height" Value="38"/>
             <Setter Property="MinWidth" Value="120"/>
@@ -80,21 +88,7 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
-        <!-- botones secundarios  -->
-        <Style x:Key="BotonSecundario" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Background" Value="{StaticResource ColorSecundario}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource ColorSecundario}"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-        <!-- botones advenrtencia -->
-        <Style x:Key="BotonPeligro" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Background" Value="{StaticResource ColorPeligro}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource ColorPeligro}"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-        <!-- texbox -->
+        <!-- textbox -->
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="32"/>
             <Setter Property="Padding" Value="8,4"/>

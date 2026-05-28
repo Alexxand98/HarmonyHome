@@ -4,9 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
-        mc:Ignorable="d" Title="MovimientosStockView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
-    <Grid Margin="15">
+        mc:Ignorable="d"
+        Title="Historial de movimientos"
+        Height="650"
+        Width="1150"
+        MinHeight="580"
+        MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource ColorFondoApp}">
+
+    <Grid Margin="22"
+          Background="{StaticResource ColorFondoApp}">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -14,42 +23,112 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Historial de movimientos"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="0,0,0,10"/>
+        <Border Grid.Row="0"
+                Background="{StaticResource ColorVerdePanel}"
+                BorderBrush="{StaticResource ColorBorde}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,0,0,14">
 
-        <Button x:Name="BtnCargarMovimientos"
-                Grid.Row="1"
-                Content="Cargar movimientos"
-                Width="160"
-                Height="32"
-                HorizontalAlignment="Left"
-                Margin="0,0,0,10"
-                Click="BtnCargarMovimientos_Click"/>
+            <StackPanel>
+                <TextBlock Text="Historial de movimientos"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"/>
 
-        <DataGrid x:Name="TablaMovimientos"
-                  Grid.Row="2"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                <TextBlock Text="Consulta los movimientos de stock registrados entre ubicaciones y operaciones logísticas."
+                           FontSize="14"
+                           Foreground="{StaticResource ColorTextoSecundario}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" Width="140"/>
-                <DataGridTextColumn Header="Referencia" Binding="{Binding ProductoReferencia}" Width="120"/>
-                <DataGridTextColumn Header="Producto" Binding="{Binding ProductoNombre}" Width="150"/>
-                <DataGridTextColumn Header="Origen" Binding="{Binding UbicacionOrigenCodigo}" Width="100"/>
-                <DataGridTextColumn Header="Destino" Binding="{Binding UbicacionDestinoCodigo}" Width="100"/>
-                <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="80"/>
-                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoMovimientoNombre}" Width="130"/>
-                <DataGridTextColumn Header="Observaciones" Binding="{Binding Observaciones}" Width="220"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border Grid.Row="1"
+                Style="{StaticResource CardPanel}"
+                Margin="0,0,0,14">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Acciones"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"
+                           Margin="0,0,0,12"/>
+
+                <Button x:Name="BtnCargarMovimientos"
+                        Grid.Row="1"
+                        Content="Cargar movimientos"
+                        Width="170"
+                        HorizontalAlignment="Left"
+                        Click="BtnCargarMovimientos_Click"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                Style="{StaticResource CardPanel}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Listado de movimientos"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"
+                           Margin="0,0,0,12"/>
+
+                <DataGrid x:Name="TablaMovimientos"
+                          Grid.Row="1"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Fecha"
+                                            Binding="{Binding Fecha}"
+                                            Width="150"/>
+
+                        <DataGridTextColumn Header="Referencia"
+                                            Binding="{Binding ProductoReferencia}"
+                                            Width="130"/>
+
+                        <DataGridTextColumn Header="Producto"
+                                            Binding="{Binding ProductoNombre}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Origen"
+                                            Binding="{Binding UbicacionOrigenCodigo}"
+                                            Width="110"/>
+
+                        <DataGridTextColumn Header="Destino"
+                                            Binding="{Binding UbicacionDestinoCodigo}"
+                                            Width="110"/>
+
+                        <DataGridTextColumn Header="Cantidad"
+                                            Binding="{Binding Cantidad}"
+                                            Width="90"/>
+
+                        <DataGridTextColumn Header="Tipo"
+                                            Binding="{Binding TipoMovimientoNombre}"
+                                            Width="150"/>
+
+                        <DataGridTextColumn Header="Observaciones"
+                                            Binding="{Binding Observaciones}"
+                                            Width="240"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
 
         <TextBlock x:Name="TxtMensajeMovimientos"
                    Grid.Row="3"
                    Text=""
-                   Foreground="Gray"
-                   TextWrapping="Wrap"
-                   Margin="0,10,0,0"/>
+                   Style="{StaticResource TextoMensaje}"/>
     </Grid>
 </Window>

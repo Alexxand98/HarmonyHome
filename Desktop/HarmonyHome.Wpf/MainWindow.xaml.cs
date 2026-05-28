@@ -128,13 +128,6 @@ namespace HarmonyHome.Wpf
             ubicacionesView.ShowDialog();
         }
 
-        private void BtnServerInfo_Click(object sender, RoutedEventArgs e)
-        {
-            ServidorView servidorView = new ServidorView();
-
-            servidorView.ShowDialog();
-        }
-
         private void BtnGestionProductos_Click(object sender, RoutedEventArgs e)
         {
             GestionProductosView gestionProductosView = new GestionProductosView();

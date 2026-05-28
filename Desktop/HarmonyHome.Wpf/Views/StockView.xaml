@@ -5,10 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HarmonyHome.Wpf.Views"
         mc:Ignorable="d"
-        Title="StockView" Height="500" Width="1000"
-        WindowStartupLocation="CenterScreen">
+        Title="Consulta de stock"
+        Height="650"
+        Width="1150"
+        MinHeight="580"
+        MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource ColorFondoApp}">
 
-    <Grid Margin="15">
+    <Grid Margin="22"
+          Background="{StaticResource ColorFondoApp}">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -16,89 +23,162 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Consulta de stock"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="0,0,0,10"/>
+        <Border Grid.Row="0"
+                Background="{StaticResource ColorVerdePanel}"
+                BorderBrush="{StaticResource ColorBorde}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,0,0,14">
 
-        <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="Consulta de stock"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"/>
 
-            <Button x:Name="BtnCargarTodo"
-                    Content="Todo"
-                    Width="100"
-                    Height="32"
-                    Margin="0,0,8,0"
-                    Click="BtnCargarTodo_Click"/>
+                <TextBlock Text="Consulta las existencias disponibles por producto, ubicación y tipo de zona logística."
+                           FontSize="14"
+                           Foreground="{StaticResource ColorTextoSecundario}"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
 
-            <Button x:Name="BtnCargarTienda"
-                    Content="Tienda"
-                    Width="100"
-                    Height="32"
-                    Margin="0,0,8,0"
-                    Click="BtnCargarTienda_Click"/>
+        <Border Grid.Row="1"
+                Style="{StaticResource CardPanel}"
+                Margin="0,0,0,14">
 
-            <Button x:Name="BtnCargarAlmacen"
-                    Content="Almacén"
-                    Width="100"
-                    Height="32"
-                    Margin="0,0,8,0"
-                    Click="BtnCargarAlmacen_Click"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <Button x:Name="BtnMoverStock"
-                    Content="Mover stock"
-                    Width="110"
-                    Height="32"
-                    Margin="0,0,8,0"
-                    Click="BtnMoverStock_Click"/>
+                <TextBlock Text="Filtros y acciones"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"
+                           Margin="0,0,0,12"/>
 
-            <Button x:Name="BtnAltaStock"
-                    Content="Añadir stock"
-                    Width="110"
-                    Height="32"
-                    Margin="0,0,8,0"
-                    Click="BtnAltaStock_Click"/>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="TxtBuscarStock"
-                     Width="220"
-                     Height="32"
-                     Margin="0,0,8,0"/>
+                    <WrapPanel Grid.Column="0"
+                               VerticalAlignment="Center">
 
-            <Button x:Name="BtnBuscarStock"
-                    Content="Buscar"
-                    Width="80"
-                    Height="32"
-                    Margin="0,0,8,0"
-                    Click="BtnBuscarStock_Click"/>
+                        <Button x:Name="BtnCargarTodo"
+                                Content="Todo"
+                                Width="95"
+                                Click="BtnCargarTodo_Click"/>
 
-            <Button x:Name="BtnLimpiarBusquedaStock"
-                    Content="Limpiar"
-                    Width="80"
-                    Height="32"
-                    Click="BtnLimpiarBusquedaStock_Click"/>
+                        <Button x:Name="BtnCargarTienda"
+                                Content="Tienda"
+                                Width="95"
+                                Click="BtnCargarTienda_Click"/>
 
-        </WrapPanel>
+                        <Button x:Name="BtnCargarAlmacen"
+                                Content="Almacén"
+                                Width="95"
+                                Click="BtnCargarAlmacen_Click"/>
 
-        <DataGrid x:Name="TablaStock"
-                  Grid.Row="2"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                        <Button x:Name="BtnMoverStock"
+                                Content="Mover stock"
+                                Width="120"
+                                Click="BtnMoverStock_Click"/>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Referencia" Binding="{Binding ProductoReferencia}" Width="130"/>
-                <DataGridTextColumn Header="Producto" Binding="{Binding ProductoNombre}" Width="160"/>
-                <DataGridTextColumn Header="Código ubicación" Binding="{Binding UbicacionCodigo}" Width="130"/>
-                <DataGridTextColumn Header="Ubicación" Binding="{Binding UbicacionNombre}" Width="220"/>
-                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoUbicacionNombre}" Width="100"/>
-                <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="80"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                        <Button x:Name="BtnAltaStock"
+                                Content="Añadir stock"
+                                Width="120"
+                                Style="{StaticResource BotonOperacion}"
+                                Click="BtnAltaStock_Click"/>
+                    </WrapPanel>
+
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right">
+
+                        <TextBlock Text="Buscar"
+                                   FontSize="13"
+                                   Foreground="{StaticResource ColorTextoSecundario}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0"/>
+
+                        <TextBox x:Name="TxtBuscarStock"
+                                 Width="250"
+                                 Margin="0,0,8,0"/>
+
+                        <Button x:Name="BtnBuscarStock"
+                                    Content="Buscar"
+                                    Width="85"
+                                    Click="BtnBuscarStock_Click"/>
+
+                        <Button x:Name="BtnLimpiarBusquedaStock"
+                                Content="Limpiar"
+                                Width="85"
+                                Style="{StaticResource BotonPeligro}"
+                                Click="BtnLimpiarBusquedaStock_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                Style="{StaticResource CardPanel}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Listado de stock"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource ColorTextoPrincipal}"
+                           Margin="0,0,0,12"/>
+
+                <DataGrid x:Name="TablaStock"
+                          Grid.Row="1"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Referencia"
+                                            Binding="{Binding ProductoReferencia}"
+                                            Width="150"/>
+
+                        <DataGridTextColumn Header="Producto"
+                                            Binding="{Binding ProductoNombre}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Código ubicación"
+                                            Binding="{Binding UbicacionCodigo}"
+                                            Width="150"/>
+
+                        <DataGridTextColumn Header="Ubicación"
+                                            Binding="{Binding UbicacionNombre}"
+                                            Width="220"/>
+
+                        <DataGridTextColumn Header="Tipo"
+                                            Binding="{Binding TipoUbicacionNombre}"
+                                            Width="120"/>
+
+                        <DataGridTextColumn Header="Cantidad"
+                                            Binding="{Binding Cantidad}"
+                                            Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
 
         <TextBlock x:Name="TxtMensajeStock"
                    Grid.Row="3"
                    Text=""
-                   Foreground="Gray"
-                   Margin="0,10,0,0"/>
-        
-        
+                   Style="{StaticResource TextoMensaje}"/>
     </Grid>
 </Window>

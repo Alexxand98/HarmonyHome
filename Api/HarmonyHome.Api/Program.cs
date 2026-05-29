@@ -1,23 +1,19 @@
 using HarmonyHome.Api.Data;
+using HarmonyHome.Api.Helpers;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Repository;
 using HarmonyHome.Api.Repository.IRepository;
-using HarmonyHome.Api.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-
 using System.Text;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
-// Swagger / OpenAPI visual
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -32,16 +28,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Entity Framework Core + SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// JWT
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
 builder.Services.AddAuthentication(options =>
@@ -69,7 +62,15 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddCors(options =>{options.AddPolicy("AllowAngular", policy =>{policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();});});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
@@ -85,7 +86,6 @@ builder.Services.AddScoped<IMovimientoStockRepository, MovimientoStockRepository
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -107,9 +107,9 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData.InicializarRolesYUsuariosAsync(services);
-    await SeedData.InicializarDatosPruebaAsync(services);
 
+    await SeedData.InicializarRolesYUsuariosAsync(services);
+    await SeedData.InicializarDatosBaseAsync(services);
 }
 
 app.Run();

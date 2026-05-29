@@ -9,10 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Images\" />
-    <Folder Include="Resources\Icons\" />
-    <Folder Include="Resources\Styles\" />
-    <Folder Include="ViewModels\" />
+    <Compile Remove="Resources\**" />
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="Resources\**" />
+    <None Remove="ViewModels\**" />
+    <Page Remove="Resources\**" />
+    <Page Remove="ViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>

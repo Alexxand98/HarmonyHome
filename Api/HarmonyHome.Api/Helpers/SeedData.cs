@@ -1,7 +1,7 @@
-﻿using HarmonyHome.Api.Models.Entity;
-using Microsoft.AspNetCore.Identity;
-using HarmonyHome.Api.Data;
+﻿using HarmonyHome.Api.Data;
+using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HarmonyHome.Api.Helpers
@@ -30,225 +30,241 @@ namespace HarmonyHome.Api.Helpers
                 }
             }
 
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "vendedor@harmonyhome.com",
-                "VendedorDemo",
-                "Vendedor",
-                "Password123!"
-            );
-
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "encargado@harmonyhome.com",
-                "EncargadoDemo",
-                "EncargadoTienda",
-                "Password123!"
-            );
-
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "logistico@harmonyhome.com",
-                "LogisticoDemo",
-                "Logistico",
-                "Password123!"
-            );
-
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "supervisor@harmonyhome.com",
-                "SupervisorDemo",
-                "SupervisorLogistico",
-                "Password123!"
-            );
-
-            await CrearUsuarioSiNoExiste(
-                userManager,
-                "admin@harmonyhome.com",
-                "AdminDemo",
-                "Administrador",
-                "Password123!"
-            );
-
-
+            await CrearUsuarioSiNoExiste(userManager, "vendedor@harmonyhome.com", "VendedorDemo", "Vendedor", "Password123!");
+            await CrearUsuarioSiNoExiste(userManager, "encargado@harmonyhome.com", "EncargadoDemo", "EncargadoTienda", "Password123!");
+            await CrearUsuarioSiNoExiste(userManager, "logistico@harmonyhome.com", "LogisticoDemo", "Logistico", "Password123!");
+            await CrearUsuarioSiNoExiste(userManager, "supervisor@harmonyhome.com", "SupervisorDemo", "SupervisorLogistico", "Password123!");
+            await CrearUsuarioSiNoExiste(userManager, "admin@harmonyhome.com", "AdminDemo", "Administrador", "Password123!");
         }
 
-        public static async Task InicializarDatosPruebaAsync(IServiceProvider serviceProvider)
+        public static async Task InicializarDatosBaseAsync(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            if (await context.Productos.AnyAsync(p => p.Referencia == "SEED-REC-001"))
+            if (await context.Productos.AnyAsync(p => p.Referencia == "MESA-NORDIK-001"))
             {
                 return;
             }
 
+            var vendedor = await userManager.FindByEmailAsync("vendedor@harmonyhome.com");
+            var logistico = await userManager.FindByEmailAsync("logistico@harmonyhome.com");
             var admin = await userManager.FindByEmailAsync("admin@harmonyhome.com");
 
-            if (admin == null)
+            if (vendedor == null || logistico == null || admin == null)
             {
                 return;
             }
 
-            var tienda = new Ubicacion
+            var tienda = await ObtenerOCrearUbicacionAsync(
+                context,
+                "TIENDA-01",
+                "Tienda principal",
+                TipoUbicacion.Tienda
+            );
+
+            var almacenA = await ObtenerOCrearUbicacionAsync(
+                context,
+                "ALM-A-01",
+                "Almacén A - Estantería 01",
+                TipoUbicacion.Almacen
+            );
+
+            var almacenB = await ObtenerOCrearUbicacionAsync(
+                context,
+                "ALM-B-01",
+                "Almacén B - Estantería 01",
+                TipoUbicacion.Almacen
+            );
+
+            var recogida = await ObtenerOCrearUbicacionAsync(
+                context,
+                "RECOGIDA-01",
+                "Zona de recogida",
+                TipoUbicacion.Recogida
+            );
+
+            var demarcas = await ObtenerOCrearUbicacionAsync(
+                context,
+                "DEMARCAS-01",
+                "Zona de demarcas",
+                TipoUbicacion.Demarca
+            );
+
+            var clienteCarlos = await ObtenerOCrearClienteAsync(
+                context,
+                "Carlos",
+                "Martínez López",
+                "666123456",
+                "carlos@harmonyhome.com",
+                "Calle Mayor 12"
+            );
+
+            var mesa = new Producto
             {
-                Codigo = "TIENDA-01",
-                Nombre = "Tienda principal",
-                TipoUbicacion = TipoUbicacion.Tienda,
-                Activa = true
-            };
-
-            var almacenA = new Ubicacion
-            {
-                Codigo = "ALM-A-01",
-                Nombre = "Almacén A - Estantería 01",
-                TipoUbicacion = TipoUbicacion.Almacen,
-                Activa = true
-            };
-
-            var almacenB = new Ubicacion
-            {
-                Codigo = "ALM-B-01",
-                Nombre = "Almacén B - Estantería 01",
-                TipoUbicacion = TipoUbicacion.Almacen,
-                Activa = true
-            };
-
-            context.Ubicaciones.AddRange(tienda, almacenA, almacenB);
-            await context.SaveChangesAsync();
-
-            var cliente = new Cliente
-            {
-                Nombre = "Dennis",
-                Apellidos = "Pasquel",
-                Telefono = "600123456",
-                Email = "dennis@test.com",
-                Direccion = "Calle Prueba 1",
-                Activo = true,
-                FechaAlta = DateTime.UtcNow
-            };
-
-            context.Clientes.Add(cliente);
-            await context.SaveChangesAsync();
-
-            var productoRecogida = new Producto
-            {
-                Referencia = "SEED-REC-001",
-                Nombre = "Producto para órdenes de recogida",
-                Descripcion = "Producto de prueba para generar órdenes de recogida",
-                Categoria = "Pruebas",
-                PrecioCoste = 5,
-                PrecioVenta = 12,
+                Referencia = "MESA-NORDIK-001",
+                Nombre = "Mesa comedor Nordik",
+                Descripcion = "Mesa de comedor de madera clara para el catálogo de tienda.",
+                Categoria = "Muebles",
+                PrecioCoste = 80,
+                PrecioVenta = 149,
                 StockMinimo = 5,
                 TipoTrazabilidad = TipoTrazabilidad.SinTrazabilidad,
                 Habilitado = true,
                 Activo = true,
-                FechaAlta = DateTime.UtcNow,
-                ImagenUrl = "/images/productos/producto-prueba.jpg",
-                Observaciones = "Producto seed para pruebas"
+                FechaAlta = DateTime.Now,
+                ImagenUrl = "/images/productos/mesa.jpg",
+                Observaciones = "Producto disponible para venta y reposición."
             };
 
-            var productoBajoTienda = new Producto
+            var silla = new Producto
             {
-                Referencia = "SEED-BAJO-TIENDA",
-                Nombre = "Producto bajo stock tienda",
-                Descripcion = "Producto para probar bajo stock en tienda",
-                Categoria = "Pruebas",
-                PrecioCoste = 4,
-                PrecioVenta = 9,
-                StockMinimo = 5,
+                Referencia = "SILLA-LUNA-001",
+                Nombre = "Silla tapizada Luna",
+                Descripcion = "Silla tapizada de comedor para el catálogo de tienda.",
+                Categoria = "Muebles",
+                PrecioCoste = 30,
+                PrecioVenta = 59,
+                StockMinimo = 8,
                 TipoTrazabilidad = TipoTrazabilidad.SinTrazabilidad,
                 Habilitado = true,
                 Activo = true,
-                FechaAlta = DateTime.UtcNow,
-                ImagenUrl = "/images/productos/producto-prueba.jpg",
-                Observaciones = "Debe aparecer en bajo stock tienda"
+                FechaAlta = DateTime.Now,
+                ImagenUrl = "/images/productos/silla.png",
+                Observaciones = "Producto con stock bajo para reposición."
             };
 
-            var productoOkTienda = new Producto
-            {
-                Referencia = "SEED-OK-TIENDA",
-                Nombre = "Producto con stock suficiente tienda",
-                Descripcion = "Producto que no debe aparecer en bajo stock tienda",
-                Categoria = "Pruebas",
-                PrecioCoste = 4,
-                PrecioVenta = 9,
-                StockMinimo = 5,
-                TipoTrazabilidad = TipoTrazabilidad.SinTrazabilidad,
-                Habilitado = true,
-                Activo = true,
-                FechaAlta = DateTime.UtcNow,
-                ImagenUrl = "/images/productos/producto-prueba.jpg",
-                Observaciones = "No debe aparecer en bajo stock tienda"
-            };
-
-            context.Productos.AddRange(productoRecogida, productoBajoTienda, productoOkTienda);
+            context.Productos.AddRange(mesa, silla);
             await context.SaveChangesAsync();
 
             context.StockUbicaciones.AddRange(
                 new StockUbicacion
                 {
-                    ProductoId = productoRecogida.Id,
-                    UbicacionId = almacenA.Id,
-                    Cantidad = 100
-                },
-                new StockUbicacion
-                {
-                    ProductoId = productoRecogida.Id,
-                    UbicacionId = almacenB.Id,
-                    Cantidad = 50
-                },
-                new StockUbicacion
-                {
-                    ProductoId = productoBajoTienda.Id,
+                    ProductoId = mesa.Id,
                     UbicacionId = tienda.Id,
-                    Cantidad = 3
+                    Cantidad = 10
                 },
                 new StockUbicacion
                 {
-                    ProductoId = productoBajoTienda.Id,
+                    ProductoId = mesa.Id,
                     UbicacionId = almacenA.Id,
                     Cantidad = 20
                 },
                 new StockUbicacion
                 {
-                    ProductoId = productoOkTienda.Id,
-                    UbicacionId = tienda.Id,
+                    ProductoId = mesa.Id,
+                    UbicacionId = almacenB.Id,
                     Cantidad = 10
+                },
+                new StockUbicacion
+                {
+                    ProductoId = silla.Id,
+                    UbicacionId = tienda.Id,
+                    Cantidad = 3
+                },
+                new StockUbicacion
+                {
+                    ProductoId = silla.Id,
+                    UbicacionId = almacenA.Id,
+                    Cantidad = 4
                 }
             );
 
             await context.SaveChangesAsync();
 
-            await CrearOrdenesRecogidaSeed(context, cliente.Id, admin.Id, productoRecogida);
+            await CrearOrdenesRecogidaAsync(context, clienteCarlos.Id, vendedor.Id, logistico.Id, mesa, silla);
+            await CrearOrdenesReposicionAsync(context, vendedor.Id, logistico.Id, mesa, silla);
+            await CrearMovimientosInicialesAsync(context, admin.Id, vendedor.Id, logistico.Id, tienda.Id, almacenA.Id, almacenB.Id, demarcas.Id, mesa.Id, silla.Id);
         }
 
-        private static async Task CrearOrdenesRecogidaSeed(
-    ApplicationDbContext context,
-    int clienteId,
-    string usuarioId,
-    Producto producto)
+        private static async Task<Ubicacion> ObtenerOCrearUbicacionAsync(
+            ApplicationDbContext context,
+            string codigo,
+            string nombre,
+            TipoUbicacion tipoUbicacion)
         {
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Pendiente, 1, "Seed pendiente 1");
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Pendiente, 1, "Seed pendiente 2");
+            var ubicacion = await context.Ubicaciones
+                .FirstOrDefaultAsync(u => u.Codigo == codigo);
 
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Asignada, 1, "Seed asignada 1");
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Asignada, 1, "Seed asignada 2");
+            if (ubicacion != null)
+            {
+                return ubicacion;
+            }
 
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.EnPreparacion, 1, "Seed en preparación 1");
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.EnPreparacion, 1, "Seed en preparación 2");
+            ubicacion = new Ubicacion
+            {
+                Codigo = codigo,
+                Nombre = nombre,
+                TipoUbicacion = tipoUbicacion,
+                Activa = true
+            };
 
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Finalizada, 1, "Seed finalizada 1");
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Finalizada, 1, "Seed finalizada 2");
+            context.Ubicaciones.Add(ubicacion);
+            await context.SaveChangesAsync();
 
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Cancelada, 1, "Seed cancelada 1");
-            await CrearOrdenRecogidaSeed(context, clienteId, usuarioId, producto, EstadoOrden.Cancelada, 1, "Seed cancelada 2");
+            return ubicacion;
         }
 
-        private static async Task CrearOrdenRecogidaSeed(
+        private static async Task<Cliente> ObtenerOCrearClienteAsync(
+            ApplicationDbContext context,
+            string nombre,
+            string apellidos,
+            string telefono,
+            string email,
+            string direccion)
+        {
+            var cliente = await context.Clientes
+                .FirstOrDefaultAsync(c => c.Email == email);
+
+            if (cliente != null)
+            {
+                return cliente;
+            }
+
+            cliente = new Cliente
+            {
+                Nombre = nombre,
+                Apellidos = apellidos,
+                Telefono = telefono,
+                Email = email,
+                Direccion = direccion,
+                Activo = true,
+                FechaAlta = DateTime.Now
+            };
+
+            context.Clientes.Add(cliente);
+            await context.SaveChangesAsync();
+
+            return cliente;
+        }
+
+        private static async Task CrearOrdenesRecogidaAsync(
             ApplicationDbContext context,
             int clienteId,
-            string usuarioId,
+            string vendedorId,
+            string logisticoId,
+            Producto mesa,
+            Producto silla)
+        {
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, null, mesa, EstadoOrden.Pendiente, 1, "Pedido pendiente de preparación");
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, null, silla, EstadoOrden.Pendiente, 1, "Pedido pendiente de preparación");
+
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, logisticoId, mesa, EstadoOrden.Asignada, 1, "Pedido asignado a logística");
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, logisticoId, silla, EstadoOrden.Asignada, 1, "Pedido asignado a logística");
+
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, logisticoId, mesa, EstadoOrden.EnPreparacion, 1, "Pedido en preparación");
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, logisticoId, silla, EstadoOrden.EnPreparacion, 1, "Pedido en preparación");
+
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, logisticoId, mesa, EstadoOrden.Finalizada, 1, "Pedido preparado correctamente");
+
+            await CrearOrdenRecogidaAsync(context, clienteId, vendedorId, logisticoId, silla, EstadoOrden.Cancelada, 1, "Cancelada: el cliente cancela el pedido");
+        }
+
+        private static async Task CrearOrdenRecogidaAsync(
+            ApplicationDbContext context,
+            int clienteId,
+            string vendedorId,
+            string? logisticoId,
             Producto producto,
             EstadoOrden estadoOrden,
             int cantidad,
@@ -257,8 +273,8 @@ namespace HarmonyHome.Api.Helpers
             var pedido = new PedidoVenta
             {
                 ClienteId = clienteId,
-                UsuarioId = usuarioId,
-                FechaCreacion = DateTime.UtcNow,
+                UsuarioId = vendedorId,
+                FechaCreacion = DateTime.Now.AddDays(-5),
                 Estado = estadoOrden == EstadoOrden.Finalizada
                     ? EstadoPedido.ListoRecogida
                     : estadoOrden == EstadoOrden.Cancelada
@@ -280,18 +296,152 @@ namespace HarmonyHome.Api.Helpers
             var orden = new OrdenRecogida
             {
                 PedidoVenta = pedido,
-                FechaCreacion = DateTime.UtcNow,
+                FechaCreacion = DateTime.Now.AddDays(-5),
                 Estado = estadoOrden,
-                UsuarioAsignadoId = estadoOrden == EstadoOrden.Pendiente ? null : usuarioId,
-                Observaciones = estadoOrden == EstadoOrden.Cancelada
-                    ? $"Cancelada: {observaciones}"
-                    : observaciones
+                UsuarioAsignadoId = logisticoId,
+                Observaciones = observaciones
             };
 
             context.OrdenesRecogida.Add(orden);
             await context.SaveChangesAsync();
         }
 
+        private static async Task CrearOrdenesReposicionAsync(
+            ApplicationDbContext context,
+            string vendedorId,
+            string logisticoId,
+            Producto mesa,
+            Producto silla)
+        {
+            await CrearOrdenReposicionAsync(context, vendedorId, null, mesa, EstadoOrden.Pendiente, 3, 0, "Reposición pendiente");
+            await CrearOrdenReposicionAsync(context, vendedorId, null, silla, EstadoOrden.Pendiente, 4, 0, "Reposición pendiente");
+
+            await CrearOrdenReposicionAsync(context, vendedorId, logisticoId, mesa, EstadoOrden.Asignada, 2, 0, "Reposición asignada");
+
+            await CrearOrdenReposicionAsync(context, vendedorId, logisticoId, silla, EstadoOrden.Finalizada, 2, 2, "Reposición finalizada");
+
+            await CrearOrdenReposicionAsync(context, vendedorId, logisticoId, mesa, EstadoOrden.Cancelada, 1, 0, "Cancelada: reposición anulada por revisión de stock");
+        }
+
+        private static async Task CrearOrdenReposicionAsync(
+            ApplicationDbContext context,
+            string usuarioSolicitanteId,
+            string? usuarioPreparadorId,
+            Producto producto,
+            EstadoOrden estadoOrden,
+            int cantidadSolicitada,
+            int cantidadPreparada,
+            string observaciones)
+        {
+            var orden = new OrdenReposicion
+            {
+                FechaSolicitud = DateTime.Now.AddDays(-5),
+                Estado = estadoOrden,
+                UsuarioSolicitanteId = usuarioSolicitanteId,
+                UsuarioPreparadorId = usuarioPreparadorId,
+                Observaciones = observaciones
+            };
+
+            context.OrdenesReposicion.Add(orden);
+            await context.SaveChangesAsync();
+
+            var linea = new LineaOrdenReposicion
+            {
+                OrdenReposicionId = orden.Id,
+                ProductoId = producto.Id,
+                CantidadSolicitada = cantidadSolicitada,
+                CantidadPreparada = cantidadPreparada
+            };
+
+            context.LineasOrdenReposicion.Add(linea);
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task CrearMovimientosInicialesAsync(
+            ApplicationDbContext context,
+            string adminId,
+            string vendedorId,
+            string logisticoId,
+            int tiendaId,
+            int almacenAId,
+            int almacenBId,
+            int demarcaId,
+            int mesaId,
+            int sillaId)
+        {
+            var fechaBase = DateTime.Now.AddDays(-7);
+
+            context.MovimientosStock.AddRange(
+                new MovimientoStock
+                {
+                    ProductoId = mesaId,
+                    UbicacionOrigenId = null,
+                    UbicacionDestinoId = almacenAId,
+                    Cantidad = 20,
+                    Fecha = fechaBase.AddMinutes(1),
+                    UsuarioId = adminId,
+                    TipoMovimiento = TipoMovimiento.EntradaInicial,
+                    Observaciones = "Entrada inicial en almacén A"
+                },
+                new MovimientoStock
+                {
+                    ProductoId = mesaId,
+                    UbicacionOrigenId = null,
+                    UbicacionDestinoId = almacenBId,
+                    Cantidad = 10,
+                    Fecha = fechaBase.AddMinutes(2),
+                    UsuarioId = adminId,
+                    TipoMovimiento = TipoMovimiento.EntradaInicial,
+                    Observaciones = "Entrada inicial en almacén B"
+                },
+                new MovimientoStock
+                {
+                    ProductoId = sillaId,
+                    UbicacionOrigenId = null,
+                    UbicacionDestinoId = almacenAId,
+                    Cantidad = 4,
+                    Fecha = fechaBase.AddMinutes(3),
+                    UsuarioId = adminId,
+                    TipoMovimiento = TipoMovimiento.EntradaInicial,
+                    Observaciones = "Entrada inicial en almacén A"
+                },
+                new MovimientoStock
+                {
+                    ProductoId = mesaId,
+                    UbicacionOrigenId = tiendaId,
+                    UbicacionDestinoId = null,
+                    Cantidad = 1,
+                    Fecha = fechaBase.AddMinutes(4),
+                    UsuarioId = vendedorId,
+                    TipoMovimiento = TipoMovimiento.VentaDirecta,
+                    Observaciones = "Venta directa en tienda"
+                },
+                new MovimientoStock
+                {
+                    ProductoId = sillaId,
+                    UbicacionOrigenId = almacenAId,
+                    UbicacionDestinoId = tiendaId,
+                    Cantidad = 2,
+                    Fecha = fechaBase.AddMinutes(5),
+                    UsuarioId = logisticoId,
+                    TipoMovimiento = TipoMovimiento.Reposicion,
+                    Observaciones = "Reposición de almacén a tienda"
+                },
+                new MovimientoStock
+                {
+                    ProductoId = sillaId,
+                    UbicacionOrigenId = tiendaId,
+                    UbicacionDestinoId = demarcaId,
+                    Cantidad = 1,
+                    Fecha = fechaBase.AddMinutes(6),
+                    UsuarioId = vendedorId,
+                    TipoMovimiento = TipoMovimiento.Demarca,
+                    Observaciones = "Retirada de producto defectuoso"
+                }
+            );
+
+            await context.SaveChangesAsync();
+        }
 
         private static async Task CrearUsuarioSiNoExiste(
             UserManager<ApplicationUser> userManager,
@@ -313,7 +463,7 @@ namespace HarmonyHome.Api.Helpers
                 Email = email,
                 NombreCompleto = userName,
                 Activo = true,
-                FechaAlta = DateTime.UtcNow,
+                FechaAlta = DateTime.Now,
                 EmailConfirmed = true
             };
 

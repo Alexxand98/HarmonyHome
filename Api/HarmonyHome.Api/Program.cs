@@ -1,23 +1,21 @@
 using HarmonyHome.Api.Data;
+using HarmonyHome.Api.Helpers;
 using HarmonyHome.Api.Models.Entity;
 using HarmonyHome.Api.Repository;
 using HarmonyHome.Api.Repository.IRepository;
-using HarmonyHome.Api.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-
 using System.Text;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Controllers
 builder.Services.AddControllers();
 
-// Swagger / OpenAPI visual
+// Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -69,8 +67,18 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddCors(options =>{options.AddPolicy("AllowAngular", policy =>{policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();});});
+// CORS para Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
+// Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
@@ -85,13 +93,14 @@ builder.Services.AddScoped<IMovimientoStockRepository, MovimientoStockRepository
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Archivos estáticos para imágenes de productos
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
@@ -104,12 +113,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Seed inicial
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData.InicializarRolesYUsuariosAsync(services);
-    await SeedData.InicializarDatosPruebaAsync(services);
 
+    await SeedData.InicializarRolesYUsuariosAsync(services);
+    await SeedData.InicializarDatosBaseAsync(services);
 }
 
 app.Run();

@@ -8,3 +8,11 @@ export interface VentaDirectaRequest {
     lineas: LineaVentaRequest[];
     observaciones?: string | null;
 }
+
+export interface VentaMixtaResponse {
+  tipoOperacion?: string;
+  ventaDirectaId?: number;
+  pedidoClienteId?: number;
+  ordenRecogidaId?: number;
+  mensaje?: string;
+}

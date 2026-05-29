@@ -165,7 +165,18 @@ export class Venta implements OnInit {
         this.isLoading = false;
 
         if (response.isSuccess) {
-          this.successMessage = 'Operación confirmada correctamente';
+          const tipoOperacion = response.result?.tipoOperacion;
+
+          if (tipoOperacion === 'VentaDirecta') {
+            this.successMessage = 'Venta realizada desde tienda';
+          } else if (tipoOperacion === 'PedidoCliente') {
+            this.successMessage = 'Pedido de cliente creado y enviado a logística';
+          } else if (tipoOperacion === 'Mixta') {
+            this.successMessage = 'Operación mixta realizada: venta en tienda y orden de recogida creada';
+          } else {
+            this.successMessage = response.result?.mensaje ?? 'Operación confirmada correctamente';
+          }
+
           this.vaciarCarrito();
           this.observaciones = '';
           this.quitarCliente();

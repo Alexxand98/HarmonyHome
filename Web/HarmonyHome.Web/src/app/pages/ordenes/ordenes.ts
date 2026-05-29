@@ -88,11 +88,15 @@ export class Ordenes implements OnInit {
   get ordenesRecogidaFiltradas(): OrdenRecogida[] {
     const texto = this.textoBusquedaRecogida.trim().toLowerCase();
 
+    const ordenesOrdenadas = [...this.ordenesRecogida].sort(
+      (a, b) => new Date(b.fechaCreacion).getTime() - new Date(a.fechaCreacion).getTime()
+    );
+
     if (!texto) {
-      return this.ordenesRecogida;
+      return ordenesOrdenadas.slice(0, 7);
     }
 
-    return this.ordenesRecogida.filter(orden =>
+    return ordenesOrdenadas.filter(orden =>
       orden.id.toString().includes(texto) ||
       orden.pedidoVentaId.toString().includes(texto) ||
       orden.clienteNombreCompleto.toLowerCase().includes(texto) ||
@@ -107,11 +111,15 @@ export class Ordenes implements OnInit {
   get ordenesReposicionFiltradas(): OrdenReposicion[] {
     const texto = this.textoBusquedaReposicion.trim().toLowerCase();
 
+    const ordenesOrdenadas = [...this.ordenesReposicion].sort(
+      (a, b) => new Date(b.fechaSolicitud).getTime() - new Date(a.fechaSolicitud).getTime()
+    );
+
     if (!texto) {
-      return this.ordenesReposicion;
+      return ordenesOrdenadas.slice(0, 7);
     }
 
-    return this.ordenesReposicion.filter(orden =>
+    return ordenesOrdenadas.filter(orden =>
       orden.id.toString().includes(texto) ||
       orden.estadoNombre.toLowerCase().includes(texto) ||
       (orden.usuarioSolicitanteUserName ?? '').toLowerCase().includes(texto) ||
